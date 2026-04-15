@@ -28,20 +28,17 @@ export class MedusaHttpClient {
     });
 
     this.client.interceptors.request.use((config) => {
-      const nextHeaders = {
-        ...(config.headers ?? {}),
-      };
-
       if (medusaApiConfig.publishableApiKey) {
-        nextHeaders[HEADER_X_PUBLISHABLE_API_KEY] =
-          medusaApiConfig.publishableApiKey;
+        config.headers.set(
+          HEADER_X_PUBLISHABLE_API_KEY,
+          medusaApiConfig.publishableApiKey,
+        );
       }
 
       if (this.authToken) {
-        nextHeaders[HEADER_AUTHORIZATION] = `Bearer ${this.authToken}`;
+        config.headers.set(HEADER_AUTHORIZATION, `Bearer ${this.authToken}`);
       }
 
-      config.headers = nextHeaders;
       return config;
     });
   }
