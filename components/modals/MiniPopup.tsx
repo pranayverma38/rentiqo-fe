@@ -13,10 +13,18 @@ export default function MiniPopup({ product }: MiniPopupProps) {
   const [isActive, setIsActive] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const showTimer = setTimeout(() => {
       setIsActive(true);
     }, 3000);
-    return () => clearTimeout(timer);
+
+    const hideTimer = setTimeout(() => {
+      setIsActive(false);
+    }, 8000);
+
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
   }, []);
 
   return (
@@ -58,7 +66,7 @@ export default function MiniPopup({ product }: MiniPopupProps) {
       </div>
       <div className="pns-content">
         <p className="mb-4 text-caption-01 cl-text-2">
-          Nathan Collins has purchased!
+          Nathan Collins has rented!
         </p>
         <Link
           href={`/product-detail/${product.id}`}
