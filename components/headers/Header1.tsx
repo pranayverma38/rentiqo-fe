@@ -40,7 +40,9 @@ export default function Header1() {
 
   return (
     <header
-      className={`tf-header header-s2 scr-box-shadow${headerSticky ? " header-sticky" : ""}`}
+      className={`tf-header header-s2 scr-box-shadow relative${
+        headerSticky ? " header-sticky" : ""
+      }`}
       style={{
         top: headerSticky ? "0px" : "-80px",
         transition: "top 0.3s ease-in-out",
@@ -124,7 +126,7 @@ export default function Header1() {
                   <i className="icon icon-User" />
                 </a>
               </li>
-              <li className="d-none d-sm-block">
+              <li>
                 <Link href={`/wishlist`} className="nav-icon-item link">
                   <i className="icon icon-HeartStraight" />
                 </Link>
@@ -143,6 +145,12 @@ export default function Header1() {
           </div>
         </div>
       </div>
+
+      {/* Explicit divider to ensure the thin grey line is visible under the header */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-[#e9e9ee] z-10"
+      />
     </header>
   );
 }

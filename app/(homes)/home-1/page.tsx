@@ -22,7 +22,7 @@ export default function IndexPage() {
       {/* <TopBar1 /> */}
       <Header1 />
       <>
-        <Hero />
+        {/* <Hero /> */}
         <Category />
         <TopPicsProducts />
         <Collection />
