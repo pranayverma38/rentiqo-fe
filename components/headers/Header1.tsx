@@ -48,10 +48,11 @@ export default function Header1() {
               </div>
             </div>
           </div>
-          <div className="header-center" style={{ flex: 1, maxWidth: 600 }}>
+          <div className="header-center flex-1 max-w-[450px] !py-0 lg:!py-4">
             <div className="header-search">
               <form className="header-search-form" onSubmit={(e) => e.preventDefault()}>
                 <input
+                  className="!h-[40px] !max-h-[40px] !px-2 !pr-9 !text-base"
                   type="text"
                   placeholder="Search Sofa"
                   name="search"
