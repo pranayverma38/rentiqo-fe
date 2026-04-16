@@ -1,6 +1,6 @@
 import Footer1 from "@/components/footers/Footer1";
 import CloseNavDropdownsOnRoute from "@/components/headers/CloseNavDropdownsOnRoute";
-import Header10 from "@/components/headers/Header10";
+import Header1 from "@/components/headers/Header1";
 import TopBar4 from "@/components/topBars/TopBar4";
 
 import type { Metadata } from "next";
@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <CloseNavDropdownsOnRoute />
       <TopBar4 />
-      <Header10 parentClass="tf-header" containerFull hasHrLine />
+      <Header1 />
       {children}
       <Footer1 />
     </>

@@ -467,9 +467,9 @@
     line-height: 16px;
   }
 
-  @include res(xl) {
-    display: flex;
-  }
+  // @include res(xl) {
+  //   display: flex;
+  // }
 }
 
 .modal-newsletter {

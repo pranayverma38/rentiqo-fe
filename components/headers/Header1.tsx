@@ -72,7 +72,7 @@ export default function Header1() {
                 alt="Image"
               />
             </Link>
-            <div className="tf-list list-currenci d-none d-xxl-flex">
+            <div className="tf-list list-currenci d-flex">
               <div className="tf-languages">
                 <LanguageSelect textBlack />
               </div>
@@ -114,7 +114,6 @@ export default function Header1() {
             </div>
           </div>
           <div className="header-right">
-            <div className="br-line type-vertical d-none d-xxl-flex" />
             <ul className="nav-icon-list">
               <li>
                 <a
