@@ -1,10 +1,8 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import CurrencySelect from "../common/CurrencySelect";
 import LanguageSelect from "../common/LanguageSelect";
 import CartIconCount from "./CartIconCount";
-import Nav from "./Nav";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
 
 export default function Header1() {
@@ -20,23 +18,21 @@ export default function Header1() {
     >
       <div className="container-full">
         <div className="header-inner">
-          <div className="box-open-menu-mobile d-xl-none">
-            <a
+          <div className="box-open-menu-mobile d-none">
+            {/* <a
               href="#mobileMenu"
               data-bs-toggle="offcanvas"
               className="btn-open-menu"
             >
               <i className="icon icon-List" />
-            </a>
+            </a> */}
           </div>
-          <div className="header-left d-none d-xl-block">
-            <nav className="box-navigation">
+          <div className="header-left">
+            {/* <nav className="box-navigation">
               <ul className="box-nav-menu">
                 <Nav />
               </ul>
-            </nav>
-          </div>
-          <div className="header-center">
+            </nav> */}
             <Link href={`/`} className="logo-site">
               <Image
                 loading="lazy"
@@ -46,27 +42,31 @@ export default function Header1() {
                 alt="Image"
               />
             </Link>
-          </div>
-          <div className="header-right">
             <div className="tf-list list-currenci d-none d-xxl-flex">
-              <div className="tf-currencies">
-                <CurrencySelect textBlack />
-              </div>
               <div className="tf-languages">
                 <LanguageSelect textBlack />
               </div>
             </div>
+          </div>
+          <div className="header-center" style={{ flex: 1, maxWidth: 600 }}>
+            <div className="header-search">
+              <form className="header-search-form" onSubmit={(e) => e.preventDefault()}>
+                <input
+                  type="text"
+                  placeholder="Search Sofa"
+                  name="search"
+                  tabIndex={2}
+                  aria-label="Search"
+                />
+                <button type="submit" aria-label="Submit search">
+                  <i className="icon icon-MagnifyingGlass" />
+                </button>
+              </form>
+            </div>
+          </div>
+          <div className="header-right">
             <div className="br-line type-vertical d-none d-xxl-flex" />
             <ul className="nav-icon-list">
-              <li className="d-none d-sm-block">
-                <a
-                  href="#search"
-                  data-bs-toggle="modal"
-                  className="nav-icon-item link"
-                >
-                  <i className="icon icon-MagnifyingGlass" />
-                </a>
-              </li>
               <li>
                 <a
                   href="#sign"
