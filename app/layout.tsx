@@ -7,6 +7,7 @@ import {
   Red_Hat_Display,
   Urbanist,
 } from "next/font/google";
+import "./tailwind.css";
 import "./globals.scss";
 import ScrollToTop from "@/components/common/ScrollToTop";
 
