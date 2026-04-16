@@ -5,6 +5,7 @@ import Header1 from "@/components/headers/Header1";
 import Footer1 from "@/components/footers/Footer1";
 import Hero from "@/components/homes/home-1/Hero";
 import Category from "@/components/homes/home-1/Category";
+import PromoCardGrid from "@/components/homes/home-1/PromoCardGrid";
 import TopPicsProducts from "@/components/homes/home-1/TopPicsProducts";
 import Collection from "@/components/homes/home-1/Collection";
 import TopPicksThisWeek from "@/components/homes/home-1/TopPicksThisWeek";
@@ -23,6 +24,7 @@ export default function IndexPage() {
       <Header1 />
       <>
         {/* <Hero /> */}
+        <PromoCardGrid />
         <Category />
         <TopPicsProducts />
         <Collection />
