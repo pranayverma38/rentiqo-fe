@@ -1,12 +1,42 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import LanguageSelect from "../common/LanguageSelect";
 import CartIconCount from "./CartIconCount";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
 
 export default function Header1() {
   const headerSticky = useHeaderSticky();
+  const rotatingSearchTexts = ["Search Sofa", "Search Bed", "Search Table", "Search AC"];
+  const rotatingSearchTextsLoop = [...rotatingSearchTexts, rotatingSearchTexts[0]];
+  const [searchQuery, setSearchQuery] = useState("");
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [isResettingTicker, setIsResettingTicker] = useState(false);
+
+  useEffect(() => {
+    if (searchQuery.trim()) return;
+    if (placeholderIndex < rotatingSearchTexts.length) {
+      const stepTimeout = setTimeout(() => {
+        setPlaceholderIndex((prev) => prev + 1);
+      }, 2200);
+      return () => clearTimeout(stepTimeout);
+    }
+
+    const resetTimeout = setTimeout(() => {
+      setIsResettingTicker(true);
+      setPlaceholderIndex(0);
+
+      // Re-enable transition on the next paint so next cycle animates normally.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsResettingTicker(false);
+        });
+      });
+    }, 420);
+
+    return () => clearTimeout(resetTimeout);
+  }, [placeholderIndex, rotatingSearchTexts.length, searchQuery]);
 
   return (
     <header
@@ -52,15 +82,33 @@ export default function Header1() {
             <div className="header-search">
               <form className="header-search-form" onSubmit={(e) => e.preventDefault()}>
                 <input
-                  className="!h-[40px] !max-h-[40px] !px-2 !pr-9 !text-base"
+                  className="!h-[40px] !max-h-[40px] !px-2 !pr-9 !text-sm placeholder:!text-sm focus:!border-[var(--primary)] focus:!outline-none focus:!ring-0"
                   type="text"
-                  placeholder="Search Sofa"
+                  placeholder=""
                   name="search"
                   tabIndex={2}
                   aria-label="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
+                {!searchQuery && (
+                  <span className="pointer-events-none absolute left-2 top-1/2 h-[20px] -translate-y-1/2 overflow-hidden">
+                    <span
+                      className={`block !text-sm leading-5 text-[#9a9aa4] ${
+                        isResettingTicker ? "" : "transition-transform duration-[420ms] ease-in-out"
+                      }`}
+                      style={{ transform: `translateY(-${placeholderIndex * 20}px)` }}
+                    >
+                      {rotatingSearchTextsLoop.map((text, index) => (
+                        <span key={`${text}-${index}`} className="block h-[20px]">
+                          {text}
+                        </span>
+                      ))}
+                    </span>
+                  </span>
+                )}
                 <button type="submit" aria-label="Submit search">
-                  <i className="icon icon-MagnifyingGlass" />
+                  <i className="icon icon-MagnifyingGlass !font-black [-webkit-text-stroke:0.3px_currentColor]" />
                 </button>
               </form>
             </div>
