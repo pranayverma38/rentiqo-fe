@@ -44,7 +44,7 @@ export default function Header1() {
         headerSticky ? " header-sticky" : ""
       }`}
       style={{
-        top: headerSticky ? "0px" : "-80px",
+        top: headerSticky ? "0px" : "-100%",
         transition: "top 0.3s ease-in-out",
       }}
     >
