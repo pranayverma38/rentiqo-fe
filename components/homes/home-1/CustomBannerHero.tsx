@@ -40,7 +40,7 @@ export default function CustomBannerHero() {
           {BANNER_SLIDES.map((slide, index) => (
             <div
               key={slide.src}
-              className="slider-wrap relative h-unset w-full overflow-hidden rounded-20"
+              className="slider-wrap relative h-unset w-full overflow-hidden rounded-[0.625rem] md:rounded-20"
             >
               <div
                 className={`relative w-full ${BANNER_ASPECT_CLASS}`}

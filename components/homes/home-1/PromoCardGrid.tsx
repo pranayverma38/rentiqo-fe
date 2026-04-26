@@ -57,7 +57,7 @@ function PromoCard({
   if (variant === "wide") {
     return (
       <div
-        className={`relative min-h-0 w-full overflow-hidden rounded-[0.875rem] bg-[#48B47B] ${shadowCard} aspect-[2.75/1] md:rounded-[1rem]`}
+        className={`relative min-h-0 w-full overflow-hidden rounded-[0.625rem] bg-[#48B47B] ${shadowCard} aspect-[2.75/1] md:rounded-[1rem]`}
       >
         {item.imageSrc ? (
           <Image
@@ -74,10 +74,10 @@ function PromoCard({
 
   return (
     <article
-      className={`relative flex h-full min-w-[0] flex-col rounded-[1rem] bg-white p-[4px] transition-transform duration-300 ease-out will-change-transform hover:z-10 hover:scale-[1.04] ${shadowCard} md:rounded-[1.125rem] md:p-[8px]`}
+      className={`relative flex h-full min-w-[0] flex-col rounded-[0.75rem] bg-white p-[4px] transition-transform duration-300 ease-out will-change-transform hover:z-10 hover:scale-[1.04] ${shadowCard} md:rounded-[1.125rem] md:p-[8px]`}
     >
       <div
-        className={`relative w-full flex-1 overflow-hidden rounded-[0.875rem] bg-[#48B47B] ${compactSwatchShape}`}
+        className={`relative w-full flex-1 overflow-hidden rounded-[0.625rem] bg-[#48B47B] ${compactSwatchShape}`}
       >
         {item.imageSrc ? (
           <Image

@@ -36,28 +36,28 @@ h1,
 .h1 {
     font-size: clamp(34px, 5vw, 56px);
     line-height: clamp(44px, 6vw, 68px);
-    letter-spacing: 0.05em;
+    letter-spacing: 0em;
 }
 
 h2,
 .h2 {
     font-size: clamp(30px, 4.2vw, 44px);
     line-height: clamp(38px, 5vw, 50px);
-    letter-spacing: 0.05em;
+    letter-spacing: 0em;
 }
 
 h3,
 .h3 {
-    font-size: clamp(28px, 3.8vw, 40px);
+    font-size: clamp(26px, 3.8vw, 40px);
     line-height: clamp(36px, 4.5vw, 48px);
-    letter-spacing: 0.05em;
+    letter-spacing: 0em;
 }
 
 h4,
 .h4 {
     font-size: clamp(24px, 3.5vw, 30px);
     line-height: clamp(32px, 4.2vw, 42px);
-    letter-spacing: 0.02em;
+    letter-spacing: 0em;
 }
 
 h5,
@@ -104,7 +104,7 @@ h6,
 .text-display {
     font-size: clamp(36px, 6vw, 80px);
     line-height: clamp(40px, 6.5vw, 88px);
-    letter-spacing: 0.05em;
+    letter-spacing: 0em;
 }
 
 .text-body-1 {

@@ -113,3 +113,20 @@
     margin-bottom: 25px;
   }
 }
+
+/* Home-1 Top Pick tabs: keep mobile controls visually smaller/compact. */
+.top-pick-tabs-mobile-compact {
+  @include res(md, max) {
+    .tab-btn-wrap-v2 {
+      gap: 7px;
+    }
+
+    .tf-btn-tab {
+      min-width: auto;
+      padding: 9px 13px;
+      min-height: 36px;
+      font-size: 13px;
+      line-height: 17px;
+    }
+  }
+}

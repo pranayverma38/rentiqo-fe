@@ -1,0 +1,7 @@
+everything inside this 
+
+sect-heading type-2 text-center wow fadeInUp
+
+shoud be horizontally left aligned (only for md and above)
+
+use arbitrary tailwind only on this page..

@@ -28,20 +28,20 @@ function TopPick() {
   );
 
   return (
-    <section className="py-[10px] md:py-[40px] flat-animate-tab">
+    <section className="py-[20px] md:py-[40px] flat-animate-tab">
       <div className="container">
-        <div className="sect-heading type-2 has-col-right">
+        <div className="sect-heading type-2 has-col-right max-md:!flex-col max-md:!items-center max-md:!justify-center max-md:!text-center max-md:gap-[10px] max-md:[&_.s-title]:!text-center max-md:[&_.col-right]:!w-full max-md:[&_.col-right]:!flex max-md:[&_.col-right]:!justify-center">
           <div className="wow fadeInUp">
-            <h3 className="s-title">Top Picks This Week</h3>
-            <p className="s-desc text-body-1 cl-text-2">
+            <h3 className="s-title !mb-[0px]">Rent Trending!</h3>
+            {/* <p className="s-desc text-body-1 cl-text-2">
               Weekly Favorites Selected With Care To Support Your Wellbeing.
-            </p>
+            </p> */}
           </div>
           <div
-            className="col-right overflow-auto wow fadeInUp"
+            className="col-right overflow-auto wow fadeInUp top-pick-tabs-mobile-compact"
             data-wow-delay="0.1s"
           >
-            <ul className="tab-btn-wrap-v2" role="tablist">
+            <ul className="tab-btn-wrap-v2 max-md:!justify-center" role="tablist">
               {TOP_PICK_MENTAL_TABS.map((tab) => (
                 <li key={tab.id} className="nav-tab-item" role="presentation">
                   <a

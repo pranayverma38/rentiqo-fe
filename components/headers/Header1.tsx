@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import LanguageSelect from "../common/LanguageSelect";
 import CartIconCount from "./CartIconCount";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
+import NavHeader1 from "./NavHeader1";
 
 export default function Header1() {
   const headerSticky = useHeaderSticky();
@@ -142,6 +143,17 @@ export default function Header1() {
                 </a>
               </li>
             </ul>
+          </div>
+        </div>
+      </div>
+      <div className="header-bottom_wrap d-none d-xl-block header-bottom_wrap--header1-clone">
+        <div className="container">
+          <div className="header-bottom">
+            <nav className="box-navigation">
+              <ul className="box-nav-menu justify-content-center">
+                <NavHeader1 variant2 />
+              </ul>
+            </nav>
           </div>
         </div>
       </div>
