@@ -32,7 +32,7 @@ function TopPick() {
       <div className="container">
         <div className="sect-heading type-2 has-col-right max-md:!flex-col max-md:!items-center max-md:!justify-center max-md:!text-center max-md:gap-[10px] max-md:[&_.s-title]:!text-center max-md:[&_.col-right]:!w-full max-md:[&_.col-right]:!flex max-md:[&_.col-right]:!justify-center">
           <div className="wow fadeInUp">
-            <h3 className="s-title !mb-[0px]">Rent Trending!</h3>
+            <h3 className="s-title !mb-[0px]">What's Trending!</h3>
             {/* <p className="s-desc text-body-1 cl-text-2">
               Weekly Favorites Selected With Care To Support Your Wellbeing.
             </p> */}
