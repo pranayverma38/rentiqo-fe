@@ -51,14 +51,15 @@ export default function Header1() {
     >
       <div className="w-[1440px] max-w-full mx-auto px-[15px]">
         <div className="header-inner">
-          <div className="box-open-menu-mobile d-none">
-            {/* <a
+          <div className="box-open-menu-mobile d-xl-none ![display:block] !flex-[0_0_auto] !mr-[10px] !self-center md:!hidden">
+            <a
               href="#mobileMenu"
               data-bs-toggle="offcanvas"
-              className="btn-open-menu"
+              className="btn-open-menu !flex !items-center !justify-center !h-full !leading-none"
+              aria-label="Open menu"
             >
-              <i className="icon icon-List" />
-            </a> */}
+              <i className="icon icon-List !block !leading-none" />
+            </a>
           </div>
           <div className="header-left">
             {/* <nav className="box-navigation">
