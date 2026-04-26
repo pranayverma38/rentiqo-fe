@@ -12,3 +12,11 @@
 // p {
 //   margin-bottom: 0;
 // }
+
+// Tailwind's `.collapse` utility clashes with Bootstrap's collapse component.
+// Bootstrap controls visibility through `display` (`.show` / `:not(.show)`),
+// so force visible here and let Bootstrap handle expand/collapse state.
+.collapse,
+.collapsing {
+  visibility: visible;
+}
