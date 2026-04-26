@@ -89,7 +89,7 @@ function PromoCard({
           />
         ) : null}
       </div>
-      <div className="px-[0.25rem] pt-[0.45rem] pb-[0.25rem] text-center font-sans text-[0.525rem] font-medium leading-[1.375] tracking-[0.025em] text-[#000000] md:pt-[0.5rem] md:pb-[1px] md:text-[0.875rem] md:leading-[1.25rem]">
+      <div className="px-[0.25rem] pt-[0.45rem] pb-[0.25rem] text-center font-sans text-[0.725rem] font-medium leading-[1.375] tracking-[0.025em] text-[#000000] md:pt-[0.5rem] md:pb-[1px] md:text-[0.875rem] md:leading-[1.25rem]">
         {item.label}
       </div>
     </article>

@@ -49,7 +49,7 @@ export default function Header1() {
         transition: "top 0.3s ease-in-out",
       }}
     >
-      <div className="container-full">
+      <div className="w-[1440px] max-w-full mx-auto px-[15px]">
         <div className="header-inner">
           <div className="box-open-menu-mobile d-none">
             {/* <a
@@ -148,10 +148,10 @@ export default function Header1() {
       </div>
       <div className="header-bottom_wrap d-none d-xl-block header-bottom_wrap--header1-clone">
         <div className="container">
-          <div className="header-bottom">
-            <nav className="box-navigation">
-              <ul className="box-nav-menu justify-content-center">
-                <NavHeader1 variant2 />
+          <div className="header-bottom !w-full">
+            <nav className="box-navigation !w-full">
+              <ul className="box-nav-menu !w-full !justify-start">
+                <NavHeader1 />
               </ul>
             </nav>
           </div>

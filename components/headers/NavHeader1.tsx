@@ -21,7 +21,7 @@ export default function NavHeader1({
   return (
     <>
       <li className="menu-item position-relative">
-        <a href="#" className="item-link">
+        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
           <span className="text cus-text"> Home </span>
           <i className="icon icon-CaretDown" aria-hidden />
         </a>
@@ -60,7 +60,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item">
-        <a href="#" className="item-link">
+        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
           <span className="text cus-text"> Shop </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -115,7 +115,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item">
-        <a href="#" className="item-link">
+        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
           <span className="text cus-text"> Product </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -172,7 +172,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item position-relative">
-        <a href="#" className="item-link">
+        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
           <span className="text cus-text"> Blog </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -189,7 +189,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item position-relative">
-        <a href="#" className="item-link">
+        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
           <span className="text cus-text"> Pages </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -209,7 +209,7 @@ export default function NavHeader1({
         <a
           href="https://themeforest.net/user/themesflat/portfolio"
           target="_blank"
-          className="item-link"
+          className="item-link !pt-[2px] !pb-[14px]"
         >
           <span className="text cus-text"> Buy Template </span>
         </a>
