@@ -8,7 +8,7 @@ interface LanguageSelectProps {
   textColor?: string;
 }
 
-const languages: string[] = ["English", "العربية", "简体中文", "اردو"];
+const languages: string[] = ["Delhi", "Gurugram", "Noida"];
 
 export default function LanguageSelect({
   placement = "bottom-start",

@@ -8,6 +8,7 @@ import {
   Urbanist,
 } from "next/font/google";
 import "./globals.scss";
+import "./tailwind.css";
 import ScrollToTop from "@/components/common/ScrollToTop";
 
 const dmSans = DM_Sans({

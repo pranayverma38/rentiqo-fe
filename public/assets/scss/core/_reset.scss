@@ -1,5 +1,7 @@
 @use "../abstracts/index"as *;
 
+/* Keep broad reset rules in the lowest-priority cascade layer so Tailwind utilities can override them. */
+@layer base {
 html,
 body,
 div,
@@ -82,7 +84,6 @@ mark,
 audio,
 video {
     margin: 0;
-    padding: 0;
     border: 0;
     outline: 0;
     font-size: 100%;
@@ -117,9 +118,8 @@ html {
 }
 
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
+}
 }
 
 body {

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 
 const Ask = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/Ask").then((m) => m.default), { ssr: false });
 const ForgotPass = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/ForgotPass").then((m) => m.default), { ssr: false });
-const NewsLetter = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/NewsLetter").then((m) => m.default), { ssr: false });
+// const NewsLetter = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/NewsLetter").then((m) => m.default), { ssr: false });
 const QuickAdd = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/QuickAdd").then((m) => m.default), { ssr: false });
 const Register = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/Register").then((m) => m.default), { ssr: false });
 const Search = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/Search").then((m) => m.default), { ssr: false });
@@ -112,7 +112,7 @@ export default function LayoutModals() {
     <>
       <Ask registerModalElement={registerModalElement} />
       <ForgotPass registerModalElement={registerModalElement} />
-      <NewsLetter registerModalElement={registerModalElement} />
+      {/* <NewsLetter registerModalElement={registerModalElement} /> */}
       <OrderDetails registerModalElement={registerModalElement} />
       <QuickAdd registerModalElement={registerModalElement} />
       <Register registerModalElement={registerModalElement} />

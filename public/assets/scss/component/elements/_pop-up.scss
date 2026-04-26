@@ -467,9 +467,9 @@
     line-height: 16px;
   }
 
-  @include res(xl) {
-    display: flex;
-  }
+  // @include res(xl) {
+  //   display: flex;
+  // }
 }
 
 .modal-newsletter {
@@ -1865,7 +1865,7 @@
 .pop-notice-sale {
   position: fixed;
   right: 40px;
-  top: 160px;
+  top: 120px;
   z-index: 22;
   display: flex;
   gap: 12px;

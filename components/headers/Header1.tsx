@@ -1,42 +1,70 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import CurrencySelect from "../common/CurrencySelect";
+import { useEffect, useState } from "react";
 import LanguageSelect from "../common/LanguageSelect";
 import CartIconCount from "./CartIconCount";
-import Nav from "./Nav";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
 
 export default function Header1() {
   const headerSticky = useHeaderSticky();
+  const rotatingSearchTexts = ["Search Sofa", "Search Bed", "Search Table", "Search AC"];
+  const rotatingSearchTextsLoop = [...rotatingSearchTexts, rotatingSearchTexts[0]];
+  const [searchQuery, setSearchQuery] = useState("");
+  const [placeholderIndex, setPlaceholderIndex] = useState(0);
+  const [isResettingTicker, setIsResettingTicker] = useState(false);
+
+  useEffect(() => {
+    if (searchQuery.trim()) return;
+    if (placeholderIndex < rotatingSearchTexts.length) {
+      const stepTimeout = setTimeout(() => {
+        setPlaceholderIndex((prev) => prev + 1);
+      }, 2200);
+      return () => clearTimeout(stepTimeout);
+    }
+
+    const resetTimeout = setTimeout(() => {
+      setIsResettingTicker(true);
+      setPlaceholderIndex(0);
+
+      // Re-enable transition on the next paint so next cycle animates normally.
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsResettingTicker(false);
+        });
+      });
+    }, 420);
+
+    return () => clearTimeout(resetTimeout);
+  }, [placeholderIndex, rotatingSearchTexts.length, searchQuery]);
 
   return (
     <header
-      className={`tf-header header-s2 scr-box-shadow${headerSticky ? " header-sticky" : ""}`}
+      className={`tf-header header-s2 scr-box-shadow relative${
+        headerSticky ? " header-sticky" : ""
+      }`}
       style={{
-        top: headerSticky ? "0px" : "-80px",
+        top: headerSticky ? "0px" : "-100%",
         transition: "top 0.3s ease-in-out",
       }}
     >
       <div className="container-full">
         <div className="header-inner">
-          <div className="box-open-menu-mobile d-xl-none">
-            <a
+          <div className="box-open-menu-mobile d-none">
+            {/* <a
               href="#mobileMenu"
               data-bs-toggle="offcanvas"
               className="btn-open-menu"
             >
               <i className="icon icon-List" />
-            </a>
+            </a> */}
           </div>
-          <div className="header-left d-none d-xl-block">
-            <nav className="box-navigation">
+          <div className="header-left">
+            {/* <nav className="box-navigation">
               <ul className="box-nav-menu">
                 <Nav />
               </ul>
-            </nav>
-          </div>
-          <div className="header-center">
+            </nav> */}
             <Link href={`/`} className="logo-site">
               <Image
                 loading="lazy"
@@ -46,27 +74,49 @@ export default function Header1() {
                 alt="Image"
               />
             </Link>
-          </div>
-          <div className="header-right">
-            <div className="tf-list list-currenci d-none d-xxl-flex">
-              <div className="tf-currencies">
-                <CurrencySelect textBlack />
-              </div>
+            <div className="tf-list list-currenci d-flex">
               <div className="tf-languages">
                 <LanguageSelect textBlack />
               </div>
             </div>
-            <div className="br-line type-vertical d-none d-xxl-flex" />
+          </div>
+          <div className="header-center flex-1 max-w-[450px] !py-0 lg:!py-4">
+            <div className="header-search">
+              <form className="header-search-form" onSubmit={(e) => e.preventDefault()}>
+                <input
+                  className="!h-[40px] !max-h-[40px] !px-2 !pr-9 !text-sm placeholder:!text-sm focus:!border-[var(--primary)] focus:!outline-none focus:!ring-0"
+                  type="text"
+                  placeholder=""
+                  name="search"
+                  tabIndex={2}
+                  aria-label="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {!searchQuery && (
+                  <span className="pointer-events-none absolute left-2 top-1/2 h-[20px] -translate-y-1/2 overflow-hidden">
+                    <span
+                      className={`block !text-sm leading-5 text-[#9a9aa4] ${
+                        isResettingTicker ? "" : "transition-transform duration-[420ms] ease-in-out"
+                      }`}
+                      style={{ transform: `translateY(-${placeholderIndex * 20}px)` }}
+                    >
+                      {rotatingSearchTextsLoop.map((text, index) => (
+                        <span key={`${text}-${index}`} className="block h-[20px]">
+                          {text}
+                        </span>
+                      ))}
+                    </span>
+                  </span>
+                )}
+                <button type="submit" aria-label="Submit search">
+                  <i className="icon icon-MagnifyingGlass !font-black [-webkit-text-stroke:0.3px_currentColor]" />
+                </button>
+              </form>
+            </div>
+          </div>
+          <div className="header-right">
             <ul className="nav-icon-list">
-              <li className="d-none d-sm-block">
-                <a
-                  href="#search"
-                  data-bs-toggle="modal"
-                  className="nav-icon-item link"
-                >
-                  <i className="icon icon-MagnifyingGlass" />
-                </a>
-              </li>
               <li>
                 <a
                   href="#sign"
@@ -76,7 +126,7 @@ export default function Header1() {
                   <i className="icon icon-User" />
                 </a>
               </li>
-              <li className="d-none d-sm-block">
+              <li>
                 <Link href={`/wishlist`} className="nav-icon-item link">
                   <i className="icon icon-HeartStraight" />
                 </Link>
@@ -95,6 +145,12 @@ export default function Header1() {
           </div>
         </div>
       </div>
+
+      {/* Explicit divider to ensure the thin grey line is visible under the header */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-[#e9e9ee] z-10"
+      />
     </header>
   );
 }

@@ -309,10 +309,15 @@
 .container-full {
     margin-left: auto;
     margin-right: auto;
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 8%;
+    padding-left: 8%;
     width: 1800px;
     max-width: 100%;
+
+    @include res(sm) {
+        padding-right: 2%;
+        padding-left: 2%;
+    }
 
     &.full-v2 {
         width: 1760px;

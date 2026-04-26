@@ -46,6 +46,37 @@
   }
 }
 
+.infiniteSlide-policy.style-2 {
+  border-top: 0;
+  border-bottom: 0;
+}
+
+/* Home-1 policy strip: tight icon→label, wider space between each label and the next icon. */
+.infiniteSlide-policy.style-2 .infiniteSlide-wrapper.infiniteSlide-wrapper--policy-pairs {
+  > * {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  > i.icon {
+    margin-right: 6px;
+  }
+
+  > .policy-text {
+    margin-right: 44px;
+  }
+
+  @include res(md, max) {
+    > i.icon {
+      margin-right: 4px;
+    }
+
+    > .policy-text {
+      margin-right: 32px;
+    }
+  }
+}
+
 @keyframes infiniteslide-anim {
   0% {
     transform: translate3d(0, 0, 0);

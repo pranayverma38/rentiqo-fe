@@ -1,10 +1,14 @@
 import { Metadata } from "next";
 
 import Header1 from "@/components/headers/Header1";
-import TopBar1 from "@/components/topBars/TopBar1";
+// import TopBar1 from "@/components/topBars/TopBar1";
 import Footer1 from "@/components/footers/Footer1";
 import Hero from "@/components/homes/home-1/Hero";
 import Category from "@/components/homes/home-1/Category";
+import PromoCardGrid from "@/components/homes/home-1/PromoCardGrid";
+import CustomBannerHero from "@/components/homes/home-1/CustomBannerHero";
+import InfiniteSlide from "@/components/homes/home-1/InfiniteSlide";
+import TopPick from "@/components/homes/home-1/TopPick";
 import TopPicsProducts from "@/components/homes/home-1/TopPicsProducts";
 import Collection from "@/components/homes/home-1/Collection";
 import TopPicksThisWeek from "@/components/homes/home-1/TopPicksThisWeek";
@@ -19,10 +23,14 @@ export const metadata: Metadata = {
 export default function IndexPage() {
   return (
     <>
-      <TopBar1 />
+      {/* <TopBar1 /> */}
       <Header1 />
       <>
-        <Hero />
+        {/* <Hero /> */}
+        <PromoCardGrid />
+        <CustomBannerHero />
+        <InfiniteSlide />
+        <TopPick />
         <Category />
         <TopPicsProducts />
         <Collection />

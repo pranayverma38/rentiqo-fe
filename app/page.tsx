@@ -11,6 +11,7 @@ export default function page() {
     <>
       <IndexPage />
       <MiniPopup product={miniPopupProduct} />
+      
     </>
   );
 }
