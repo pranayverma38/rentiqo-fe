@@ -8,6 +8,7 @@ import Category from "@/components/homes/home-1/Category";
 import PromoCardGrid from "@/components/homes/home-1/PromoCardGrid";
 import CustomBannerHero from "@/components/homes/home-1/CustomBannerHero";
 import InfiniteSlide from "@/components/homes/home-1/InfiniteSlide";
+import TopPick from "@/components/homes/home-1/TopPick";
 import TopPicsProducts from "@/components/homes/home-1/TopPicsProducts";
 import Collection from "@/components/homes/home-1/Collection";
 import TopPicksThisWeek from "@/components/homes/home-1/TopPicksThisWeek";
@@ -29,6 +30,7 @@ export default function IndexPage() {
         <PromoCardGrid />
         <CustomBannerHero />
         <InfiniteSlide />
+        <TopPick />
         <Category />
         <TopPicsProducts />
         <Collection />
