@@ -7,7 +7,7 @@ function Testimonial() {
   return (
     <section className="flat-spacing">
       <div className="container">
-        <div className="sect-heading type-2 text-center wow fadeInUp">
+        <div className="sect-heading type-2 text-center md:![text-align:left] wow fadeInUp">
           <h3 className="s-title">Customer Say!</h3>
           <p className="s-desc text-body-1 cl-text-2">
             Our customers adore our products, and we constantly aim to delight

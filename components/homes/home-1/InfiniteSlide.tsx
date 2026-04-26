@@ -9,7 +9,7 @@ const policyIconClassName =
 function InfiniteSlide() {
   return (
     <>
-      <div className="infiniteSlide-policy style-2 wow fadeInUp ">
+      <div className="infiniteSlide-policy style-2 wow fadeInUp md:mx-auto md:max-w-[1425px]">
         <div className="infiniteslide_wrap">
           <div className="infiniteSlide infinite-slider infiniteSlide-wrapper infiniteSlide-wrapper--policy-pairs">
             {Array.from({ length: 4 }).map((_, index) => (

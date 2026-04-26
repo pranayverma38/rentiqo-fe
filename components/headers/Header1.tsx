@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import LanguageSelect from "../common/LanguageSelect";
 import CartIconCount from "./CartIconCount";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
+import NavHeader1 from "./NavHeader1";
 
 export default function Header1() {
   const headerSticky = useHeaderSticky();
@@ -48,16 +49,17 @@ export default function Header1() {
         transition: "top 0.3s ease-in-out",
       }}
     >
-      <div className="container-full">
+      <div className="w-[1440px] max-w-full mx-auto px-[15px]">
         <div className="header-inner">
-          <div className="box-open-menu-mobile d-none">
-            {/* <a
+          <div className="box-open-menu-mobile d-xl-none ![display:block] !flex-[0_0_auto] !mr-[10px] !self-center md:!hidden">
+            <a
               href="#mobileMenu"
               data-bs-toggle="offcanvas"
-              className="btn-open-menu"
+              className="btn-open-menu !flex !items-center !justify-center !h-full !leading-none"
+              aria-label="Open menu"
             >
-              <i className="icon icon-List" />
-            </a> */}
+              <i className="icon icon-List !block !leading-none" />
+            </a>
           </div>
           <div className="header-left">
             {/* <nav className="box-navigation">
@@ -142,6 +144,17 @@ export default function Header1() {
                 </a>
               </li>
             </ul>
+          </div>
+        </div>
+      </div>
+      <div className="header-bottom_wrap d-none d-xl-block header-bottom_wrap--header1-clone">
+        <div className="container">
+          <div className="header-bottom !w-full">
+            <nav className="box-navigation !w-full">
+              <ul className="box-nav-menu !w-full !justify-start">
+                <NavHeader1 />
+              </ul>
+            </nav>
           </div>
         </div>
       </div>

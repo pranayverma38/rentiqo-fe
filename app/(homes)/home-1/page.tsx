@@ -31,11 +31,11 @@ export default function IndexPage() {
         <CustomBannerHero />
         <InfiniteSlide />
         <TopPick />
-        <Category />
-        <TopPicsProducts />
-        <Collection />
-        <TopPicksThisWeek />
-        <Lookbook />
+        {/* <Category /> */}
+        {/* <TopPicsProducts /> */}
+        {/* <Collection /> */}
+        {/* <TopPicksThisWeek /> */}
+        {/* <Lookbook /> */}
         <Testimonial />
         <Gallery />
         <Features />
