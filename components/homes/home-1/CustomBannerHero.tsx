@@ -19,7 +19,7 @@ const BANNER_SLIDES = [
 export default function CustomBannerHero() {
   return (
     <section
-      className="tf-slideshow tf-btn-swiper-main bg-[#fafafa] pt-[10px] pb-[10px]"
+      className="tf-slideshow tf-btn-swiper-main bg-[linear-gradient(to_bottom,#fafafa_0%,#ffffff_100%)] pt-[10px] pb-[10px] md:pt-[10px] md:pb-[18px]"
       aria-label="Featured banner"
     >
       <div className="w-full max-w-full px-[15px] md:mx-auto md:w-[1440px] md:max-w-full">
