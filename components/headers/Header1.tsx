@@ -149,9 +149,9 @@ export default function Header1() {
       </div>
       <div className="header-bottom_wrap d-none d-xl-block header-bottom_wrap--header1-clone">
         <div className="container">
-          <div className="header-bottom !w-full">
-            <nav className="box-navigation !w-full">
-              <ul className="box-nav-menu !w-full !justify-start">
+          <div className="header-bottom !w-full overflow-x-hidden">
+            <nav className="box-navigation !w-full overflow-x-auto">
+              <ul className="box-nav-menu !w-full !justify-start !min-w-max">
                 <NavHeader1 />
               </ul>
             </nav>
