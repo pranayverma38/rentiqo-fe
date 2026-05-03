@@ -35,7 +35,13 @@ const DEFAULT_ITEMS: PromoCardItem[] = [
     imageSrc: "/assets/images/first-section/ChatGPT Image Apr 17, 2026, 04_14_39 PM.png",
     imageAlt: "Combo furniture setup",
   },
-  { id: "5", label: "Text here" },
+  {
+    id: "5",
+    label: "Text here",
+    imageSrc:
+      "/assets/images/second-section/Gemini_Generated_Image_wdl474wdl474wdl4.png",
+    imageAlt: "Promotional furniture setup",
+  },
 ];
 
 type PromoCardGridProps = {

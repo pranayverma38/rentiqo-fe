@@ -22,7 +22,7 @@ export default function NavHeader1({
   return (
     <>
       <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[8px]">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Home Furniture </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -39,7 +39,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[8px]">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Appliances </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -56,7 +56,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[8px]">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Combos </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -73,12 +73,12 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item">
-        <Link href="/" className="item-link !pt-[2px] !pb-[8px]">
+        <Link href="/" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Refer a friend </span>
         </Link>
       </li>
       <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[8px]">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Home </span>
           <i className="icon icon-CaretDown" aria-hidden />
         </a>
@@ -117,7 +117,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item">
-        <a href="#" className="item-link !pt-[2px] !pb-[8px]">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Shop </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -172,7 +172,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item">
-        <a href="#" className="item-link !pt-[2px] !pb-[8px]">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Product </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -227,15 +227,6 @@ export default function NavHeader1({
             </div>
           </div>
         </div>
-      </li>
-      <li className="menu-item d-none d-xxl-block">
-        <a
-          href="https://themeforest.net/user/themesflat/portfolio"
-          target="_blank"
-          className="item-link !pt-[2px] !pb-[8px]"
-        >
-          <span className="text cus-text"> Buy Template </span>
-        </a>
       </li>
     </>
   );

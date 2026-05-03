@@ -205,15 +205,6 @@ export default function Nav({
           </ul>
         </div>
       </li>
-      <li className="menu-item d-none d-xxl-block">
-        <a
-          href="https://themeforest.net/user/themesflat/portfolio"
-          target="_blank"
-          className="item-link"
-        >
-          <span className="text cus-text"> Buy Template </span>
-        </a>
-      </li>
     </>
   );
 }
