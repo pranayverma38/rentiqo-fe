@@ -1,37 +1,42 @@
 import type { ReactNode } from "react";
 
-import DelhiShopListing from "@/components/delhi/DelhiShopListing";
-import type { DelhiCategorySlug } from "@/lib/delhi/subcategories";
+import CategoryShopListing from "@/components/catalog/CategoryShopListing";
+import type {
+  CategorySlug,
+  LocationSlug,
+} from "@/lib/catalog/subcategories";
 
-type DelhiCategorySubcategoryPageProps = {
+type CategorySubcategoryPageProps = {
+  locationSlug: LocationSlug;
   categoryPath: string;
-  categorySlug: DelhiCategorySlug;
+  categorySlug: CategorySlug;
   categoryLabel: string;
   subcategoryLabel: string;
   activeSubcategorySlug: string;
-  /** Optional hero line; defaults to a generic line using the subcategory label */
   description?: ReactNode;
 };
 
-export default function DelhiCategorySubcategoryPage({
+export default function CategorySubcategoryPage({
+  locationSlug,
   categoryPath,
   categorySlug,
   categoryLabel,
   subcategoryLabel,
   activeSubcategorySlug,
   description,
-}: DelhiCategorySubcategoryPageProps) {
+}: CategorySubcategoryPageProps) {
   const desc =
     description ??
     `Browse ${subcategoryLabel} in our ${categoryLabel.toLowerCase()} collection.`;
 
   return (
-    <DelhiShopListing
+    <CategoryShopListing
       crumbs={[
         { href: "/", label: "Home" },
         { href: categoryPath, label: categoryLabel },
         { label: subcategoryLabel },
       ]}
+      locationSlug={locationSlug}
       categoryPath={categoryPath}
       categorySlug={categorySlug}
       activeSubcategorySlug={activeSubcategorySlug}

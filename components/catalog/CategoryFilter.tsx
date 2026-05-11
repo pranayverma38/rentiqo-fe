@@ -1,14 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { DelhiCategorySlug } from "@/lib/delhi/subcategories";
-import { getDelhiCategoryFilters } from "@/lib/delhi/subcategories";
+import type {
+  CategorySlug,
+  LocationSlug,
+} from "@/lib/catalog/subcategories";
+import { getLocationCategoryFilters } from "@/lib/catalog/subcategories";
 
 const DEFAULT_FILTER_IMAGE = "/assets/images/custom-top-filter/apple2.png";
 
-type DelhiSubcategoryFilterProps = {
+type CategoryFilterProps = {
+  locationSlug: LocationSlug;
   categoryPath: string;
-  categorySlug: DelhiCategorySlug;
+  categorySlug: CategorySlug;
   activeSubcategorySlug?: string | null;
 };
 
@@ -23,12 +27,13 @@ function isFilterActive(
   return filterSlug === activeSubcategorySlug;
 }
 
-export default function DelhiSubcategoryFilter({
+export default function CategoryFilter({
+  locationSlug,
   categoryPath,
   categorySlug,
   activeSubcategorySlug,
-}: DelhiSubcategoryFilterProps) {
-  const filters = getDelhiCategoryFilters(categorySlug);
+}: CategoryFilterProps) {
+  const filters = getLocationCategoryFilters(locationSlug, categorySlug);
   const activeRingClass =
     "ring-2 ring-[rgb(247_130_64)] shadow-[inset_0_0_0_2px_#fff]";
 

@@ -1,6 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+import {
+  getEquivalentLocationPath,
+  getLocationSlugFromPathname,
+  locationOptions,
+} from "@/lib/catalog/subcategories";
+import { useStore } from "@/context/store";
 
 interface LanguageSelectProps {
   placement?: string;
@@ -8,20 +16,29 @@ interface LanguageSelectProps {
   textColor?: string;
 }
 
-const languages: string[] = ["Delhi", "Gurugram", "Noida"];
-
 export default function LanguageSelect({
   placement = "bottom-start",
   textBlack = false,
   textColor = "color-white",
 }: LanguageSelectProps) {
-  const [selectedLanguage, setSelectedLanguage] = useState<string>(
-    languages[0],
-  );
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const selectedLocation = useStore((state) => state.selectedLocation);
+  const setSelectedLocation = useStore((state) => state.setSelectedLocation);
+  const activeLocation =
+    locationOptions.find((location) => location.slug === selectedLocation) ??
+    locationOptions[0];
 
-  const handleSelect = (lang: string): void => {
-    setSelectedLanguage(lang);
-  };
+  useEffect(() => {
+    const locationFromPath = getLocationSlugFromPathname(pathname);
+    if (
+      locationFromPath != null &&
+      locationFromPath !== selectedLocation
+    ) {
+      setSelectedLocation(locationFromPath);
+    }
+  }, [pathname, selectedLocation, setSelectedLocation]);
 
   return (
     <div
@@ -34,35 +51,55 @@ export default function LanguageSelect({
         className="btn dropdown-toggle btn-light"
         data-bs-toggle="dropdown"
         aria-expanded="false"
-        title={selectedLanguage}
+        title={activeLocation.label}
       >
         <div className="filter-option">
           <div className="filter-option-inner">
-            <div className="filter-option-inner-inner">{selectedLanguage}</div>
+            <div className="filter-option-inner-inner">
+              {activeLocation.label}
+            </div>
           </div>
         </div>
       </button>
 
       <div className="dropdown-menu" data-popper-placement={placement}>
         <ul className="dropdown-menu inner show" role="presentation">
-          {languages.map((lang, index) => (
+          {locationOptions.map((location) => (
             <li
-              key={index}
-              className={selectedLanguage === lang ? "selected active" : ""}
+              key={location.slug}
+              className={
+                activeLocation.slug === location.slug ? "selected active" : ""
+              }
             >
               <a
                 role="option"
-                aria-selected={selectedLanguage === lang}
+                aria-selected={activeLocation.slug === location.slug}
                 className={`dropdown-item ${
-                  selectedLanguage === lang ? "active selected" : ""
+                  activeLocation.slug === location.slug ? "active selected" : ""
                 }`}
                 href="#"
                 onClick={(e) => {
                   e.preventDefault();
-                  handleSelect(lang);
+                  if (location.slug === activeLocation.slug) {
+                    return;
+                  }
+
+                  setSelectedLocation(location.slug);
+                  const nextPath = getEquivalentLocationPath(
+                    pathname,
+                    location.slug,
+                  );
+                  if (nextPath == null || nextPath === pathname) {
+                    return;
+                  }
+
+                  const queryString = searchParams.toString();
+                  router.push(
+                    queryString ? `${nextPath}?${queryString}` : nextPath,
+                  );
                 }}
               >
-                <span className="text">{lang}</span>
+                <span className="text">{location.label}</span>
               </a>
             </li>
           ))}
