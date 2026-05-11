@@ -41,7 +41,7 @@ export default function Header1() {
 
   return (
     <header
-      className={`tf-header header-s2 scr-box-shadow relative${
+      className={`tf-header header-s2 scr-box-shadow relative max-w-full${
         headerSticky ? " header-sticky" : ""
       }`}
       style={{
@@ -147,11 +147,11 @@ export default function Header1() {
           </div>
         </div>
       </div>
-      <div className="header-bottom_wrap d-none d-xl-block header-bottom_wrap--header1-clone">
-        <div className="container">
-          <div className="header-bottom !w-full">
-            <nav className="box-navigation !w-full">
-              <ul className="box-nav-menu !w-full !justify-start">
+      <div className="header-bottom_wrap d-none d-xl-block header-bottom_wrap--header1-clone min-w-0 max-w-full">
+        <div className="container min-w-0 max-w-full">
+          <div className="header-bottom !w-full min-w-0 max-w-full">
+            <nav className="box-navigation !w-full min-w-0 max-w-full">
+              <ul className="box-nav-menu !flex !w-full !min-w-0 !max-w-full !flex-wrap !justify-start !gap-y-2 [&>li]:shrink-0">
                 <NavHeader1 />
               </ul>
             </nav>

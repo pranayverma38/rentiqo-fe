@@ -5,8 +5,9 @@ import {
   navShop,
   navProduct,
   navBlog,
+  navCombos,
   navPages,
-} from "@/data/nav";
+} from "@/data/navHeader1";
 import { topPicsProducts } from "@/data/products/products";
 import ProductCard from "@/components/ui/ProductCard";
 import TfSwiper from "@/components/ui/TfSwiper";
@@ -21,7 +22,63 @@ export default function NavHeader1({
   return (
     <>
       <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
+          <span className="text cus-text"> Home Furniture </span>
+          <i className="icon icon-CaretDown" />
+        </a>
+        <div className="sub-menu mega-menu-item">
+          <ul className="sub-menu_list">
+            {navPages.map((link, index) => (
+              <li key={index}>
+                <Link href={link.href} className="sub-menu_link has-text">
+                  <span className="cus-text"> {link.text} </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </li>
+      <li className="menu-item position-relative">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
+          <span className="text cus-text"> Appliances </span>
+          <i className="icon icon-CaretDown" />
+        </a>
+        <div className="sub-menu mega-menu-item">
+          <ul className="sub-menu_list">
+            {navBlog.map((link, index) => (
+              <li key={index}>
+                <Link href={link.href} className="sub-menu_link has-text">
+                  <span className="cus-text"> {link.text} </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </li>
+      <li className="menu-item position-relative">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
+          <span className="text cus-text"> Combos </span>
+          <i className="icon icon-CaretDown" />
+        </a>
+        <div className="sub-menu mega-menu-item">
+          <ul className="sub-menu_list">
+            {navCombos.map((link, index) => (
+              <li key={index}>
+                <Link href={link.href} className="sub-menu_link has-text">
+                  <span className="cus-text"> {link.text} </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </li>
+      <li className="menu-item">
+        <Link href="/" className="item-link !pt-[2px] !pb-[5px]">
+          <span className="text cus-text"> Refer a friend </span>
+        </Link>
+      </li>
+      <li className="menu-item position-relative">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Home </span>
           <i className="icon icon-CaretDown" aria-hidden />
         </a>
@@ -60,7 +117,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item">
-        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Shop </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -115,7 +172,7 @@ export default function NavHeader1({
         </div>
       </li>
       <li className="menu-item">
-        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
+        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Product </span>
           <i className="icon icon-CaretDown" />
         </a>
@@ -170,49 +227,6 @@ export default function NavHeader1({
             </div>
           </div>
         </div>
-      </li>
-      <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
-          <span className="text cus-text"> Blog </span>
-          <i className="icon icon-CaretDown" />
-        </a>
-        <div className="sub-menu mega-menu-item">
-          <ul className="sub-menu_list">
-            {navBlog.map((link, index) => (
-              <li key={index}>
-                <Link href={link.href} className="sub-menu_link has-text">
-                  <span className="cus-text"> {link.text} </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </li>
-      <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[14px]">
-          <span className="text cus-text"> Pages </span>
-          <i className="icon icon-CaretDown" />
-        </a>
-        <div className="sub-menu mega-menu-item">
-          <ul className="sub-menu_list">
-            {navPages.map((link, index) => (
-              <li key={index}>
-                <Link href={link.href} className="sub-menu_link has-text">
-                  <span className="cus-text"> {link.text} </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </li>
-      <li className="menu-item d-none d-xxl-block">
-        <a
-          href="https://themeforest.net/user/themesflat/portfolio"
-          target="_blank"
-          className="item-link !pt-[2px] !pb-[14px]"
-        >
-          <span className="text cus-text"> Buy Template </span>
-        </a>
       </li>
     </>
   );

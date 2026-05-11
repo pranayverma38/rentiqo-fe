@@ -231,16 +231,6 @@ export default function MobileMenu({
                 </ul>
               </div>
             </li>
-
-            <li className="nav-mb-item">
-              <a
-                href="https://themeforest.net/user/themesflat/portfolio"
-                target="_blank"
-                className="mb-menu-link"
-              >
-                <span>Buy Template</span>
-              </a>
-            </li>
           </ul>
         </div>
 
