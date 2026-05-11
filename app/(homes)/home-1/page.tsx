@@ -35,7 +35,7 @@ export default function IndexPage() {
         {/* <TopPicsProducts /> */}
         {/* <Collection /> */}
         {/* <TopPicksThisWeek /> */}
-        {/* <Lookbook /> */}
+        <Lookbook />
         <Testimonial />
         <Gallery />
         <Features />

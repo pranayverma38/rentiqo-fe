@@ -1,16 +1,30 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import {
   navHomeLinks,
   navShop,
   navProduct,
-  navBlog,
-  navCombos,
-  navPages,
 } from "@/data/navHeader1";
 import { topPicsProducts } from "@/data/products/products";
 import ProductCard from "@/components/ui/ProductCard";
 import TfSwiper from "@/components/ui/TfSwiper";
+import {
+  type CategorySlug,
+  getCategoryPath,
+  getCategoryMenuItems,
+} from "@/lib/catalog/subcategories";
+import { useStore } from "@/context/store";
+
+const locationAwareMenus: Array<{
+  label: string;
+  category: CategorySlug;
+}> = [
+  { label: "Home Furniture", category: "home-furniture" },
+  { label: "Appliances", category: "appliances" },
+  { label: "Combos", category: "combos" },
+];
 
 export default function NavHeader1({
   variant2 = false,
@@ -19,59 +33,34 @@ export default function NavHeader1({
   variant2?: boolean;
   variant3?: boolean;
 }) {
+  const selectedLocation = useStore((state) => state.selectedLocation);
+
   return (
     <>
-      <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
-          <span className="text cus-text"> Home Furniture </span>
-          <i className="icon icon-CaretDown" />
-        </a>
-        <div className="sub-menu mega-menu-item">
-          <ul className="sub-menu_list">
-            {navPages.map((link, index) => (
-              <li key={index}>
-                <Link href={link.href} className="sub-menu_link has-text">
-                  <span className="cus-text"> {link.text} </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </li>
-      <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
-          <span className="text cus-text"> Appliances </span>
-          <i className="icon icon-CaretDown" />
-        </a>
-        <div className="sub-menu mega-menu-item">
-          <ul className="sub-menu_list">
-            {navBlog.map((link, index) => (
-              <li key={index}>
-                <Link href={link.href} className="sub-menu_link has-text">
-                  <span className="cus-text"> {link.text} </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </li>
-      <li className="menu-item position-relative">
-        <a href="#" className="item-link !pt-[2px] !pb-[5px]">
-          <span className="text cus-text"> Combos </span>
-          <i className="icon icon-CaretDown" />
-        </a>
-        <div className="sub-menu mega-menu-item">
-          <ul className="sub-menu_list">
-            {navCombos.map((link, index) => (
-              <li key={index}>
-                <Link href={link.href} className="sub-menu_link has-text">
-                  <span className="cus-text"> {link.text} </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </li>
+      {locationAwareMenus.map((menu) => {
+        const links = getCategoryMenuItems(selectedLocation, menu.category);
+        const allCategoryHref = getCategoryPath(selectedLocation, menu.category);
+
+        return (
+          <li key={menu.category} className="menu-item position-relative">
+            <Link href={allCategoryHref} className="item-link !pt-[2px] !pb-[5px]">
+              <span className="text cus-text"> {menu.label} </span>
+              <i className="icon icon-CaretDown" />
+            </Link>
+            <div className="sub-menu mega-menu-item">
+              <ul className="sub-menu_list">
+                {links.map((link) => (
+                  <li key={link.slug}>
+                    <Link href={link.href} className="sub-menu_link has-text">
+                      <span className="cus-text"> {link.label} </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        );
+      })}
       <li className="menu-item">
         <Link href="/" className="item-link !pt-[2px] !pb-[5px]">
           <span className="text cus-text"> Refer a friend </span>

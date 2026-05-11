@@ -5,6 +5,7 @@ import { persist, type StorageValue } from "zustand/middleware";
 
 import { ProductCardItem } from "@/types/productCard";
 import { products } from "@/data/products/products";
+import { type LocationSlug } from "@/lib/catalog/subcategories";
 
 export type Product = ProductCardItem;
 export type CartProduct = Product & {
@@ -22,6 +23,7 @@ interface StoreState {
   quickAddItem: ProductId;
   totalPrice: number;
   activeCartProduct: CartProduct | null;
+  selectedLocation: LocationSlug;
   setCartProducts: (
     value: CartProduct[] | ((prev: CartProduct[]) => CartProduct[]),
   ) => void;
@@ -30,6 +32,7 @@ interface StoreState {
   setQuickAddItem: (id: ProductId) => void;
   setCompareItem: (value: Product[] | ((prev: Product[]) => Product[])) => void;
   setActiveCartProduct: (item: CartProduct | null) => void;
+  setSelectedLocation: (location: LocationSlug) => void;
   isAddedToCartProducts: (id: ProductId) => boolean;
   addProductToCart: (item: Product, qty?: number) => void;
   updateQuantity: (id: ProductId, qty: number) => void;
@@ -55,6 +58,7 @@ export const useStore = create<StoreState>()(
       quickAddItem: 1,
       totalPrice: 0,
       activeCartProduct: null,
+      selectedLocation: "delhi",
 
       setCartProducts: (value) =>
         set((state) => {
@@ -76,6 +80,7 @@ export const useStore = create<StoreState>()(
             typeof value === "function" ? value(state.compareItem) : value,
         })),
       setActiveCartProduct: (item) => set({ activeCartProduct: item }),
+      setSelectedLocation: (selectedLocation) => set({ selectedLocation }),
 
       isAddedToCartProducts: (id) => {
         const cart = get().cartProducts;
@@ -145,6 +150,7 @@ export const useStore = create<StoreState>()(
         cartProducts: state.cartProducts,
         wishList: state.wishList,
         totalPrice: state.totalPrice,
+        selectedLocation: state.selectedLocation,
       }),
       storage: {
         getItem: (
@@ -153,6 +159,7 @@ export const useStore = create<StoreState>()(
           cartProducts: CartProduct[];
           wishList: Product[];
           totalPrice: number;
+          selectedLocation: LocationSlug;
         }> | null => {
           if (typeof window === "undefined") return null;
           const str = window.localStorage.getItem(name);
@@ -162,10 +169,14 @@ export const useStore = create<StoreState>()(
                 cartProducts: CartProduct[];
                 wishList: Product[];
                 totalPrice: number;
+                selectedLocation: LocationSlug;
               }>;
               parsed.state.wishList = normalizeStoredProductList(
                 parsed?.state?.wishList,
               );
+              if (parsed?.state?.selectedLocation == null) {
+                parsed.state.selectedLocation = "delhi";
+              }
               if (
                 parsed?.state?.cartProducts &&
                 parsed.state.totalPrice == null
@@ -187,6 +198,7 @@ export const useStore = create<StoreState>()(
             cartProducts: CartProduct[];
             wishList: Product[];
             totalPrice: number;
+            selectedLocation: LocationSlug;
           }>,
         ) => {
           if (typeof window !== "undefined") {
@@ -239,6 +251,8 @@ function getContextSnapshot(state: StoreState) {
     quantityInCart: state.quantityInCart,
     activeCartProduct: state.activeCartProduct,
     setActiveCartProduct: state.setActiveCartProduct,
+    selectedLocation: state.selectedLocation,
+    setSelectedLocation: state.setSelectedLocation,
   };
 }
 
