@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   getEquivalentLocationPath,
@@ -23,7 +23,6 @@ export default function LanguageSelect({
 }: LanguageSelectProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const selectedLocation = useStore((state) => state.selectedLocation);
   const setSelectedLocation = useStore((state) => state.setSelectedLocation);
   const activeLocation =
@@ -93,9 +92,10 @@ export default function LanguageSelect({
                     return;
                   }
 
-                  const queryString = searchParams.toString();
+                  const queryString =
+                    typeof window === "undefined" ? "" : window.location.search;
                   router.push(
-                    queryString ? `${nextPath}?${queryString}` : nextPath,
+                    queryString ? `${nextPath}${queryString}` : nextPath,
                   );
                 }}
               >
