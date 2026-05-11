@@ -42,7 +42,7 @@ export default function DelhiShopListing({
                       {c.label}
                     </Link>
                   ) : (
-                    <p className="text-caption-01">{c.label}</p>
+                    <span className="text-caption-01">{c.label}</span>
                   )}
                 </span>
               ))}
