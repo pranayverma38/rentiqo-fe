@@ -13,6 +13,8 @@ export default function page() {
         { href: "/", label: "Home" },
         { label: "Combos" },
       ]}
+      categoryPath="/delhi/combos"
+      categorySlug="combos"
       title="Combos"
       description={
         <>

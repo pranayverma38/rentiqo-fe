@@ -13,6 +13,8 @@ export default function page() {
         { href: "/", label: "Home" },
         { label: "Office furniture" },
       ]}
+      categoryPath="/delhi/office-furniture"
+      categorySlug="office-furniture"
       title="Office furniture"
       description={
         <>

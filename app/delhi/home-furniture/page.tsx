@@ -13,6 +13,8 @@ export default function page() {
         { href: "/", label: "Home" },
         { label: "Home furniture" },
       ]}
+      categoryPath="/delhi/home-furniture"
+      categorySlug="home-furniture"
       title="Home furniture"
       description={
         <>

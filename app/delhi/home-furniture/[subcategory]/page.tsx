@@ -47,8 +47,10 @@ export default async function page({
   return (
     <DelhiCategorySubcategoryPage
       categoryPath={CATEGORY_PATH}
+      categorySlug={CATEGORY_SLUG}
       categoryLabel={CATEGORY_LABEL}
       subcategoryLabel={label}
+      activeSubcategorySlug={subcategory}
     />
   );
 }
