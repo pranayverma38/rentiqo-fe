@@ -4,6 +4,10 @@ import { notFound } from "next/navigation";
 import CategoryShopListing from "@/components/catalog/CategoryShopListing";
 import { fetchCatalogProducts } from "@/lib/catalog/fetchCatalogProducts";
 import {
+  fetchMedusaCategoryNavChildren,
+  isRentiqoStoreCatalogConfigured,
+} from "@/lib/catalog/rentiqoStoreCatalog";
+import {
   categoryDescriptions,
   getAllLocationCategoryParams,
   getCategoryPath,
@@ -11,7 +15,7 @@ import {
   getLocationLabel,
   isCategorySlug,
   isLocationSlug,
-} from "@/lib/catalog/subcategories";
+} from "@/lib/catalog/catalogRoutes";
 import { shopRouteMetadata } from "@/lib/metadata/shop";
 
 export const dynamicParams = false;
@@ -48,11 +52,17 @@ export default async function Page({
 
   const categoryLabel = getCategoryLabel(category);
 
-  const catalogProducts = await fetchCatalogProducts({
-    location,
-    category,
-    subcategorySlug: null,
-  });
+  const storeConfigured = isRentiqoStoreCatalogConfigured();
+  const [catalogProducts, medusaNav] = await Promise.all([
+    fetchCatalogProducts({
+      location,
+      category,
+      subcategorySlug: null,
+    }),
+    storeConfigured
+      ? fetchMedusaCategoryNavChildren(category, location)
+      : Promise.resolve([]),
+  ]);
 
   return (
     <CategoryShopListing
@@ -66,6 +76,8 @@ export default async function Page({
       title={categoryLabel}
       description={categoryDescriptions[category]}
       catalogProducts={catalogProducts}
+      subcategoryNavSource={storeConfigured ? "medusa" : "static"}
+      medusaSubcategoryNav={storeConfigured ? medusaNav : undefined}
     />
   );
 }

@@ -1,4 +1,4 @@
-import type { LocationSlug } from "@/lib/catalog/subcategories";
+import type { LocationSlug } from "@/lib/catalog/catalogRoutes";
 
 /** Medusa `/store/products` query context per storefront location (hardcoded). */
 export type MedusaListingStoreContext = {

@@ -5,7 +5,7 @@ import { persist, type StorageValue } from "zustand/middleware";
 
 import { ProductCardItem } from "@/types/productCard";
 import { products } from "@/data/products/products";
-import { type LocationSlug } from "@/lib/catalog/subcategories";
+import { type LocationSlug } from "@/lib/catalog/catalogRoutes";
 
 export type Product = ProductCardItem;
 export type CartProduct = Product & {

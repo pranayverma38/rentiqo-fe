@@ -3,10 +3,11 @@ import type { ReactNode } from "react";
 
 import CategoryFilter from "@/components/catalog/CategoryFilter";
 import Shop from "@/components/shop/shop-default/Shop";
+import type { MedusaSubcategoryNavItem } from "@/lib/catalog/rentiqoStoreCatalog";
 import type {
   CategorySlug,
   LocationSlug,
-} from "@/lib/catalog/subcategories";
+} from "@/lib/catalog/catalogRoutes";
 import type { ShopProduct } from "@/types/shopFilter";
 
 export type ShopCrumb = {
@@ -24,6 +25,8 @@ export type CategoryShopListingProps = {
   activeSubcategorySlug?: string | null;
   /** From `fetchCatalogProducts` on the server (Medusa / BFF). */
   catalogProducts: ShopProduct[];
+  subcategoryNavSource?: "static" | "medusa";
+  medusaSubcategoryNav?: MedusaSubcategoryNavItem[];
 };
 
 /**
@@ -38,6 +41,8 @@ export default function CategoryShopListing({
   categorySlug,
   activeSubcategorySlug,
   catalogProducts,
+  subcategoryNavSource = "static",
+  medusaSubcategoryNav,
 }: CategoryShopListingProps) {
   const displayCrumbs =
     (activeSubcategorySlug == null || activeSubcategorySlug === "all") &&
@@ -80,6 +85,8 @@ export default function CategoryShopListing({
         categoryPath={categoryPath}
         categorySlug={categorySlug}
         activeSubcategorySlug={activeSubcategorySlug}
+        subcategoryNavSource={subcategoryNavSource}
+        medusaSubcategoryNav={medusaSubcategoryNav}
       />
       <Shop variant={["leftSidebar"]} catalogProducts={catalogProducts} />
     </>

@@ -4,16 +4,27 @@ import Link from "next/link";
 import type {
   CategorySlug,
   LocationSlug,
-} from "@/lib/catalog/subcategories";
-import { getLocationCategoryFilters } from "@/lib/catalog/subcategories";
+} from "@/lib/catalog/catalogRoutes";
+import type { MedusaSubcategoryNavItem } from "@/lib/catalog/rentiqoStoreCatalog";
 
 const DEFAULT_FILTER_IMAGE = "/assets/images/custom-top-filter/apple2.png";
+
+/** When Medusa is off, only "All" (no static per-location subcategory lists). */
+const STATIC_SUBCATEGORY_FILTERS = [
+  { slug: "all", label: "All", imageAlt: "All" },
+];
 
 type CategoryFilterProps = {
   locationSlug: LocationSlug;
   categoryPath: string;
   categorySlug: CategorySlug;
   activeSubcategorySlug?: string | null;
+  /**
+   * `medusa`: chips from `medusaSubcategoryNav` only (All + API rows; may be empty).
+   * `static`: only an "All" chip (no static subcategory lists).
+   */
+  subcategoryNavSource?: "static" | "medusa";
+  medusaSubcategoryNav?: MedusaSubcategoryNavItem[];
 };
 
 function isFilterActive(
@@ -32,8 +43,20 @@ export default function CategoryFilter({
   categoryPath,
   categorySlug,
   activeSubcategorySlug,
+  subcategoryNavSource = "static",
+  medusaSubcategoryNav,
 }: CategoryFilterProps) {
-  const filters = getLocationCategoryFilters(locationSlug, categorySlug);
+  const filters =
+    subcategoryNavSource === "medusa"
+      ? [
+          { slug: "all", label: "All", imageAlt: "All" },
+          ...(medusaSubcategoryNav ?? []).map((item) => ({
+            slug: item.handle,
+            label: item.name,
+            imageAlt: item.name,
+          })),
+        ]
+      : STATIC_SUBCATEGORY_FILTERS;
   const activeRingClass =
     "ring-2 ring-[rgb(247_130_64)] shadow-[inset_0_0_0_2px_#fff]";
 

@@ -1,14 +1,21 @@
 import { getMedusaListingStoreContext } from "@/lib/catalog/medusaListingByLocation";
-import type { LocationSlug } from "@/lib/catalog/subcategories";
+import type { LocationSlug } from "@/lib/catalog/catalogRoutes";
 import type { ProductColorSwatch } from "@/types/productCard";
 import type { ShopProduct } from "@/types/shopFilter";
 
 const DEFAULT_REVALIDATE_SECONDS = 60;
 const PRODUCTS_PAGE_SIZE = 50;
 
+const PRODUCT_LISTING_FIELDS = "*variants.calculated_price";
+/** Same as manual jq on `.products[].categories[1]?.handle` for regional availability. */
+const SUBCATEGORY_NAV_PRODUCT_FIELDS = "*categories,*variants.calculated_price";
+
 type MedusaCategoryChild = {
   id: string;
   handle?: string | null;
+  name?: string | null;
+  rank?: number | null;
+  is_active?: boolean | null;
 };
 
 type MedusaProductCategory = {
@@ -36,6 +43,12 @@ type MedusaProductTag = {
   name?: string | null;
 };
 
+type MedusaProductCategoryRow = {
+  id?: string;
+  handle?: string | null;
+  name?: string | null;
+};
+
 export type MedusaStoreProduct = {
   id: string;
   handle?: string | null;
@@ -45,6 +58,7 @@ export type MedusaStoreProduct = {
   tags?: MedusaProductTag[] | null;
   metadata?: unknown;
   variants?: MedusaVariant[] | null;
+  categories?: MedusaProductCategoryRow[] | null;
 };
 
 function storeBaseUrl(): string | null {
@@ -258,6 +272,38 @@ export async function fetchProductCategoriesByHandle(
   return first ?? null;
 }
 
+/** Display name for breadcrumb/metadata; uses Medusa category tree only. */
+export async function resolveMedusaSubcategoryDisplayName(
+  categoryHandle: string,
+  subcategorySlug: string,
+): Promise<string | null> {
+  if (subcategorySlug === "all") {
+    return "All";
+  }
+
+  try {
+    const root = await fetchProductCategoriesByHandle(categoryHandle);
+    if (root == null) {
+      return null;
+    }
+    const match = root.category_children?.find((c) => c.handle === subcategorySlug);
+    if (match == null) {
+      return null;
+    }
+    return typeof match.name === "string" && match.name.length > 0
+      ? match.name
+      : subcategorySlug;
+  } catch {
+    return null;
+  }
+}
+
+/** One row for the category filter strip (Medusa child category). */
+export type MedusaSubcategoryNavItem = {
+  handle: string;
+  name: string;
+};
+
 function collectCategoryIdsForListing(
   root: MedusaProductCategory,
   subcategorySlug: string | null,
@@ -282,13 +328,14 @@ function buildProductsUrl(
   offset: number,
   limit: number,
   listing: { regionId: string; salesChannelId: string },
+  fields: string,
 ): string {
   const base = storeBaseUrl();
   if (base == null) {
     throw new Error("Missing NEXT_PUBLIC_MEDUSA_BACKEND_URL");
   }
   const params = new URLSearchParams();
-  params.set("fields", "*variants.calculated_price");
+  params.set("fields", fields);
   params.set("region_id", listing.regionId);
   params.set("sales_channel_id", listing.salesChannelId);
   params.set("limit", String(limit));
@@ -300,11 +347,13 @@ function buildProductsUrl(
 async function fetchAllProductsForCategoryIds(
   categoryIds: string[],
   location: LocationSlug,
+  options?: { fields?: string },
 ): Promise<MedusaStoreProduct[]> {
   if (categoryIds.length === 0) {
     return [];
   }
 
+  const fields = options?.fields ?? PRODUCT_LISTING_FIELDS;
   const listing = getMedusaListingStoreContext(location);
   const all: MedusaStoreProduct[] = [];
   let offset = 0;
@@ -316,6 +365,7 @@ async function fetchAllProductsForCategoryIds(
       offset,
       PRODUCTS_PAGE_SIZE,
       listing,
+      fields,
     );
     const json = await fetchJson<ProductsListResponse>(url);
     const batch = json.products ?? [];
@@ -328,6 +378,72 @@ async function fetchAllProductsForCategoryIds(
   }
 
   return all;
+}
+
+/**
+ * Filter-strip subcategories that have ≥1 product in the active region/sales channel.
+ * Uses `GET /store/products` with parent + all child category ids and
+ * `fields=*categories,*variants.calculated_price`, then keeps Medusa children whose
+ * `handle` appears as `product.categories[1].handle` (leaf row, same as `jq`).
+ */
+export async function fetchMedusaCategoryNavChildren(
+  categoryHandle: string,
+  location: LocationSlug,
+): Promise<MedusaSubcategoryNavItem[]> {
+  if (!isRentiqoStoreCatalogConfigured()) {
+    return [];
+  }
+
+  try {
+    const root = await fetchProductCategoriesByHandle(categoryHandle);
+    if (root == null) {
+      return [];
+    }
+
+    const children = root.category_children ?? [];
+    const categoryIds = collectCategoryIdsForListing(root, null);
+    if (categoryIds.length === 0) {
+      return [];
+    }
+
+    const products = await fetchAllProductsForCategoryIds(
+      categoryIds,
+      location,
+      { fields: SUBCATEGORY_NAV_PRODUCT_FIELDS },
+    );
+
+    const handlesWithProducts = new Set<string>();
+    for (const p of products) {
+      const cats = p.categories;
+      if (!Array.isArray(cats) || cats.length < 2) {
+        continue;
+      }
+      const h = cats[1]?.handle;
+      if (typeof h === "string" && h.trim().length > 0) {
+        handlesWithProducts.add(h.trim());
+      }
+    }
+
+    return children
+      .filter(
+        (c) =>
+          typeof c.handle === "string" &&
+          c.handle.length > 0 &&
+          c.is_active !== false &&
+          handlesWithProducts.has(c.handle),
+      )
+      .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+      .map((c) => ({
+        handle: c.handle as string,
+        name:
+          typeof c.name === "string" && c.name.length > 0
+            ? c.name
+            : (c.handle as string),
+      }));
+  } catch (err) {
+    console.error("[fetchMedusaCategoryNavChildren]", err);
+    return [];
+  }
 }
 
 export function isRentiqoStoreCatalogConfigured(): boolean {

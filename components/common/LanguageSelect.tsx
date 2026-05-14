@@ -7,7 +7,7 @@ import {
   getEquivalentLocationPath,
   getLocationSlugFromPathname,
   locationOptions,
-} from "@/lib/catalog/subcategories";
+} from "@/lib/catalog/catalogRoutes";
 import { useStore } from "@/context/store";
 
 interface LanguageSelectProps {

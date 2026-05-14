@@ -3,7 +3,7 @@ import {
   fetchRentiqoCatalogShopProducts,
   isRentiqoStoreCatalogConfigured,
 } from "@/lib/catalog/rentiqoStoreCatalog";
-import type { CategorySlug, LocationSlug } from "@/lib/catalog/subcategories";
+import type { CategorySlug, LocationSlug } from "@/lib/catalog/catalogRoutes";
 import type { ShopProduct } from "@/types/shopFilter";
 
 /**
