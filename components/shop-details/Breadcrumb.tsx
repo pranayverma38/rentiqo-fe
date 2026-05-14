@@ -6,12 +6,18 @@ import { useParams, usePathname } from "next/navigation";
 import { products } from "@/data/products/products";
 import type { ProductCardItem } from "@/types/productCard";
 
-function useAdjacentProductIds(currentId: number) {
+function useAdjacentProductIds(currentId: string | number) {
   return useMemo(() => {
-    const sorted = [...products].sort((a, b) => a.id - b.id);
-    const idx = sorted.findIndex((p) => p.id === currentId);
+    const key = String(currentId);
+    const sorted = [...products].sort((a, b) =>
+      String(a.id).localeCompare(String(b.id), undefined, { numeric: true }),
+    );
+    const idx = sorted.findIndex((p) => String(p.id) === key);
     if (idx === -1) {
-      return { prevId: null as number | null, nextId: null as number | null };
+      return {
+        prevId: null as string | number | null,
+        nextId: null as string | number | null,
+      };
     }
     return {
       prevId: idx > 0 ? sorted[idx - 1].id : null,
@@ -57,8 +63,8 @@ export default function Breadcrumb({ product }: { product: ProductCardItem }) {
 
   const idParam = params?.id;
   const rawId = Array.isArray(idParam) ? idParam[0] : idParam;
-  const parsed = Number(rawId);
-  const currentId = Number.isFinite(parsed) ? parsed : product.id;
+  const currentId: string | number =
+    rawId != null && rawId !== "" ? rawId : product.id;
 
   const basePath =
     pathname.includes("/") && pathname.length > 0

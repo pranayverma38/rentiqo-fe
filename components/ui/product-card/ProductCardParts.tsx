@@ -17,7 +17,7 @@ export function ProductCardDualImageLink({
   width,
   height,
 }: {
-  productId: number;
+  productId: number | string;
   activeImage: string;
   hoverImage: string;
   alt: string;

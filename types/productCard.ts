@@ -31,7 +31,8 @@ export interface ShopProductFacetFields {
 
 /** One product for cards, single-product sections, or any product UI. Use img/imgHover for cards; use images for single-product gallery. */
 export interface ProductCardItem extends Partial<ShopProductFacetFields> {
-  id: number;
+  /** Theme demo uses numeric ids; Medusa store uses string ids (e.g. `prod_…`). */
+  id: number | string;
   /** Main image for card layout. Omit when using images[] (single-product). */
   img: string;
   imgHover?: string;

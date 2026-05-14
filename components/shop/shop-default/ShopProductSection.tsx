@@ -20,6 +20,7 @@ export function ShopProductSection() {
     pagedVisibleProducts,
     progressive,
     infiniteScroll,
+    squareProductCards,
   } = useShop();
 
   const { visibleProducts, loadMore } = useShopProgressiveLoad({
@@ -34,6 +35,7 @@ export function ShopProductSection() {
 
   const gridCardVariant = resolveGridProductCardVariant(variants);
   const onClear = () => clearAllFilters(dispatch);
+  const cardWrapperClass = squareProductCards ? "square" : undefined;
 
   return (
     <div className="wrapper-control-shop gridLayout-wrapper">
@@ -51,7 +53,7 @@ export function ShopProductSection() {
               key={`${product.id}-list-${i}`}
               product={product}
               variant="shopList"
-              wrapperClass={product.cardVariant}
+              wrapperClass={cardWrapperClass ?? product.cardVariant}
               cardClass=""
               shopMeta={shopMetaFor(product)}
             />
@@ -72,7 +74,7 @@ export function ShopProductSection() {
             <ProductCard
               key={`${product.id}-grid-${i}`}
               product={product}
-              wrapperClass={product.cardVariant}
+              wrapperClass={cardWrapperClass ?? product.cardVariant}
               variant={gridCardVariant}
               cardClass="grid"
               shopMeta={shopMetaFor(product)}

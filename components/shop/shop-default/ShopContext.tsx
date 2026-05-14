@@ -34,6 +34,8 @@ export type ShopContextValue = {
   pagedVisibleProducts: ShopProduct[];
   totalPages: number;
   pageItems: number[];
+  /** Location/category listing: force square card layout on all products. */
+  squareProductCards: boolean;
 };
 
 const ShopContext = createContext<ShopContextValue | null>(null);

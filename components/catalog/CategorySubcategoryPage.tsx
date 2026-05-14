@@ -5,6 +5,7 @@ import type {
   CategorySlug,
   LocationSlug,
 } from "@/lib/catalog/subcategories";
+import type { ShopProduct } from "@/types/shopFilter";
 
 type CategorySubcategoryPageProps = {
   locationSlug: LocationSlug;
@@ -14,6 +15,7 @@ type CategorySubcategoryPageProps = {
   subcategoryLabel: string;
   activeSubcategorySlug: string;
   description?: ReactNode;
+  catalogProducts: ShopProduct[];
 };
 
 export default function CategorySubcategoryPage({
@@ -24,6 +26,7 @@ export default function CategorySubcategoryPage({
   subcategoryLabel,
   activeSubcategorySlug,
   description,
+  catalogProducts,
 }: CategorySubcategoryPageProps) {
   const desc =
     description ??
@@ -42,6 +45,7 @@ export default function CategorySubcategoryPage({
       activeSubcategorySlug={activeSubcategorySlug}
       title={subcategoryLabel}
       description={desc}
+      catalogProducts={catalogProducts}
     />
   );
 }

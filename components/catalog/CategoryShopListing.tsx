@@ -7,6 +7,7 @@ import type {
   CategorySlug,
   LocationSlug,
 } from "@/lib/catalog/subcategories";
+import type { ShopProduct } from "@/types/shopFilter";
 
 export type ShopCrumb = {
   label: string;
@@ -21,11 +22,13 @@ export type CategoryShopListingProps = {
   categoryPath: string;
   categorySlug: CategorySlug;
   activeSubcategorySlug?: string | null;
+  /** From `fetchCatalogProducts` on the server (Medusa / BFF). */
+  catalogProducts: ShopProduct[];
 };
 
 /**
  * Shared hero + left-sidebar shop grid for location-aware category routes.
- * Product source is wired inside `Shop` (static data today; Medusa later).
+ * Products are loaded per route via `catalogProducts` (see `fetchCatalogProducts`).
  */
 export default function CategoryShopListing({
   crumbs,
@@ -34,6 +37,7 @@ export default function CategoryShopListing({
   categoryPath,
   categorySlug,
   activeSubcategorySlug,
+  catalogProducts,
 }: CategoryShopListingProps) {
   const displayCrumbs =
     (activeSubcategorySlug == null || activeSubcategorySlug === "all") &&
@@ -77,7 +81,7 @@ export default function CategoryShopListing({
         categorySlug={categorySlug}
         activeSubcategorySlug={activeSubcategorySlug}
       />
-      <Shop variant={["leftSidebar"]} />
+      <Shop variant={["leftSidebar"]} catalogProducts={catalogProducts} />
     </>
   );
 }

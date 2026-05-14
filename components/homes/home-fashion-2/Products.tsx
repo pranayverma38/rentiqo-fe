@@ -77,7 +77,9 @@ function Products() {
               paginationClassName="sw-dot-default tf-sw-pagination"
             >
               {visible.map((product) => {
-                const addToCart = ADD_TO_CART_PRODUCT_IDS.has(product.id);
+                const addToCart =
+                  typeof product.id === "number" &&
+                  ADD_TO_CART_PRODUCT_IDS.has(product.id);
                 return (
                   <ProductCard
                     key={product.id}

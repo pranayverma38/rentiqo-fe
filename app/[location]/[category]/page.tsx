@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import CategoryShopListing from "@/components/catalog/CategoryShopListing";
+import { fetchCatalogProducts } from "@/lib/catalog/fetchCatalogProducts";
 import {
   categoryDescriptions,
   getAllLocationCategoryParams,
@@ -47,6 +48,12 @@ export default async function Page({
 
   const categoryLabel = getCategoryLabel(category);
 
+  const catalogProducts = await fetchCatalogProducts({
+    location,
+    category,
+    subcategorySlug: null,
+  });
+
   return (
     <CategoryShopListing
       crumbs={[
@@ -58,6 +65,7 @@ export default async function Page({
       categorySlug={category}
       title={categoryLabel}
       description={categoryDescriptions[category]}
+      catalogProducts={catalogProducts}
     />
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import CategorySubcategoryPage from "@/components/catalog/CategorySubcategoryPage";
+import { fetchCatalogProducts } from "@/lib/catalog/fetchCatalogProducts";
 import {
   getAllLocationCategorySubcategoryParams,
   getCategoryPath,
@@ -65,6 +66,12 @@ export default async function Page({
     notFound();
   }
 
+  const catalogProducts = await fetchCatalogProducts({
+    location,
+    category,
+    subcategorySlug: subcategory,
+  });
+
   return (
     <CategorySubcategoryPage
       locationSlug={location}
@@ -76,6 +83,7 @@ export default async function Page({
       description={`Browse ${subcategoryLabel} in ${getLocationLabel(location)} from our ${getCategoryLabel(
         category,
       ).toLowerCase()} collection.`}
+      catalogProducts={catalogProducts}
     />
   );
 }
