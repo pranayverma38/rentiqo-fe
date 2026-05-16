@@ -33,12 +33,18 @@ export interface ShopProductFacetFields {
 export interface ProductCardItem extends Partial<ShopProductFacetFields> {
   /** Theme demo uses numeric ids; Medusa store uses string ids (e.g. `prod_…`). */
   id: number | string;
+  /** Medusa `prod_…` id when `id` is the storefront handle. */
+  medusaProductId?: string;
+  /** Selected Medusa variant on PDP add-to-cart. */
+  medusaVariantId?: string;
   /** Main image for card layout. Omit when using images[] (single-product). */
   img: string;
   imgHover?: string;
   /** Gallery images for single-product layout. When set, use instead of img. */
   images?: ProductSingleImage[];
   name: string;
+  /** Short line under the title (Medusa `subtitle`). */
+  subtitle?: string;
   price: number;
   priceOld?: number;
   /** Badge text (e.g. "NEW", "-25%"). Rendered with class "new" or "sale" based on value. */
@@ -61,8 +67,10 @@ export interface ProductCardItem extends Partial<ShopProductFacetFields> {
   filterTabIds?: string[];
   /** Category for single-product (e.g. "Skin care", "Headphone"). */
   category?: string;
-  /** Reviews text (e.g. "(134 reviews)"). */
+  /** Reviews text (e.g. "(54 reviews)"), from Medusa `metadata.review_count`. */
   reviewsText?: string;
+  /** Medusa `metadata.review_count` when available. */
+  reviewCount?: number;
   /** Full description for single-product. */
   description?: string;
   /** Sold progress for single-product (e.g. 84). */

@@ -32,7 +32,7 @@ export default function ProductInfoOutOfStock({
               <span className="stock out-stock fw-medium">Out of Stock</span>
             </div>
 
-            <ProductShortDescription />
+            <ProductShortDescription product={product} />
             <ProductViews />
           </div>
           <div className="br-line" />

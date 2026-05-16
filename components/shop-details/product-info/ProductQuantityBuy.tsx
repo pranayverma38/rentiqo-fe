@@ -4,8 +4,18 @@ import { useProduct } from "@/context/ProductContext";
 import { useContextElement } from "@/context/Context";
 import { ProductCardItem } from "@/types/productCard";
 
+function formatInr(amount: number): string {
+  return new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
 export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
-  const { quantity, setQuantity, currentColor, currentSize } = useProduct();
+  const { quantity, setQuantity, currentColor, currentSize, selectedVariant } =
+    useProduct();
+  const unitPrice = selectedVariant?.price ?? product.price;
   const { addProductToCart, isAddedToCartProducts, updateQuantity } =
     useContextElement();
   const isInCart = isAddedToCartProducts(product.id);
@@ -17,8 +27,10 @@ export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
     }
     const productWithSelection = {
       ...product,
+      price: unitPrice,
       selectedColor: currentColor || undefined,
       selectedSize: currentSize || undefined,
+      medusaVariantId: selectedVariant?.id,
     };
     addProductToCart(productWithSelection, quantity);
   };
@@ -69,7 +81,7 @@ export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
             &nbsp;-&nbsp;
           </span>
           <span className="price-add d-none d-sm-block d-md-none d-lg-block">
-            ${(product.price * quantity).toFixed(2)}
+            {formatInr(unitPrice * quantity)}
           </span>
         </a>
       </div>
