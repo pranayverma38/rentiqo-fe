@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import CountdownTimer from "@/components/common/Countdown";
 import { useContextElement, type CartProduct } from "@/context/Context";
 import type { ProductId } from "@/context/store";
-import { syncCartFromMedusaSession } from "@/lib/cart/medusaCartSync";
 import { formatPrice } from "@/utils/formatPrice";
 
 const FREE_SHIPPING_THRESHOLD = 100;
@@ -24,10 +23,6 @@ export default function ShoppingCart() {
   const { cartProducts, removeProductFromCart, updateQuantity, totalPrice } =
     useContextElement();
   const [shipOption, setShipOption] = useState<ShipOption>("free");
-
-  useEffect(() => {
-    void syncCartFromMedusaSession();
-  }, []);
 
   const discount = 0;
   const shippingCost = SHIP_PRICES[shipOption];

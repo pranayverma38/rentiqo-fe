@@ -23,14 +23,14 @@ import {
 import {
   clearLocalCart,
   loadCartForCustomer,
-  refreshCartFromMedusa,
+  syncCartFromMedusaSession,
 } from "@/lib/cart/medusaCartSync";
 import {
   clearLocalWishlist,
   loadWishlistFromCustomer,
 } from "@/lib/wishlist/wishlistSync";
 import type { Product } from "@/context/store";
-import { useStore, waitForStoreHydration } from "@/context/store";
+import { useStore } from "@/context/store";
 import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
 
 export type RegisterInput = {
@@ -126,7 +126,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      await waitForStoreHydration();
       if (cancelled) return;
 
       const token = getStoredAuthToken();
@@ -137,7 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (!cancelled) {
             setCustomer(next);
             await loadWishlistFromCustomer(next);
-            await loadCartForCustomer(next);
+            await syncCartFromMedusaSession();
           }
         } catch {
           clearAuthToken();
@@ -145,7 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (!cancelled) setCustomer(null);
         }
       } else {
-        await refreshCartFromMedusa();
+        await syncCartFromMedusaSession();
       }
       if (!cancelled) setIsLoading(false);
     })();

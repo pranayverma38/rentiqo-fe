@@ -17,14 +17,22 @@ import {
 import { getMedusaListingStoreContext } from "@/lib/catalog/medusaListingByLocation";
 import type { LocationSlug } from "@/lib/catalog/catalogRoutes";
 import {
-  fetchRentiqoStoreProductByIdOrHandle,
-  resolveDefaultMedusaVariantId,
-} from "@/lib/catalog/rentiqoStoreCatalog";
-import {
   mapMedusaCartToCartProducts,
   resolveCartTotal,
 } from "@/lib/cart/mapMedusaCart";
 import type { MedusaCart } from "@/lib/api/types/medusa";
+
+let cartSyncInFlight: Promise<void> | null = null;
+
+function cartLinesEqual(a: CartProduct[], b: CartProduct[]): boolean {
+  if (a.length !== b.length) return false;
+  return a.every(
+    (line, index) =>
+      line.id === b[index]?.id &&
+      line.quantity === b[index]?.quantity &&
+      line.medusaLineItemId === b[index]?.medusaLineItemId,
+  );
+}
 
 function applyCartToStore(cartProducts: CartProduct[], totalPrice: number): void {
   useStore.setState({ cartProducts, totalPrice });
@@ -45,6 +53,9 @@ async function persistCartIdToCustomer(cartId: string): Promise<void> {
 
   try {
     const { customer } = await medusaApi.customers.retrieve();
+    if (getCartIdFromCustomer(customer) === cartId) {
+      return;
+    }
     const metadata = {
       ...(customer.metadata ?? {}),
       [CART_ID_METADATA_KEY]: cartId,
@@ -58,7 +69,17 @@ async function persistCartIdToCustomer(cartId: string): Promise<void> {
 async function applyCartResponse(cart: MedusaCart): Promise<void> {
   setStoredCartId(cart.id);
   const cartProducts = mapMedusaCartToCartProducts(cart);
-  applyCartToStore(cartProducts, resolveCartTotal(cart, cartProducts));
+  const totalPrice = resolveCartTotal(cart, cartProducts);
+  const { cartProducts: currentProducts, totalPrice: currentTotal } =
+    useStore.getState();
+
+  if (
+    !cartLinesEqual(currentProducts, cartProducts) ||
+    currentTotal !== totalPrice
+  ) {
+    applyCartToStore(cartProducts, totalPrice);
+  }
+
   await persistCartIdToCustomer(cart.id);
 }
 
@@ -127,17 +148,27 @@ async function retrieveAndApplyCart(
 }
 
 /** Link guest cart to the logged-in customer (cross-device via customer metadata). */
-async function linkCartToCustomerIfNeeded(cartId: string): Promise<void> {
+async function linkCartToCustomerIfNeeded(
+  cartId: string,
+  cartHint?: MedusaCart | null,
+): Promise<void> {
   if (!getStoredAuthToken()) return;
+
+  const { customer } = await medusaApi.customers.retrieve();
+  const cart =
+    cartHint ?? (await fetchCartIfAccessible(cartId, customer));
+  if (!cart) return;
+
+  if (cart.customer_id === customer.id) {
+    return;
+  }
 
   try {
     await medusaApi.carts.transferToCustomer(cartId);
+    await reloadCartFromServer(cartId, customer);
   } catch (error) {
     console.error("Failed to link cart to customer:", error);
   }
-
-  const { customer } = await medusaApi.customers.retrieve();
-  await reloadCartFromServer(cartId, customer);
 }
 
 async function resolveBestCustomerCart(
@@ -199,7 +230,7 @@ export async function loadCartForCustomer(
   const bestCart = await resolveBestCustomerCart(customer!);
   if (bestCart) {
     await applyCartResponse(bestCart);
-    await linkCartToCustomerIfNeeded(bestCart.id);
+    await linkCartToCustomerIfNeeded(bestCart.id, bestCart);
     return;
   }
 
@@ -225,8 +256,7 @@ function waitForStoreHydration(): Promise<void> {
   });
 }
 
-/** Reload cart from Medusa after navigation or hard refresh (guest or logged-in). */
-export async function syncCartFromMedusaSession(): Promise<void> {
+async function runCartSyncSession(): Promise<void> {
   if (!hasMedusaApiBaseUrl) return;
 
   await waitForStoreHydration();
@@ -243,6 +273,19 @@ export async function syncCartFromMedusaSession(): Promise<void> {
   }
 
   await refreshCartFromMedusa();
+}
+
+/** Reload cart from Medusa once per session burst (dedupes Auth + page mounts). */
+export async function syncCartFromMedusaSession(): Promise<void> {
+  if (cartSyncInFlight) {
+    return cartSyncInFlight;
+  }
+
+  cartSyncInFlight = runCartSyncSession().finally(() => {
+    cartSyncInFlight = null;
+  });
+
+  return cartSyncInFlight;
 }
 
 export async function refreshCartFromMedusa(): Promise<void> {
@@ -272,7 +315,7 @@ async function ensureMedusaCart(location: LocationSlug): Promise<string> {
     const bestCart = await resolveBestCustomerCart(customer);
     if (bestCart) {
       await applyCartResponse(bestCart);
-      await linkCartToCustomerIfNeeded(bestCart.id);
+      await linkCartToCustomerIfNeeded(bestCart.id, bestCart);
       return bestCart.id;
     }
 
@@ -311,6 +354,8 @@ async function resolveMedusaVariantId(
   }
 
   const lookupId = item.medusaProductId ?? String(item.id);
+  const { fetchRentiqoStoreProductByIdOrHandle, resolveDefaultMedusaVariantId } =
+    await import("@/lib/catalog/rentiqoStoreCatalog");
   const medusaProduct = await fetchRentiqoStoreProductByIdOrHandle(
     lookupId,
     location,
@@ -346,7 +391,8 @@ export async function addProductToMedusaCart(
     quantity,
   });
   await reloadCartFromServer(cartId, customer);
-  await linkCartToCustomerIfNeeded(cartId);
+  const linkedCart = await fetchCartIfAccessible(cartId, customer);
+  await linkCartToCustomerIfNeeded(cartId, linkedCart);
 }
 
 export async function updateMedusaCartLineQuantity(
