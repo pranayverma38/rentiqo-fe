@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import Nav from "./Nav";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
-import CartIconCount from "./CartIconCount";
+import CartNavIcon from "./CartNavIcon";
+import HeaderUserNav from "./HeaderUserNav";
 
 export default function Header10({
   parentClass = "tf-header header-s10 scr-box-shadow",
@@ -12,8 +12,6 @@ export default function Header10({
   hasHrLine = false,
 }) {
   const headerSticky = useHeaderSticky();
-  const pathname = usePathname();
-  const isAccountRoute = pathname.startsWith("/account-");
   const containerClass = containerFull ? "container-full" : "container";
   return (
     <header
@@ -64,76 +62,14 @@ export default function Header10({
                   <i className="icon icon-MagnifyingGlass" />
                 </a>
               </li>
-              {isAccountRoute ? (
-                <>
-                  <li className="nav-account d-none d-sm-block">
-                    <a href="#" className="nav-icon-item link">
-                      <i className="icon icon-User" />
-                    </a>
-                    <div className="dropdown-account">
-                      <ul className="list-menu-item">
-                        <li>
-                          <Link href="/account-page" className="sub-menu_link">
-                            My Account
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/account-orders" className="sub-menu_link">
-                            Your Order
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            href="/account-addresses"
-                            className="sub-menu_link"
-                          >
-                            My Address
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/track-order" className="sub-menu_link">
-                            Traking
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/account-setting" className="sub-menu_link">
-                            Setting
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
-                  </li>
-                  <li className="d-sm-none">
-                    <Link href="/account-page" className="nav-icon-item link">
-                      <i className="icon icon-User" />
-                    </Link>
-                  </li>
-                </>
-              ) : (
-                <li>
-                  <a
-                    href="#sign"
-                    data-bs-toggle="modal"
-                    className="nav-icon-item link"
-                  >
-                    <i className="icon icon-User" />
-                  </a>
-                </li>
-              )}
+              <HeaderUserNav />
               <li className="d-none d-sm-block">
                 <Link href={`/wishlist`} className="nav-icon-item link">
                   <i className="icon icon-HeartStraight" />
                 </Link>
               </li>
               <li>
-                <a
-                  href="#shoppingCart"
-                  data-bs-toggle="offcanvas"
-                  className="nav-icon-item link shop-cart"
-                >
-                  <i className="icon icon-Handbag" />
-                  <CartIconCount />
-                </a>
+                <CartNavIcon />
               </li>
             </ul>
           </div>

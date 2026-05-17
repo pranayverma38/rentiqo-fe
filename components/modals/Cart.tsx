@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { useContextElement, type CartProduct } from "@/context/Context";
 import type { ProductId } from "@/context/store";
-import { products } from "@/data/products/products";
+// import { useMemo } from "react";
+// import { products } from "@/data/products/products";
 import { formatPrice } from "@/utils/formatPrice";
 import {
   MiniCartToolButtons,
@@ -20,18 +21,18 @@ export default function Cart({
 }: {
   registerOffcanvasElement?: (el: HTMLElement | null) => void;
 }) {
-  const { cartProducts, setCartProducts, updateQuantity, totalPrice } =
+  const { cartProducts, removeProductFromCart, updateQuantity, totalPrice } =
     useContextElement();
-  const [showRecommendations, setShowRecommendations] = useState(true);
+  // const [showRecommendations, setShowRecommendations] = useState(true);
   const [activeTool, setActiveTool] = useState<
     "note" | "shipping" | "coupon" | null
   >(null);
 
-  const recommendations = useMemo(() => {
-    const inCart = new Set(cartProducts.map((p) => p.id));
-    const notInCart = products.filter((p) => !inCart.has(p.id));
-    return notInCart.length > 0 ? notInCart.slice(0, 3) : products.slice(0, 3);
-  }, [cartProducts]);
+  // const recommendations = useMemo(() => {
+  //   const inCart = new Set(cartProducts.map((p) => p.id));
+  //   const notInCart = products.filter((p) => !inCart.has(p.id));
+  //   return notInCart.length > 0 ? notInCart.slice(0, 3) : products.slice(0, 3);
+  // }, [cartProducts]);
 
   const amountToFreeship = Math.max(0, FREE_SHIPPING_THRESHOLD - totalPrice);
   const shipProgressPercent = Math.min(
@@ -42,7 +43,7 @@ export default function Cart({
   );
 
   const removeLine = (id: ProductId) => {
-    setCartProducts((prev) => prev.filter((p) => p.id !== id));
+    removeProductFromCart(id);
   };
 
   const setQty = (id: ProductId, qty: number) => {
@@ -58,6 +59,7 @@ export default function Cart({
       className="offcanvas offcanvas-end popup-shopping-cart"
       id="shoppingCart"
     >
+      {/* tf-minicart-recommendations file-delete — hidden sitewide for now
       {showRecommendations ? (
         <div className="tf-minicart-recommendations file-delete">
           <div className="title d-flex justify-content-between align-items-center">
@@ -106,6 +108,7 @@ export default function Cart({
           </div>
         </div>
       ) : null}
+      */}
       <div className="canvas-wrapper">
         <div className="popup-header">
           <div className="d-flex align-items-center justify-content-between mb-12">

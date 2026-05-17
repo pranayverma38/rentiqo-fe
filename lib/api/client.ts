@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
+import { getStoredAuthToken } from "@/lib/auth/storage";
 import { medusaApiConfig } from "@/lib/api/config";
 import { ApiError, toApiError } from "@/lib/api/errors";
 import { ApiRequestOptions } from "@/lib/api/types";
@@ -18,9 +19,15 @@ export class MedusaHttpClient {
       ? `/${medusaApiConfig.apiVersion.replace(/^\/+/, "")}`
       : "";
 
+    const storedToken = getStoredAuthToken();
+    if (storedToken) {
+      this.authToken = storedToken;
+    }
+
     this.client = axios.create({
       baseURL: `${medusaApiConfig.baseUrl}${versionPath}`,
       timeout: medusaApiConfig.timeoutMs,
+      withCredentials: true,
       headers: {
         [HEADER_ACCEPT]: "application/json",
         [HEADER_CONTENT_TYPE]: "application/json",

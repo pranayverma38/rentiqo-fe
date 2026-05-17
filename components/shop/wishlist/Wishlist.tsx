@@ -2,9 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useContextElement } from "@/context/Context";
+import {
+  isWishlistItemPlaceholder,
+} from "@/lib/wishlist/hydrateWishlistProducts";
+import { refreshWishlistProductDetails } from "@/lib/wishlist/wishlistSync";
 import type { ProductCardItem } from "@/types/productCard";
+import { formatPrice } from "@/utils/formatPrice";
 
 function WishlistItem({
   cardVariant,
@@ -17,6 +22,11 @@ function WishlistItem({
 }) {
   const defaultImage = product.img || "/assets/images/product/product-1.jpg";
   const [activeImage, setActiveImage] = useState(defaultImage);
+
+  useEffect(() => {
+    setActiveImage(product.img || "/assets/images/product/product-1.jpg");
+  }, [product.img, product.id]);
+
   const activeHoverImage =
     activeImage === defaultImage
       ? (product.imgHover ?? defaultImage)
@@ -121,13 +131,13 @@ function WishlistItem({
         </div>
         <div className="price-wrap">
           <span className="price-new text-primary fw-semibold">
-            ${product.price}
+            {formatPrice(product.price)}
           </span>
-          {product.priceOld && (
+          {product.priceOld != null && product.priceOld > product.price ? (
             <span className="price-old text-caption-01 cl-text-3">
-              ${product.priceOld}
+              {formatPrice(product.priceOld)}
             </span>
-          )}
+          ) : null}
         </div>
         {product.colors && product.colors.length > 0 && (
           <ul className="product-color_list">
@@ -152,11 +162,31 @@ function WishlistItem({
 
 function Wishlist() {
   const { wishList, removeFromWishlist } = useContextElement();
+  const [hydrating, setHydrating] = useState(false);
+
+  const placeholderCount = wishList.filter(isWishlistItemPlaceholder).length;
+
+  useEffect(() => {
+    if (placeholderCount === 0) return;
+
+    let cancelled = false;
+    setHydrating(true);
+    void refreshWishlistProductDetails().finally(() => {
+      if (!cancelled) setHydrating(false);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [placeholderCount]);
 
   return (
     <>
       <div className="section-wishlist flat-spacing">
         <div className="container">
+          {hydrating ? (
+            <p className="text-center cl-text-2 py-4">Loading your wishlist…</p>
+          ) : null}
           {wishList && wishList.length > 0 ? (
             <div className="tf-grid-layout tf-col-2 md-col-3 xl-col-4 wrapper-wishlist">
               {wishList.map((product) => (

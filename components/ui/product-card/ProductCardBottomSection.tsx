@@ -24,6 +24,7 @@ export function ProductCardBottomSection() {
     actionBotLabel,
     actionBotHref,
     actionBotDataToggle,
+    directAdd,
   } = useProductCard();
   const { setQuickViewItem } = useContextElement();
 
@@ -86,6 +87,7 @@ export function ProductCardBottomSection() {
               href={actionBotHref}
               dataToggle={actionBotDataToggle}
               label={actionBotLabel}
+              directAdd={directAdd}
             />
           </div>
         )

@@ -56,6 +56,7 @@ export function ShopProductSection() {
               wrapperClass={cardWrapperClass ?? product.cardVariant}
               cardClass=""
               shopMeta={shopMetaFor(product)}
+              directAdd={squareProductCards}
             />
           ))
         )}
@@ -78,6 +79,7 @@ export function ShopProductSection() {
               variant={gridCardVariant}
               cardClass="grid"
               shopMeta={shopMetaFor(product)}
+              directAdd={squareProductCards}
             />
           ))
         )}

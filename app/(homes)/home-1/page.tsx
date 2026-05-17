@@ -16,7 +16,6 @@ import Lookbook from "@/components/homes/home-1/Lookbook";
 import Testimonial from "@/components/homes/home-1/Testimonial";
 import Gallery from "@/components/homes/home-1/Gallery";
 import Features from "@/components/homes/home-1/Features";
-import StickyProduct from "@/components/shop-details/StickyProduct";
 export const metadata: Metadata = {
   title: "Index | Amerce - Multipurpose eCommerce React Nextjs Template",
   description: "Amerce - Multipurpose eCommerce React Nextjs Template",
@@ -38,7 +37,6 @@ export default function IndexPage() {
         {/* <TopPicksThisWeek /> */}
         {/* <Lookbook /> */}
         <Testimonial />
-        {/* <StickyProduct/> */}
         <Gallery />
         <Features />
       </>

@@ -10,7 +10,9 @@ import type { ShopProduct } from "@/types/shopFilter";
 const DEFAULT_REVALIDATE_SECONDS = 60;
 const PRODUCTS_PAGE_SIZE = 50;
 
-const PRODUCT_LISTING_FIELDS = "*variants.calculated_price,+metadata";
+/** Keep `*variants.calculated_price` (required for regional pricing). Add `+variants.id` for quick-add. */
+const PRODUCT_LISTING_FIELDS =
+  "*variants.calculated_price,+variants.id,+metadata";
 /** Same as manual jq on `.products[].categories[1]?.handle` for regional availability. */
 const SUBCATEGORY_NAV_PRODUCT_FIELDS = "*categories,*variants.calculated_price";
 const PRODUCT_DETAIL_FIELDS =
@@ -365,6 +367,51 @@ export function resolveListingPricesFromVariants(
   return { price: bestPrice, priceOld: bestPriceOld };
 }
 
+/** Default variant for listing quick-add (matches `resolveListingPricesFromVariants`). */
+export function resolveDefaultMedusaVariantId(
+  product: MedusaStoreProduct,
+): string | undefined {
+  const variants = product.variants ?? [];
+  let bestPrice = Number.POSITIVE_INFINITY;
+  let bestDiscount = -1;
+  let bestVariantId: string | undefined;
+
+  for (const variant of variants) {
+    if (typeof variant.id !== "string" || variant.id.length === 0) {
+      continue;
+    }
+    const cp = variant.calculated_price;
+    if (cp == null) {
+      continue;
+    }
+    const { price, priceOld } = variantPricesFromCalculated(cp);
+    if (!Number.isFinite(price)) {
+      continue;
+    }
+
+    const discount =
+      priceOld != null && priceOld > price ? priceOld - price : 0;
+
+    if (
+      price < bestPrice ||
+      (price === bestPrice && discount > bestDiscount)
+    ) {
+      bestPrice = price;
+      bestDiscount = discount;
+      bestVariantId = variant.id;
+    }
+  }
+
+  if (bestVariantId != null) {
+    return bestVariantId;
+  }
+
+  const fallback = variants.find(
+    (v) => typeof v.id === "string" && v.id.length > 0,
+  );
+  return fallback?.id;
+}
+
 function variantOptionLabel(
   variant: MedusaVariant,
   optionTitle: string,
@@ -697,9 +744,12 @@ export function mapMedusaStoreProductToShopProduct(
       ? `-${Math.round(((priceOld - price) / priceOld) * 100)}%`
       : undefined;
 
+  const medusaVariantId = resolveDefaultMedusaVariantId(product);
+
   return {
     id,
     medusaProductId: product.id,
+    medusaVariantId,
     name: typeof product.title === "string" ? product.title : "",
     price,
     priceOld,

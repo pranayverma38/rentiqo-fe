@@ -35,6 +35,7 @@ export type ProductCardContextValue = {
   actionBotLabel: string;
   actionBotHref: string;
   actionBotDataToggle: "modal" | "offcanvas";
+  directAdd: boolean;
   wowDelay?: string;
   isShopGridHoverBar: boolean;
   shopHoverActionClass: string;
@@ -84,6 +85,7 @@ export function buildProductCardContextValue(params: {
   actionBotLabel: string;
   actionBotHref: string;
   actionBotDataToggle: "modal" | "offcanvas";
+  directAdd?: boolean;
   wowDelay?: string;
 }): ProductCardContextValue {
   const gridVariant = layoutToGridVariant(params.layoutVariant);
@@ -92,6 +94,7 @@ export function buildProductCardContextValue(params: {
 
   return {
     ...params,
+    directAdd: params.directAdd ?? false,
     gridVariant,
     isShopGridHoverBar,
     shopHoverActionClass,

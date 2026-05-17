@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import LanguageSelect from "../common/LanguageSelect";
-import CartIconCount from "./CartIconCount";
+import CartNavIcon from "./CartNavIcon";
+import HeaderUserNav from "./HeaderUserNav";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
 import NavHeader1 from "./NavHeader1";
 
@@ -119,29 +120,14 @@ export default function Header1() {
           </div>
           <div className="header-right">
             <ul className="nav-icon-list">
-              <li>
-                <a
-                  href="#sign"
-                  data-bs-toggle="modal"
-                  className="nav-icon-item link"
-                >
-                  <i className="icon icon-User" />
-                </a>
-              </li>
+              <HeaderUserNav />
               <li>
                 <Link href={`/wishlist`} className="nav-icon-item link">
                   <i className="icon icon-HeartStraight" />
                 </Link>
               </li>
               <li>
-                <a
-                  href="#shoppingCart"
-                  data-bs-toggle="offcanvas"
-                  className="nav-icon-item link shop-cart"
-                >
-                  <i className="icon icon-Handbag" />
-                  <CartIconCount />
-                </a>
+                <CartNavIcon />
               </li>
             </ul>
           </div>

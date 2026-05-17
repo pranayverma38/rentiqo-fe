@@ -18,11 +18,12 @@ export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
   const unitPrice = selectedVariant?.price ?? product.price;
   const { addProductToCart, isAddedToCartProducts, updateQuantity } =
     useContextElement();
-  const isInCart = isAddedToCartProducts(product.id);
+  const cartLineKey = selectedVariant?.id ?? product.id;
+  const isInCart = isAddedToCartProducts(cartLineKey);
 
   const handleAddToCart = () => {
     if (isInCart) {
-      updateQuantity(product.id, quantity);
+      updateQuantity(cartLineKey, quantity);
       return;
     }
     const productWithSelection = {

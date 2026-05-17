@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 
 import { AccountSection } from "@/components/account/AccountSection";
+import { useCustomerOrders } from "@/lib/hooks/useCustomerOrders";
+import { mapMedusaOrderToUi } from "@/lib/orders/mapMedusaOrder";
 
 const ORDER_TABS = [
   { id: "all-order", label: "All Order" },
@@ -15,106 +17,16 @@ const ORDER_TABS = [
 
 const DEFAULT_TAB_ID = "all-order";
 
-type OrderStatus = "pending" | "delivery" | "completed" | "canceled";
-
-type OrderLineItem = {
-  img: string;
-  name: string;
-  variant: string;
-  qty: number;
-  price: string;
-};
-
-type OrderRow = {
-  orderNumber: string;
-  status: OrderStatus;
-  statusLabel: string;
-  statusClass: string;
-  items: OrderLineItem[];
-  showCancelOrder: boolean;
-};
-
-const ORDERS: OrderRow[] = [
-  {
-    orderNumber: "S184989823",
-    status: "delivery",
-    statusLabel: "Delivery",
-    statusClass: "stt-delivery",
-    showCancelOrder: true,
-    items: [
-      {
-        img: "/assets/images/product/square/product-1.jpg",
-        name: "Contrasting sheepskin sweatshirt",
-        variant: "XL/Blue",
-        qty: 1,
-        price: "$60.00",
-      },
-      {
-        img: "/assets/images/product/square/product-3.jpg",
-        name: "Contrasting sheepskin sweatshirt",
-        variant: "XL/Blue",
-        qty: 1,
-        price: "$60.00",
-      },
-    ],
-  },
-  {
-    orderNumber: "S184989823",
-    status: "pending",
-    statusLabel: "Pending",
-    statusClass: "stt-pending",
-    showCancelOrder: true,
-    items: [
-      {
-        img: "/assets/images/product/square/product-4.jpg",
-        name: "Contrasting sheepskin sweatshirt",
-        variant: "XL/Blue",
-        qty: 1,
-        price: "$60.00",
-      },
-    ],
-  },
-  {
-    orderNumber: "S184989823",
-    status: "completed",
-    statusLabel: "Completed",
-    statusClass: "stt-completed",
-    showCancelOrder: false,
-    items: [
-      {
-        img: "/assets/images/product/square/product-6.jpg",
-        name: "Contrasting sheepskin sweatshirt",
-        variant: "XL/Blue",
-        qty: 1,
-        price: "$60.00",
-      },
-    ],
-  },
-  {
-    orderNumber: "S184989823",
-    status: "canceled",
-    statusLabel: "Canceled",
-    statusClass: "stt-canceled",
-    showCancelOrder: false,
-    items: [
-      {
-        img: "/assets/images/product/square/product-8.jpg",
-        name: "Contrasting sheepskin sweatshirt",
-        variant: "XL/Blue",
-        qty: 1,
-        price: "$60.00",
-      },
-    ],
-  },
-];
-
 export default function AccountOrders() {
   const [activeTabId, setActiveTabId] = useState<string>(DEFAULT_TAB_ID);
+  const { orders, loading, error } = useCustomerOrders();
+
+  const uiOrders = useMemo(() => orders.map(mapMedusaOrderToUi), [orders]);
 
   const visibleOrders = useMemo(() => {
-    if (activeTabId === "all-order") return ORDERS;
-    return ORDERS.filter((o) => o.status === activeTabId);
-  }, [activeTabId]);
+    if (activeTabId === "all-order") return uiOrders;
+    return uiOrders.filter((o) => o.status === activeTabId);
+  }, [activeTabId, uiOrders]);
 
   return (
     <AccountSection
@@ -146,10 +58,15 @@ export default function AccountOrders() {
             role="tabpanel"
             id={activeTabId}
           >
+            {error ? <p className="text-primary mb-20">{error}</p> : null}
+            {loading ? <p className="cl-text-2 mb-20">Loading orders…</p> : null}
+            {!loading && visibleOrders.length === 0 ? (
+              <p className="cl-text-2 mb-20">No orders yet.</p>
+            ) : null}
             <div className="my-order_list d-grid gap-24">
               {visibleOrders.map((order, orderIdx) => (
                 <div
-                  key={`${order.orderNumber}-${order.status}-${orderIdx}`}
+                  key={order.id}
                   className="wg-my-order"
                 >
                   <div className="order-heading">
