@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useContextElement, Product } from "@/context/Context";
 
 interface AddToCartButtonProps {
@@ -10,6 +11,13 @@ interface AddToCartButtonProps {
   className?: string;
   label?: string;
   variant?: "default" | "icon" | "tooltip";
+  /** Add default variant to cart on click (no modal). Shows "Go to Cart" when already in cart. */
+  directAdd?: boolean;
+  goToCartHref?: string;
+}
+
+function resolveCartLookupId(product: Product): string | number {
+  return product.medusaVariantId ?? product.medusaProductId ?? product.id;
 }
 
 export default function AddToCartButton({
@@ -20,11 +28,15 @@ export default function AddToCartButton({
   className,
   label = "Add to Cart",
   variant = "default",
+  directAdd = false,
+  goToCartHref = "/view-cart",
 }: AddToCartButtonProps) {
   const { addProductToCart, isAddedToCartProducts, setQuickAddItem } =
     useContextElement();
-  const isAdded = product ? isAddedToCartProducts(product.id) : false;
-  const isQuickAddTrigger = href === "#quickAdd";
+  const cartLookupId = product ? resolveCartLookupId(product) : null;
+  const isAdded =
+    cartLookupId != null ? isAddedToCartProducts(cartLookupId) : false;
+  const isQuickAddTrigger = !directAdd && href === "#quickAdd";
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -36,29 +48,90 @@ export default function AddToCartButton({
       return;
     }
 
-    if (product) {
-      addProductToCart(product, quantity);
-    }
+    addProductToCart(product, quantity);
   };
 
-  const activeClass = !isQuickAddTrigger && isAdded ? "added" : "";
+  const displayLabel = (() => {
+    if (directAdd && isAdded) return "Go to Cart";
+    if (!isQuickAddTrigger && isAdded) {
+      if (variant === "default") return "Added to Cart";
+      return "Added";
+    }
+    return label;
+  })();
 
-  /** Bootstrap 5 needs `data-bs-target` on `<button>`; anchors used to rely on `href`. */
-  const bsTarget = href.startsWith("#") && href.length > 1 ? href : undefined;
+  const activeClass = (!isQuickAddTrigger && isAdded) || (directAdd && isAdded)
+    ? "added"
+    : "";
+
+  const defaultClass =
+    variant === "tooltip"
+      ? "hover-tooltip tooltip-left btn-action"
+      : variant === "icon"
+        ? "btn-action"
+        : "tf-btn btn-white small w-100";
+
+  const buttonClass =
+    `tf-btn-reset ${className || defaultClass} ${activeClass}`.trim();
+
+  if (directAdd && isAdded) {
+    if (variant === "tooltip") {
+      return (
+        <Link
+          href={goToCartHref}
+          className={buttonClass}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <i className="icon icon-Handbag" aria-hidden />
+          <span className="tooltip" suppressHydrationWarning>
+            {displayLabel}
+          </span>
+        </Link>
+      );
+    }
+
+    if (variant === "icon") {
+      return (
+        <Link
+          href={goToCartHref}
+          className={buttonClass}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <i className="icon icon-Handbag" aria-hidden />
+          <span className="text fw-semibold ml-1" suppressHydrationWarning>
+            {displayLabel}
+          </span>
+        </Link>
+      );
+    }
+
+    return (
+      <Link
+        href={goToCartHref}
+        className={buttonClass}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {displayLabel}
+      </Link>
+    );
+  }
+
+  const bsTarget =
+    !directAdd && href.startsWith("#") && href.length > 1 ? href : undefined;
 
   if (variant === "tooltip") {
     return (
       <button
         type="button"
         onClick={handleClick}
-        data-bs-toggle={dataToggle}
+        data-bs-toggle={directAdd ? undefined : dataToggle}
         data-bs-target={bsTarget}
         suppressHydrationWarning
-        className={`tf-btn-reset ${className || "hover-tooltip tooltip-left btn-action"} ${activeClass}`.trim()}
+        className={buttonClass}
       >
         <i className="icon icon-Handbag" aria-hidden />
         <span className="tooltip" suppressHydrationWarning>
-          {!isQuickAddTrigger && isAdded ? "Added" : label}
+          {displayLabel}
         </span>
       </button>
     );
@@ -69,30 +142,29 @@ export default function AddToCartButton({
       <button
         type="button"
         onClick={handleClick}
-        data-bs-toggle={dataToggle}
+        data-bs-toggle={directAdd ? undefined : dataToggle}
         data-bs-target={bsTarget}
         suppressHydrationWarning
-        className={`tf-btn-reset ${className || "btn-action"} ${activeClass}`.trim()}
+        className={buttonClass}
       >
         <i className="icon icon-Handbag" aria-hidden />
         <span className="text fw-semibold ml-1" suppressHydrationWarning>
-          {!isQuickAddTrigger && isAdded ? "Added" : label}
+          {displayLabel}
         </span>
       </button>
     );
   }
 
-  // default
   return (
     <button
       type="button"
       onClick={handleClick}
-      data-bs-toggle={dataToggle}
+      data-bs-toggle={directAdd ? undefined : dataToggle}
       data-bs-target={bsTarget}
       suppressHydrationWarning
-      className={`tf-btn-reset ${className || "tf-btn btn-white small w-100"} ${activeClass}`.trim()}
+      className={buttonClass}
     >
-      {!isQuickAddTrigger && isAdded ? "Added to Cart" : label}
+      {displayLabel}
     </button>
   );
 }

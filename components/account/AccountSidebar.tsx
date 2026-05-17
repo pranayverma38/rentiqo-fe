@@ -1,12 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { ACCOUNT_NAV_ITEMS } from "./accountNav";
+import { useAuth } from "@/context/AuthProvider";
 
 export default function AccountSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    await logout();
+    router.push("/login");
+  };
 
   return (
     <div className="sidebar-account-wrap sidebar-content-wrap sticky-top d-lg-block d-none">
@@ -25,10 +34,14 @@ export default function AccountSidebar() {
             </Link>
           );
         })}
-        <Link href="/login" className="link-account">
+        <button
+          type="button"
+          className="link-account border-0 bg-transparent w-100 text-start"
+          onClick={handleLogout}
+        >
           <i className="icon icon-SignOut" />
           <span className="text h6 fw-medium">Logout</span>
-        </Link>
+        </button>
       </nav>
     </div>
   );

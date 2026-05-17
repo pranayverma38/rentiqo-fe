@@ -1,5 +1,6 @@
 import { MedusaHttpClient } from "@/lib/api/client";
 import { medusaApiConfig } from "@/lib/api/config";
+import { AuthApi } from "@/lib/api/modules/auth";
 import { CartsApi } from "@/lib/api/modules/carts";
 import { CustomApi } from "@/lib/api/modules/custom";
 import { CustomersApi } from "@/lib/api/modules/customers";
@@ -12,6 +13,7 @@ export function createMedusaApi() {
   return {
     config: medusaApiConfig,
     client: httpClient,
+    auth: new AuthApi(httpClient),
     products: new ProductsApi(httpClient),
     carts: new CartsApi(httpClient),
     customers: new CustomersApi(httpClient),

@@ -68,7 +68,10 @@ export function ProductCardShopList() {
           {product.name}
         </Link>
         {showRatting ? (
-          <ProductCardStars className={starWrapClassName} />
+          <ProductCardStars
+            rating={product.rating ?? 0}
+            className={starWrapClassName}
+          />
         ) : null}
         <ProductCardPriceWrap
           price={product.price}

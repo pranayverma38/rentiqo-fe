@@ -1,10 +1,11 @@
+"use client";
+
 import Link from "next/link";
 
-import { PreventDefaultForm } from "@/components/forms/PreventDefaultForm";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 
-function Log() {
+export default function Log() {
   return (
-    <>
       <section className="section-log flat-spacing">
         <div className="container">
           <div className="row align-items-center gy-30">
@@ -14,28 +15,7 @@ function Log() {
                 <p className="cl-text-2 mb-20">
                   We’ll send instructions to reset your password.
                 </p>
-                <PreventDefaultForm className="form-log">
-                  <div className="form-content">
-                    <fieldset className="tf-field">
-                      <label
-                        htmlFor="forgot-user2"
-                        className="tf-lable fw-medium"
-                      >
-                        Username or email address{" "}
-                        <span className="text-primary">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="forgot-user2"
-                        placeholder="Username or email address*"
-                        required
-                      />
-                    </fieldset>
-                  </div>
-                  <button type="submit" className="tf-btn animate-btn">
-                    Get Reset Code
-                  </button>
-                </PreventDefaultForm>
+                <ForgotPasswordForm />
               </div>
             </div>
             <div className="col-md-5 me-auto">
@@ -54,8 +34,5 @@ function Log() {
           </div>
         </div>
       </section>
-    </>
   );
 }
-
-export default Log;

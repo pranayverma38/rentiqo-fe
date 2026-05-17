@@ -5,13 +5,21 @@ import { persist, type StorageValue } from "zustand/middleware";
 
 import { ProductCardItem } from "@/types/productCard";
 import { products } from "@/data/products/products";
-import { type LocationSlug } from "@/lib/catalog/subcategories";
+import { type LocationSlug } from "@/lib/catalog/catalogRoutes";
+import { hasMedusaApiBaseUrl } from "@/lib/api/config";
+import {
+  addProductToMedusaCart,
+  removeMedusaCartLine,
+  updateMedusaCartLineQuantity,
+} from "@/lib/cart/medusaCartSync";
+import { syncWishlistIfAuthenticated } from "@/lib/wishlist/wishlistSync";
 
 export type Product = ProductCardItem;
 export type CartProduct = Product & {
   quantity: number;
   selectedColor?: string;
   selectedSize?: string;
+  medusaLineItemId?: string;
 };
 export type ProductId = number | string;
 
@@ -36,6 +44,7 @@ interface StoreState {
   isAddedToCartProducts: (id: ProductId) => boolean;
   addProductToCart: (item: Product, qty?: number) => void;
   updateQuantity: (id: ProductId, qty: number) => void;
+  removeProductFromCart: (id: ProductId) => void;
   quantityInCart: (id: ProductId) => number;
   addToWishlist: (item: Product) => void;
   removeFromWishlist: (id: ProductId) => void;
@@ -84,27 +93,100 @@ export const useStore = create<StoreState>()(
 
       isAddedToCartProducts: (id) => {
         const cart = get().cartProducts;
-        return cart.some((elm) => elm.id === id);
+        const key = String(id);
+        return cart.some(
+          (elm) =>
+            String(elm.id) === key ||
+            (elm.medusaVariantId != null && String(elm.medusaVariantId) === key) ||
+            (elm.medusaProductId != null && String(elm.medusaProductId) === key),
+        );
       },
 
       addProductToCart: (item, qty = 1) => {
-        const { cartProducts, isAddedToCartProducts } = get();
-        if (isAddedToCartProducts(item.id)) return;
-        const cartItem: CartProduct = {
-          ...item,
-          quantity: qty,
+        const { cartProducts, isAddedToCartProducts, selectedLocation } = get();
+
+        const runMedusa = async () => {
+          if (!hasMedusaApiBaseUrl) return;
+          try {
+            const key = String(
+              item.medusaVariantId ?? item.medusaProductId ?? item.id,
+            );
+            if (isAddedToCartProducts(key)) {
+              const existing = cartProducts.find(
+                (p) =>
+                  String(p.id) === key ||
+                  (p.medusaVariantId != null && String(p.medusaVariantId) === key),
+              );
+              if (existing) {
+                await updateMedusaCartLineQuantity(existing, qty, selectedLocation);
+              }
+              return;
+            }
+            await addProductToMedusaCart(item, qty, selectedLocation);
+          } catch (error) {
+            console.error("Medusa add to cart failed:", error);
+          }
         };
+
+        if (hasMedusaApiBaseUrl) {
+          if (!item.medusaVariantId && !item.medusaProductId) {
+            console.error(
+              "Cannot add to Medusa cart: missing Medusa product id for",
+              item.id,
+            );
+            return;
+          }
+          void runMedusa();
+          return;
+        }
+
+        if (isAddedToCartProducts(item.id)) return;
+        const cartItem: CartProduct = { ...item, quantity: qty };
         const next = [...cartProducts, cartItem];
         set({ cartProducts: next, totalPrice: getTotalPrice(next) });
       },
 
       updateQuantity: (id, qty) => {
-        const { cartProducts, isAddedToCartProducts } = get();
+        const { cartProducts, isAddedToCartProducts, selectedLocation } = get();
         if (!isAddedToCartProducts(id) || qty < 1) return;
+
+        const key = String(id);
+        const existing = cartProducts.find(
+          (p) =>
+            String(p.id) === key ||
+            (p.medusaVariantId != null && String(p.medusaVariantId) === key),
+        );
+        if (hasMedusaApiBaseUrl && existing?.medusaLineItemId) {
+          void updateMedusaCartLineQuantity(existing, qty, selectedLocation).catch(
+            (error) => console.error("Medusa cart update failed:", error),
+          );
+          return;
+        }
+
         const items = cartProducts.map((item) =>
           item.id === id ? { ...item, quantity: qty } : item,
         );
         set({ cartProducts: items, totalPrice: getTotalPrice(items) });
+      },
+
+      removeProductFromCart: (id) => {
+        const { cartProducts, selectedLocation } = get();
+        const key = String(id);
+        const existing = cartProducts.find(
+          (p) =>
+            String(p.id) === key ||
+            (p.medusaVariantId != null && String(p.medusaVariantId) === key),
+        );
+
+        if (hasMedusaApiBaseUrl && existing?.medusaLineItemId) {
+          void removeMedusaCartLine(existing, selectedLocation).catch((error) =>
+            console.error("Medusa cart remove failed:", error),
+          );
+          return;
+        }
+
+        const next = cartProducts.filter((p) => p.id !== id);
+        set({ cartProducts: next, totalPrice: getTotalPrice(next) });
       },
 
       quantityInCart: (id) => {
@@ -117,15 +199,21 @@ export const useStore = create<StoreState>()(
         const isAlreadyAdded = wishList.some((elm) => elm.id === item.id);
         if (isAlreadyAdded) {
           set({ wishList: wishList.filter((elm) => elm.id !== item.id) });
-          return;
+        } else {
+          set({ wishList: [...wishList, item] });
         }
-        set({ wishList: [...wishList, item] });
+        void syncWishlistIfAuthenticated().catch((error) =>
+          console.error("Wishlist sync failed:", error),
+        );
       },
 
       removeFromWishlist: (id) => {
         set((state) => ({
           wishList: state.wishList.filter((elm) => elm.id !== id),
         }));
+        void syncWishlistIfAuthenticated().catch((error) =>
+          console.error("Wishlist sync failed:", error),
+        );
       },
 
       addToCompareItem: (item) => {
@@ -147,9 +235,13 @@ export const useStore = create<StoreState>()(
     {
       name: "amerce-store",
       partialize: (state) => ({
-        cartProducts: state.cartProducts,
+        ...(hasMedusaApiBaseUrl
+          ? {}
+          : {
+              cartProducts: state.cartProducts,
+              totalPrice: state.totalPrice,
+            }),
         wishList: state.wishList,
-        totalPrice: state.totalPrice,
         selectedLocation: state.selectedLocation,
       }),
       storage: {
@@ -177,7 +269,10 @@ export const useStore = create<StoreState>()(
               if (parsed?.state?.selectedLocation == null) {
                 parsed.state.selectedLocation = "delhi";
               }
-              if (
+              if (hasMedusaApiBaseUrl) {
+                parsed.state.cartProducts = [];
+                parsed.state.totalPrice = 0;
+              } else if (
                 parsed?.state?.cartProducts &&
                 parsed.state.totalPrice == null
               ) {
@@ -215,6 +310,24 @@ export const useStore = create<StoreState>()(
   ),
 );
 
+/** Wait for persisted wishlist/location before loading Medusa cart (avoids hydration races). */
+export function waitForStoreHydration(): Promise<void> {
+  if (typeof window === "undefined") {
+    return Promise.resolve();
+  }
+
+  return new Promise((resolve) => {
+    if (useStore.persist.hasHydrated()) {
+      resolve();
+      return;
+    }
+    const unsub = useStore.persist.onFinishHydration(() => {
+      unsub();
+      resolve();
+    });
+  });
+}
+
 function normalizeStoredProductList(value: unknown): Product[] {
   if (!Array.isArray(value)) return [];
 
@@ -248,6 +361,7 @@ function getContextSnapshot(state: StoreState) {
     compareItem: state.compareItem,
     setCompareItem: state.setCompareItem,
     updateQuantity: state.updateQuantity,
+    removeProductFromCart: state.removeProductFromCart,
     quantityInCart: state.quantityInCart,
     activeCartProduct: state.activeCartProduct,
     setActiveCartProduct: state.setActiveCartProduct,

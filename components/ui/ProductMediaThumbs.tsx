@@ -77,7 +77,9 @@ export function ProductMediaThumbs({
           className="tf-product-media-main tf-product-media-main-inner"
         >
           {images.map((img, i) => (
-            <SwiperSlide key={i}>{renderMainSlide(img, i)}</SwiperSlide>
+            <SwiperSlide key={`${img.src}-${i}`}>
+              {renderMainSlide(img, i)}
+            </SwiperSlide>
           ))}
         </Swiper>
       </div>
@@ -101,7 +103,7 @@ export function ProductMediaThumbs({
         className={`swiper tf-product-media-thumbs ${thumbClassName}`.trim()}
       >
         {images.map((img, i) => (
-          <SwiperSlide key={i} className="stagger-item">
+          <SwiperSlide key={`${img.src}-${i}`} className="stagger-item">
             <div
               className={`item ${img.video ? "tf-btn-video btn-abs" : ""} ${img.model3d ? "position-relative" : ""}`.trim()}
             >

@@ -25,6 +25,8 @@ export interface ProductCardProps {
   actionBotHref?: string;
   /** Bottom CTA data attribute (e.g. "modal" for data-bs-toggle="modal") */
   actionBotDataToggle?: "modal" | "offcanvas";
+  /** Listing pages: add default variant to cart on click (no quick-add modal). */
+  directAdd?: boolean;
   /** Card wrapper class (e.g. "has-size"). Default none. */
   cardClass?: string;
   /** Extra classes on `.card-product_info` (e.g. bundle lookbook: text-center align-items-center). */
@@ -47,6 +49,7 @@ export default function ProductCard({
   actionBotLabel = "Quick Add",
   actionBotHref = "#quickAdd",
   actionBotDataToggle = "modal",
+  directAdd = false,
   cardClass = "",
   infoClassName = "",
   nameLinkClassName,
@@ -87,6 +90,7 @@ export default function ProductCard({
     actionBotLabel,
     actionBotHref,
     actionBotDataToggle,
+    directAdd,
     wowDelay,
   });
 

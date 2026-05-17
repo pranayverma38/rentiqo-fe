@@ -3,20 +3,55 @@ import { notFound } from "next/navigation";
 
 import CategorySubcategoryPage from "@/components/catalog/CategorySubcategoryPage";
 import {
-  getAllLocationCategorySubcategoryParams,
-  getCategoryPath,
   getCategoryLabel,
+  getCategoryPath,
   getLocationLabel,
-  getLocationSubcategoryLabel,
   isCategorySlug,
   isLocationSlug,
-} from "@/lib/catalog/subcategories";
+  type CategorySlug,
+} from "@/lib/catalog/catalogRoutes";
+import { fetchCatalogProducts } from "@/lib/catalog/fetchCatalogProducts";
+import {
+  fetchMedusaCategoryNavChildren,
+  isRentiqoStoreCatalogConfigured,
+  resolveMedusaSubcategoryDisplayName,
+} from "@/lib/catalog/rentiqoStoreCatalog";
 import { shopRouteMetadata } from "@/lib/metadata/shop";
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export function generateStaticParams() {
-  return getAllLocationCategorySubcategoryParams();
+  return [];
+}
+
+function humanizeSubcategorySlug(slug: string): string {
+  return slug
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+async function resolveSubcategoryLabel(
+  category: CategorySlug,
+  subcategory: string,
+): Promise<string> {
+  if (subcategory === "all") {
+    return "All";
+  }
+
+  const storeConfigured = isRentiqoStoreCatalogConfigured();
+  if (storeConfigured) {
+    const fromMedusa = await resolveMedusaSubcategoryDisplayName(
+      category,
+      subcategory,
+    );
+    if (fromMedusa == null) {
+      notFound();
+    }
+    return fromMedusa;
+  }
+
+  return humanizeSubcategorySlug(subcategory);
 }
 
 export async function generateMetadata({
@@ -29,14 +64,7 @@ export async function generateMetadata({
     notFound();
   }
 
-  const subcategoryLabel = getLocationSubcategoryLabel(
-    location,
-    category,
-    subcategory,
-  );
-  if (subcategoryLabel == null) {
-    notFound();
-  }
+  const subcategoryLabel = await resolveSubcategoryLabel(category, subcategory);
 
   return shopRouteMetadata(
     `${subcategoryLabel} — ${getCategoryLabel(category)} in ${getLocationLabel(
@@ -56,14 +84,19 @@ export default async function Page({
     notFound();
   }
 
-  const subcategoryLabel = getLocationSubcategoryLabel(
-    location,
-    category,
-    subcategory,
-  );
-  if (subcategoryLabel == null) {
-    notFound();
-  }
+  const subcategoryLabel = await resolveSubcategoryLabel(category, subcategory);
+
+  const storeConfigured = isRentiqoStoreCatalogConfigured();
+  const [catalogProducts, medusaNav] = await Promise.all([
+    fetchCatalogProducts({
+      location,
+      category,
+      subcategorySlug: subcategory,
+    }),
+    storeConfigured
+      ? fetchMedusaCategoryNavChildren(category, location)
+      : Promise.resolve([]),
+  ]);
 
   return (
     <CategorySubcategoryPage
@@ -76,6 +109,9 @@ export default async function Page({
       description={`Browse ${subcategoryLabel} in ${getLocationLabel(location)} from our ${getCategoryLabel(
         category,
       ).toLowerCase()} collection.`}
+      catalogProducts={catalogProducts}
+      subcategoryNavSource={storeConfigured ? "medusa" : "static"}
+      medusaSubcategoryNav={storeConfigured ? medusaNav : undefined}
     />
   );
 }

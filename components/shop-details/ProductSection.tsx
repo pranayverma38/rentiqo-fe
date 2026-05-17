@@ -5,6 +5,7 @@ import {
   ColorOption,
   SizeOption,
 } from "@/context/ProductContext";
+import type { ProductDetailVariant } from "@/lib/catalog/rentiqoStoreCatalog";
 import ProductMedia from "@/components/shop-details/ProductMedia";
 import ProductMediaGrid from "@/components/shop-details/ProductMediaGrid";
 import ProductInfo from "@/components/shop-details/ProductInfo";
@@ -188,6 +189,8 @@ export default function ProductSection({
   extraImages = demoImages,
   colors = demoColors,
   sizes: sizesProp = demoSizes,
+  medusaVariants,
+  optionTitle,
   layout = "default",
   mediaLayout = "slider",
   parentClass = "section-product-single tf-main-product section-image-zoom",
@@ -202,6 +205,8 @@ export default function ProductSection({
   extraImages?: ProductSingleImage[];
   colors?: ColorOption[];
   sizes?: (string | SizeOption)[];
+  medusaVariants?: ProductDetailVariant[];
+  optionTitle?: string;
   layout?:
     | "default"
     | "grouped"
@@ -235,6 +240,8 @@ export default function ProductSection({
       extraImages={extraImages}
       colors={colors}
       sizes={sizes}
+      medusaVariants={medusaVariants}
+      optionTitle={optionTitle}
       thumbnailPosition={thumbnailPosition}
       zoomType={zoomType}
     >

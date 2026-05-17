@@ -6,7 +6,8 @@ import Link from "next/link";
 import type { ProductCardItem } from "@/types/productCard";
 import { formatPrice } from "@/utils/formatPrice";
 import CountdownTimer from "@/components/common/Countdown";
-import { badgeClassFromBadge, STAR_COUNT } from "./productCardUtils";
+import { ProductRatingStars } from "@/components/common/ProductRatingStars";
+import { badgeClassFromBadge } from "./productCardUtils";
 import React from "react";
 
 export function ProductCardDualImageLink({
@@ -17,7 +18,7 @@ export function ProductCardDualImageLink({
   width,
   height,
 }: {
-  productId: number;
+  productId: number | string;
   activeImage: string;
   hoverImage: string;
   alt: string;
@@ -97,7 +98,7 @@ export function ProductCardPriceWrap({
       <span className="price-new text-primary fw-semibold">
         {formatPrice(price)}
       </span>
-      {priceOld != null && (
+      {priceOld != null && priceOld > price && (
         <span className="price-old text-caption-01 cl-text-3">
           {formatPrice(priceOld)}
         </span>
@@ -106,13 +107,18 @@ export function ProductCardPriceWrap({
   );
 }
 
-export function ProductCardStars({ className = "" }: { className?: string }) {
+export function ProductCardStars({
+  rating,
+  className = "",
+}: {
+  rating: number;
+  className?: string;
+}) {
   return (
-    <div className={`star-wrap d-flex align-items-center ${className}`.trim()}>
-      {[...Array(STAR_COUNT)].map((_, i) => (
-        <i key={i} className="icon icon-Star" aria-hidden />
-      ))}
-    </div>
+    <ProductRatingStars
+      rating={rating}
+      className={`star-wrap normal d-flex align-items-center ${className}`.trim()}
+    />
   );
 }
 

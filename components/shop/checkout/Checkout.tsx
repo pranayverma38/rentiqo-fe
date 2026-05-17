@@ -15,7 +15,7 @@ import {
 } from "@/utils/estimateShipping";
 
 export default function Checkout() {
-  const { cartProducts, setCartProducts, updateQuantity, totalPrice } =
+  const { cartProducts, removeProductFromCart, updateQuantity, totalPrice } =
     useContextElement();
   const [shippingCost, setShippingCost] = useState(0);
   const [shippingCountry, setShippingCountry] = useState("");
@@ -53,7 +53,7 @@ export default function Checkout() {
   };
 
   const removeLine = (id: ProductId) => {
-    setCartProducts((prev) => prev.filter((p) => p.id !== id));
+    removeProductFromCart(id);
   };
 
   const setQty = (id: ProductId, qty: number) => {

@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
 import {
   navHomeLinks,
   navShop,
@@ -13,8 +15,7 @@ import TfSwiper from "@/components/ui/TfSwiper";
 import {
   type CategorySlug,
   getCategoryPath,
-  getCategoryMenuItems,
-} from "@/lib/catalog/subcategories";
+} from "@/lib/catalog/catalogRoutes";
 import { useStore } from "@/context/store";
 
 const locationAwareMenus: Array<{
@@ -26,6 +27,21 @@ const locationAwareMenus: Array<{
   { label: "Combos", category: "combos" },
 ];
 
+type CatalogNavApiItem = { label: string; href: string };
+
+async function fetchCatalogNavItems(
+  location: string,
+  category: CategorySlug,
+): Promise<CatalogNavApiItem[]> {
+  const params = new URLSearchParams({ location, category });
+  const res = await fetch(`/api/catalog/subcategory-nav?${params.toString()}`);
+  if (!res.ok) {
+    return [];
+  }
+  const data = (await res.json()) as { items?: CatalogNavApiItem[] };
+  return data.items ?? [];
+}
+
 export default function NavHeader1({
   variant2 = false,
   variant3 = false,
@@ -34,12 +50,40 @@ export default function NavHeader1({
   variant3?: boolean;
 }) {
   const selectedLocation = useStore((state) => state.selectedLocation);
+  const [navByCategory, setNavByCategory] = useState<
+    Partial<Record<CategorySlug, CatalogNavApiItem[]>>
+  >({});
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const entries = await Promise.all(
+        locationAwareMenus.map(async (menu) => {
+          const items = await fetchCatalogNavItems(
+            selectedLocation,
+            menu.category,
+          );
+          return [menu.category, items] as const;
+        }),
+      );
+      if (!cancelled) {
+        setNavByCategory(Object.fromEntries(entries));
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedLocation]);
 
   return (
     <>
       {locationAwareMenus.map((menu) => {
-        const links = getCategoryMenuItems(selectedLocation, menu.category);
+        const links = navByCategory[menu.category] ?? [];
         const allCategoryHref = getCategoryPath(selectedLocation, menu.category);
+        const menuLinks =
+          links.length > 0
+            ? links
+            : [{ label: "View all", href: allCategoryHref }];
 
         return (
           <li key={menu.category} className="menu-item position-relative">
@@ -49,8 +93,8 @@ export default function NavHeader1({
             </Link>
             <div className="sub-menu mega-menu-item">
               <ul className="sub-menu_list">
-                {links.map((link) => (
-                  <li key={link.slug}>
+                {menuLinks.map((link) => (
+                  <li key={link.href}>
                     <Link href={link.href} className="sub-menu_link has-text">
                       <span className="cus-text"> {link.label} </span>
                     </Link>

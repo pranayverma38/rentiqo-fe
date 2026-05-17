@@ -22,11 +22,16 @@ export default function ProductMedia({
     setCurrentColor,
     setCurrentSize,
     extraImages,
+    activeGalleryImages,
+    medusaVariants,
     thumbnailPosition,
   } = useProduct();
 
-  const images: ProductSingleImage[] = useMemo(
-    () => [
+  const images: ProductSingleImage[] = useMemo(() => {
+    if (medusaVariants.length > 0 && activeGalleryImages.length > 0) {
+      return activeGalleryImages;
+    }
+    return [
       {
         src:
           product.img ||
@@ -36,15 +41,30 @@ export default function ProductMedia({
         dataSize: extraImages[0]?.dataSize,
       },
       ...extraImages.slice(1),
-    ],
-    [product.img, extraImages],
-  );
+    ];
+  }, [product.img, extraImages, activeGalleryImages, medusaVariants.length]);
 
   const [swiper, setSwiper] = useState<SwiperType | null>(null);
+
+  const galleryKey =
+    medusaVariants.length > 0
+      ? (activeGalleryImages[0]?.src ?? "")
+      : "";
+
+  // Medusa: swap full gallery when size changes — always show variant hero first.
+  useEffect(() => {
+    if (!swiper || swiper.destroyed || medusaVariants.length === 0) {
+      return;
+    }
+    swiper.slideTo(0);
+  }, [currentSize, galleryKey, swiper, medusaVariants.length]);
 
   // Sync Gallery with Variant Selection
   useEffect(() => {
     if (!swiper || swiper.destroyed) return;
+    if (medusaVariants.length > 0) {
+      return;
+    }
 
     // Prioritized search: 1. Both match, 2. Color match, 3. Size match
     const findIndex = () => {
@@ -66,7 +86,7 @@ export default function ProductMedia({
     if (targetIndex !== -1 && targetIndex !== swiper.activeIndex) {
       swiper.slideTo(targetIndex);
     }
-  }, [currentColor, currentSize, swiper, images]);
+  }, [currentColor, currentSize, swiper, images, medusaVariants.length]);
 
   // Handle Manual Gallery Swipe -> Updates Variants
   const handleSlideChange = (index: number) => {

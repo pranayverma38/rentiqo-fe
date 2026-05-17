@@ -1,4 +1,5 @@
 import LayoutModals from "@/components/modals";
+import AppProviders from "@/providers/AppProviders";
 // import WowInit from "@/components/common/WowInit";
 import {
   DM_Sans,
@@ -49,9 +50,11 @@ export default function RootLayout({
     >
       <body>
         {/* <WowInit /> WOW.js off for now */}
-        {children}
-        <LayoutModals />
-        <ScrollToTop />
+        <AppProviders>
+          {children}
+          <LayoutModals />
+          <ScrollToTop />
+        </AppProviders>
       </body>
     </html>
   );

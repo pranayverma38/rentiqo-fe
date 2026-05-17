@@ -1,4 +1,5 @@
 export * from "./ProductTitle";
+export * from "./ProductRatingStars";
 export * from "./ProductPrice";
 export * from "./ProductShortDescription";
 export * from "./ProductViews";

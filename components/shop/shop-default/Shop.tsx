@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { shopDefaultProducts } from "@/data/products/products";
+import type { ShopProduct } from "@/types/shopFilter";
 import { useShopState } from "./useShopState";
 import { SORT_OPTIONS } from "./ShopFilterBody";
 import { ShopMainColumn } from "./ShopMainColumn";
@@ -24,10 +25,17 @@ export type { ShopContextValue } from "./ShopContext";
 export default function Shop({
   variant,
   isFullWidth = false,
+  /** When set (e.g. catalog routes), shop filters/grid use this list instead of `shopDefaultProducts`. */
+  catalogProducts,
 }: {
   variant?: ShopVariantProp;
   isFullWidth?: boolean;
+  catalogProducts?: ShopProduct[];
 }) {
+  const sourceProducts = catalogProducts ?? shopDefaultProducts;
+  /** Catalog routes pass `catalogProducts`; theme shop pages omit it. */
+  const squareProductCards = catalogProducts !== undefined;
+
   const variants = useMemo(() => normalizeShopVariants(variant), [variant]);
 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -44,7 +52,7 @@ export default function Shop({
     getFilterCount,
     hasNoFilteredItems,
     hasMultiplePages,
-  } = useShopState({ products: shopDefaultProducts });
+  } = useShopState({ products: sourceProducts });
 
   const infiniteScroll = variants.includes("infinityScroll");
   const progressive =
@@ -93,11 +101,12 @@ export default function Shop({
         state,
         dispatch,
         getFilterCount,
-        sourceProducts: shopDefaultProducts,
+        sourceProducts,
       },
       pagedVisibleProducts,
       totalPages,
       pageItems,
+      squareProductCards,
     }),
     [
       variants,
@@ -111,6 +120,7 @@ export default function Shop({
       state,
       dispatch,
       getFilterCount,
+      sourceProducts,
       hasNoFilteredItems,
       showPaginationFooter,
       progressive,
@@ -118,6 +128,7 @@ export default function Shop({
       pagedVisibleProducts,
       totalPages,
       pageItems,
+      squareProductCards,
     ],
   );
 

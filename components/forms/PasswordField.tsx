@@ -4,16 +4,20 @@ import { useState } from "react";
 
 type PasswordFieldProps = {
   id: string;
+  name?: string;
   className?: string;
   placeholder?: string;
   required?: boolean;
+  autoComplete?: string;
 };
 
 export function PasswordField({
   id,
+  name,
   className = "password-field",
   placeholder = "Password",
   required = false,
+  autoComplete,
 }: PasswordFieldProps) {
   const [visible, setVisible] = useState(false);
 
@@ -33,6 +37,8 @@ export function PasswordField({
         className={className}
         type={visible ? "text" : "password"}
         id={id}
+        name={name}
+        autoComplete={autoComplete}
         placeholder={placeholder}
         required={required}
       />

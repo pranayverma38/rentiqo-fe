@@ -3,10 +3,12 @@ import type { ReactNode } from "react";
 
 import CategoryFilter from "@/components/catalog/CategoryFilter";
 import Shop from "@/components/shop/shop-default/Shop";
+import type { MedusaSubcategoryNavItem } from "@/lib/catalog/rentiqoStoreCatalog";
 import type {
   CategorySlug,
   LocationSlug,
-} from "@/lib/catalog/subcategories";
+} from "@/lib/catalog/catalogRoutes";
+import type { ShopProduct } from "@/types/shopFilter";
 
 export type ShopCrumb = {
   label: string;
@@ -21,11 +23,15 @@ export type CategoryShopListingProps = {
   categoryPath: string;
   categorySlug: CategorySlug;
   activeSubcategorySlug?: string | null;
+  /** From `fetchCatalogProducts` on the server (Medusa / BFF). */
+  catalogProducts: ShopProduct[];
+  subcategoryNavSource?: "static" | "medusa";
+  medusaSubcategoryNav?: MedusaSubcategoryNavItem[];
 };
 
 /**
  * Shared hero + left-sidebar shop grid for location-aware category routes.
- * Product source is wired inside `Shop` (static data today; Medusa later).
+ * Products are loaded per route via `catalogProducts` (see `fetchCatalogProducts`).
  */
 export default function CategoryShopListing({
   crumbs,
@@ -34,6 +40,9 @@ export default function CategoryShopListing({
   categoryPath,
   categorySlug,
   activeSubcategorySlug,
+  catalogProducts,
+  subcategoryNavSource = "static",
+  medusaSubcategoryNav,
 }: CategoryShopListingProps) {
   const displayCrumbs =
     (activeSubcategorySlug == null || activeSubcategorySlug === "all") &&
@@ -76,8 +85,10 @@ export default function CategoryShopListing({
         categoryPath={categoryPath}
         categorySlug={categorySlug}
         activeSubcategorySlug={activeSubcategorySlug}
+        subcategoryNavSource={subcategoryNavSource}
+        medusaSubcategoryNav={medusaSubcategoryNav}
       />
-      <Shop variant={["leftSidebar"]} />
+      <Shop variant={["leftSidebar"]} catalogProducts={catalogProducts} />
     </>
   );
 }

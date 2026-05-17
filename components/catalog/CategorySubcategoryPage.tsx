@@ -1,10 +1,12 @@
 import type { ReactNode } from "react";
 
 import CategoryShopListing from "@/components/catalog/CategoryShopListing";
+import type { MedusaSubcategoryNavItem } from "@/lib/catalog/rentiqoStoreCatalog";
 import type {
   CategorySlug,
   LocationSlug,
-} from "@/lib/catalog/subcategories";
+} from "@/lib/catalog/catalogRoutes";
+import type { ShopProduct } from "@/types/shopFilter";
 
 type CategorySubcategoryPageProps = {
   locationSlug: LocationSlug;
@@ -14,6 +16,9 @@ type CategorySubcategoryPageProps = {
   subcategoryLabel: string;
   activeSubcategorySlug: string;
   description?: ReactNode;
+  catalogProducts: ShopProduct[];
+  subcategoryNavSource?: "static" | "medusa";
+  medusaSubcategoryNav?: MedusaSubcategoryNavItem[];
 };
 
 export default function CategorySubcategoryPage({
@@ -24,6 +29,9 @@ export default function CategorySubcategoryPage({
   subcategoryLabel,
   activeSubcategorySlug,
   description,
+  catalogProducts,
+  subcategoryNavSource = "static",
+  medusaSubcategoryNav,
 }: CategorySubcategoryPageProps) {
   const desc =
     description ??
@@ -42,6 +50,9 @@ export default function CategorySubcategoryPage({
       activeSubcategorySlug={activeSubcategorySlug}
       title={subcategoryLabel}
       description={desc}
+      catalogProducts={catalogProducts}
+      subcategoryNavSource={subcategoryNavSource}
+      medusaSubcategoryNav={medusaSubcategoryNav}
     />
   );
 }
