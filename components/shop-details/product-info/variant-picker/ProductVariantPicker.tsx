@@ -2,6 +2,7 @@
 
 import { useProduct } from "@/context/ProductContext";
 import { COLOR_PICKERS } from "./colorPickersMap";
+import { DurationPickerButtons } from "./DurationPickerButtons";
 import { SIZE_PICKERS } from "./sizePickersMap";
 import type { ProductVariantColorType, ProductVariantSizeType } from "./types";
 
@@ -21,6 +22,7 @@ export function ProductVariantPicker({
     setCurrentSize,
     colors,
     sizes,
+    hasDurationOption,
   } = useProduct();
 
   const ColorPicker = COLOR_PICKERS[colorType];
@@ -28,6 +30,7 @@ export function ProductVariantPicker({
 
   return (
     <>
+      {hasDurationOption && <DurationPickerButtons />}
       {colors.length > 0 && (
         <ColorPicker
           colors={colors}

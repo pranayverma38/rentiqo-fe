@@ -1105,6 +1105,50 @@
     }
   }
 
+  .variant-duration {
+    .variant-picker-label {
+      justify-content: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .duration-value {
+      color: #1d4ed8;
+    }
+
+    .variant-picker-values {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .duration-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 20px;
+      border: 1px solid var(--line);
+      border-radius: 40px;
+      background: var(--white);
+      color: var(--text);
+      font-size: inherit;
+      font-family: inherit;
+      line-height: 1.2;
+      cursor: pointer;
+      @include transition3;
+
+      &:hover {
+        border-color: #93c5fd;
+      }
+
+      &.active {
+        background: #eff6ff;
+        border-color: #2563eb;
+        color: #2563eb;
+      }
+    }
+  }
+
   .variant-size {
     .variant-picker-label {
       justify-content: space-between;

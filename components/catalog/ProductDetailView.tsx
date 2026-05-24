@@ -20,10 +20,20 @@ function galleryExtras(product: ProductDetailItem) {
   return images.slice(1);
 }
 
+function toSizeOptions(values: string[] | undefined): SizeOption[] {
+  return (values ?? []).map((value) => ({ value }));
+}
+
 function medusaSizeOptions(product: ProductDetailItem): SizeOption[] {
+  if ((product.sizeOptions?.length ?? 0) > 0) {
+    return toSizeOptions(product.sizeOptions);
+  }
   const variants = product.medusaVariants ?? [];
   if (variants.length === 0) {
     return (product.sizes ?? []).map((value) => ({ value }));
+  }
+  if (product.hasDurationOption) {
+    return [];
   }
   return variants.map((v) => ({
     value: v.label,
@@ -31,6 +41,21 @@ function medusaSizeOptions(product: ProductDetailItem): SizeOption[] {
     price: String(v.price),
     thumbnail: v.thumbnail,
   }));
+}
+
+function initialSelections(product: ProductDetailItem) {
+  const defaultVariant = product.medusaVariants?.[0];
+  const ov = defaultVariant?.optionValues;
+
+  return {
+    initialDuration:
+      ov?.duration ?? product.durationOptions?.[0] ?? "",
+    initialColor:
+      ov?.color?.toLowerCase() ??
+      product.colors?.[0]?.label.toLowerCase() ??
+      "",
+    initialSize: ov?.size ?? product.sizeOptions?.[0] ?? product.sizes?.[0] ?? "",
+  };
 }
 
 function markUnavailable(product: ProductDetailItem): ProductDetailItem {
@@ -106,8 +131,10 @@ export default function ProductDetailView({
   const layout = product.isStockOut ? "out-of-stock" : "default";
   const sizes = medusaSizeOptions(product);
   const colors = product.colors ?? [];
+  const durationOptions = toSizeOptions(product.durationOptions);
   const medusaVariants = product.medusaVariants ?? [];
   const variantKey = medusaVariants.map((v) => v.id).join(",");
+  const { initialDuration, initialColor, initialSize } = initialSelections(product);
 
   return (
     <>
@@ -119,10 +146,14 @@ export default function ProductDetailView({
           layout={layout}
           extraImages={galleryExtras(product)}
           sizes={sizes}
+          durationOptions={durationOptions}
           colors={colors}
           medusaVariants={medusaVariants}
           optionTitle={product.optionTitle}
-          initialSize={sizes[0]?.value ?? ""}
+          hasDurationOption={product.hasDurationOption ?? false}
+          initialDuration={initialDuration}
+          initialColor={initialColor}
+          initialSize={initialSize}
         />
       </div>
     </>

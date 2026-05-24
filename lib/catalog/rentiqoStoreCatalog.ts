@@ -103,11 +103,19 @@ export type MedusaStoreProduct = {
   categories?: MedusaProductCategoryRow[] | null;
 };
 
-/** One Medusa variant row for PDP size/option selection. */
+/** Medusa option values on one variant row (keys are normalized). */
+export type ProductDetailOptionValues = {
+  duration?: string;
+  color?: string;
+  size?: string;
+};
+
+/** One Medusa variant row for PDP option selection. */
 export type ProductDetailVariant = {
   id: string;
-  /** Option value label (e.g. `single`, `double`). */
+  /** Primary display key (legacy); prefer `optionValues`. */
   label: string;
+  optionValues: ProductDetailOptionValues;
   price: number;
   priceOld?: number;
   /** Medusa variant `thumbnail` (hero image for this option). */
@@ -124,8 +132,13 @@ export type ProductDetailItem = ProductCardItem & {
   categoryNav?: ProductCategoryNav;
   /** Medusa variants with regional prices (when product has options). */
   medusaVariants?: ProductDetailVariant[];
-  /** Primary option title from Medusa (e.g. `size`). */
+  /** Size option title from Medusa (e.g. `size`). */
   optionTitle?: string;
+  /** Rental duration values when product has a `Duration` option. */
+  durationOptions?: string[];
+  /** Size option values (separate from duration). */
+  sizeOptions?: string[];
+  hasDurationOption?: boolean;
 };
 
 function storeBaseUrl(): string | null {
@@ -279,34 +292,255 @@ function isColorOptionTitle(title: string | null | undefined): boolean {
   return (title?.toLowerCase() ?? "").includes("color");
 }
 
+export function isDurationOptionTitle(title: string | null | undefined): boolean {
+  return (title?.trim().toLowerCase() ?? "") === "duration";
+}
+
+export function durationMedusaOption(
+  product: MedusaStoreProduct,
+): MedusaProductOption | undefined {
+  return product.options?.find((o) => isDurationOptionTitle(o.title));
+}
+
+export function isMedusaDurationProduct(product: MedusaStoreProduct): boolean {
+  return durationMedusaOption(product) != null;
+}
+
+function durationSortKey(value: string): number {
+  const match = value.match(/(\d+)/);
+  return match != null ? Number.parseInt(match[1], 10) : Number.MAX_SAFE_INTEGER;
+}
+
+function isSizeOptionTitle(title: string | null | undefined): boolean {
+  const t = title?.trim().toLowerCase() ?? "";
+  return t === "size" || (t.includes("size") && !isDurationOptionTitle(title));
+}
+
+export function sizeMedusaOption(
+  product: MedusaStoreProduct,
+): MedusaProductOption | undefined {
+  return product.options?.find((o) => isSizeOptionTitle(o.title));
+}
+
+export function colorMedusaOption(
+  product: MedusaStoreProduct,
+): MedusaProductOption | undefined {
+  return product.options?.find((o) => isColorOptionTitle(o.title));
+}
+
 function primaryMedusaOption(
   product: MedusaStoreProduct,
 ): MedusaProductOption | undefined {
+  const size = sizeMedusaOption(product);
+  if (size != null) {
+    return size;
+  }
   const options = product.options ?? [];
   return (
-    options.find((o) => !isColorOptionTitle(o.title)) ?? options[0] ?? undefined
+    options.find(
+      (o) => !isColorOptionTitle(o.title) && !isDurationOptionTitle(o.title),
+    ) ??
+    options[0] ??
+    undefined
   );
 }
 
 function primaryOptionTitleFromMedusa(product: MedusaStoreProduct): string {
-  const title = primaryMedusaOption(product)?.title?.trim();
-  return title && title.length > 0 ? title : "Size";
+  const title = sizeMedusaOption(product)?.title?.trim();
+  if (title && title.length > 0) {
+    return title;
+  }
+  const titleFallback = primaryMedusaOption(product)?.title?.trim();
+  return titleFallback && titleFallback.length > 0 ? titleFallback : "Size";
 }
 
-function optionValuesFromMedusa(product: MedusaStoreProduct): string[] {
-  const out: string[] = [];
-  const options = product.options ?? [];
-  for (const opt of options) {
-    if (isColorOptionTitle(opt.title)) {
+function optionValuesFromMedusaOption(
+  opt: MedusaProductOption | undefined,
+  sortDuration = false,
+): string[] {
+  if (opt == null) {
+    return [];
+  }
+  const values = (opt.values ?? [])
+    .map((v) => (typeof v.value === "string" ? v.value.trim() : ""))
+    .filter((v) => v.length > 0);
+  if (sortDuration && isDurationOptionTitle(opt.title)) {
+    return [...values].sort((a, b) => durationSortKey(a) - durationSortKey(b));
+  }
+  return values;
+}
+
+export function durationOptionValuesFromMedusa(
+  product: MedusaStoreProduct,
+): string[] {
+  return optionValuesFromMedusaOption(durationMedusaOption(product), true);
+}
+
+export function sizeOptionValuesFromMedusa(product: MedusaStoreProduct): string[] {
+  return optionValuesFromMedusaOption(sizeMedusaOption(product));
+}
+
+function variantOptionValuesMap(variant: MedusaVariant): ProductDetailOptionValues {
+  const out: ProductDetailOptionValues = {};
+  for (const row of variant.options ?? []) {
+    const title = row.option?.title?.trim().toLowerCase() ?? "";
+    const value = typeof row.value === "string" ? row.value.trim() : "";
+    if (value.length === 0) {
       continue;
     }
-    for (const v of opt.values ?? []) {
-      if (typeof v.value === "string" && v.value.length > 0) {
-        out.push(v.value);
-      }
+    if (isDurationOptionTitle(title)) {
+      out.duration = value;
+    } else if (isColorOptionTitle(title)) {
+      out.color = value;
+    } else if (isSizeOptionTitle(title)) {
+      out.size = value;
     }
   }
   return out;
+}
+
+function variantLabelFromOptionValues(
+  values: ProductDetailOptionValues,
+): string {
+  const parts = [values.duration, values.color, values.size].filter(
+    (p): p is string => typeof p === "string" && p.length > 0,
+  );
+  return parts.length > 0 ? parts.join(" / ") : "";
+}
+
+function isValidPdpVariant(
+  variant: MedusaVariant,
+  product: MedusaStoreProduct,
+): boolean {
+  const map = variantOptionValuesMap(variant);
+  const hasDuration = durationMedusaOption(product) != null;
+  const hasSize = sizeMedusaOption(product) != null;
+  const hasColor = colorMedusaOption(product) != null;
+
+  if ((variant.options ?? []).length === 0) {
+    return !hasDuration && !hasSize && !hasColor;
+  }
+
+  if (hasDuration && map.duration == null) {
+    return false;
+  }
+
+  if (hasSize && hasColor && (map.size == null || map.color == null)) {
+    return false;
+  }
+
+  return map.duration != null || map.size != null || map.color != null;
+}
+
+export function findMedusaVariantByOptions(
+  variants: ProductDetailVariant[],
+  selection: ProductDetailOptionValues,
+): ProductDetailVariant | null {
+  if (variants.length === 0) {
+    return null;
+  }
+
+  const exact = variants.find((v) => variantMatchesSelection(v, selection));
+  if (exact != null) {
+    return exact;
+  }
+
+  let best: ProductDetailVariant | null = null;
+  let bestScore = -1;
+  for (const v of variants) {
+    const ov = v.optionValues;
+    let score = 0;
+    if (
+      selection.duration != null &&
+      selection.duration.length > 0 &&
+      (ov.duration?.toLowerCase() ?? "") === selection.duration.toLowerCase()
+    ) {
+      score += 4;
+    }
+    if (
+      selection.color != null &&
+      selection.color.length > 0 &&
+      (ov.color?.toLowerCase() ?? "") === selection.color.toLowerCase()
+    ) {
+      score += 2;
+    }
+    if (
+      selection.size != null &&
+      selection.size.length > 0 &&
+      (ov.size?.toLowerCase() ?? "") === selection.size.toLowerCase()
+    ) {
+      score += 1;
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      best = v;
+    }
+  }
+
+  return best ?? variants[0] ?? null;
+}
+
+export function variantMatchesSelection(
+  variant: ProductDetailVariant,
+  selection: ProductDetailOptionValues,
+): boolean {
+  const ov = variant.optionValues;
+  if (
+    selection.duration != null &&
+    selection.duration.length > 0 &&
+    (ov.duration?.toLowerCase() ?? "") !== selection.duration.toLowerCase()
+  ) {
+    return false;
+  }
+  if (
+    selection.color != null &&
+    selection.color.length > 0 &&
+    (ov.color?.toLowerCase() ?? "") !== selection.color.toLowerCase()
+  ) {
+    return false;
+  }
+  if (
+    selection.size != null &&
+    selection.size.length > 0 &&
+    (ov.size?.toLowerCase() ?? "") !== selection.size.toLowerCase()
+  ) {
+    return false;
+  }
+  return true;
+}
+
+function colorOptionsFromMedusa(
+  product: MedusaStoreProduct,
+  meta: Record<string, unknown>,
+): ProductColorSwatch[] {
+  const fromMeta = readColorSwatches(meta.colors);
+  if (fromMeta.length > 0) {
+    return fromMeta;
+  }
+
+  const colorOpt = colorMedusaOption(product);
+  if (colorOpt == null) {
+    return [];
+  }
+
+  const fallbackImg =
+    (typeof product.thumbnail === "string" && product.thumbnail.length > 0
+      ? product.thumbnail
+      : sortedImages(product.images ?? undefined)[0]?.url) ?? "";
+
+  return (colorOpt.values ?? [])
+    .map((v) => {
+      const value = typeof v.value === "string" ? v.value.trim() : "";
+      if (value.length === 0) {
+        return null;
+      }
+      return {
+        label: value,
+        swatchClass: `bg-${value.replace(/\s+/g, "-")}`,
+        img: fallbackImg,
+      };
+    })
+    .filter((c): c is ProductColorSwatch => c != null);
 }
 
 function variantPricesFromCalculated(
@@ -461,7 +695,7 @@ function variantGalleryImages(
   return urls.map((src) => ({ src, dataSize: label }));
 }
 
-/** Build ordered PDP variants from Medusa `variants` + primary product option. */
+/** Build PDP variants with full option axes (duration, color, size). */
 export function buildMedusaProductDetailVariants(
   product: MedusaStoreProduct,
 ): ProductDetailVariant[] {
@@ -469,10 +703,6 @@ export function buildMedusaProductDetailVariants(
   if (variants.length === 0) {
     return [];
   }
-
-  const optionTitle = primaryOptionTitleFromMedusa(product);
-  const optionOrder = optionValuesFromMedusa(product);
-  const orderIndex = new Map(optionOrder.map((v, i) => [v.toLowerCase(), i]));
 
   const rows: ProductDetailVariant[] = [];
   for (const variant of variants) {
@@ -485,7 +715,12 @@ export function buildMedusaProductDetailVariants(
       continue;
     }
 
-    const label = variantOptionLabel(variant, optionTitle);
+    if (!isValidPdpVariant(variant, product)) {
+      continue;
+    }
+
+    const optionValues = variantOptionValuesMap(variant);
+    const label = variantLabelFromOptionValues(optionValues);
     if (label.length === 0) {
       continue;
     }
@@ -504,6 +739,7 @@ export function buildMedusaProductDetailVariants(
     rows.push({
       id: variant.id,
       label,
+      optionValues,
       price,
       priceOld,
       thumbnail,
@@ -513,16 +749,14 @@ export function buildMedusaProductDetailVariants(
   }
 
   rows.sort((a, b) => {
-    const ai = orderIndex.get(a.label.toLowerCase());
-    const bi = orderIndex.get(b.label.toLowerCase());
-    if (ai != null && bi != null) {
-      return ai - bi;
-    }
-    if (ai != null) {
-      return -1;
-    }
-    if (bi != null) {
-      return 1;
+    const ad = a.optionValues.duration
+      ? durationSortKey(a.optionValues.duration)
+      : Number.MAX_SAFE_INTEGER;
+    const bd = b.optionValues.duration
+      ? durationSortKey(b.optionValues.duration)
+      : Number.MAX_SAFE_INTEGER;
+    if (ad !== bd) {
+      return ad - bd;
     }
     return a.label.localeCompare(b.label);
   });
@@ -640,17 +874,21 @@ export function mapMedusaStoreProductToProductDetail(
   const medusaVariants = buildMedusaProductDetailVariants(product);
   const defaultVariant = medusaVariants[0];
   const variant0 = product.variants?.[0];
+  const durationOptions = durationOptionValuesFromMedusa(product);
+  const sizeOptions = sizeOptionValuesFromMedusa(product);
+  const medusaColors = colorOptionsFromMedusa(product, meta);
   const galleryImages =
     defaultVariant != null && defaultVariant.galleryImages.length > 0
       ? defaultVariant.galleryImages
       : medusaImagesToGallery(product);
-  const optionSizes = medusaVariants.map((v) => v.label);
   const sizes =
-    optionSizes.length > 0
-      ? optionSizes
-      : base.sizes && base.sizes.length > 0
-        ? base.sizes
-        : undefined;
+    sizeOptions.length > 0
+      ? sizeOptions
+      : medusaVariants.length > 0 && durationOptions.length === 0
+        ? [...new Set(medusaVariants.map((v) => v.label))]
+        : base.sizes && base.sizes.length > 0
+          ? base.sizes
+          : undefined;
 
   const reviewCount = readOptionalNumber(meta.review_count);
   const reviewsText = resolvePdpReviewCountText(meta);
@@ -688,9 +926,11 @@ export function mapMedusaStoreProductToProductDetail(
     medusaProductId: product.id,
     medusaVariants: medusaVariants.length > 0 ? medusaVariants : undefined,
     optionTitle:
-      medusaVariants.length > 0
-        ? primaryOptionTitleFromMedusa(product)
-        : undefined,
+      sizeOptions.length > 0 ? primaryOptionTitleFromMedusa(product) : undefined,
+    hasDurationOption: durationOptions.length > 0,
+    durationOptions: durationOptions.length > 0 ? durationOptions : undefined,
+    sizeOptions: sizeOptions.length > 0 ? sizeOptions : undefined,
+    colors: medusaColors.length > 0 ? medusaColors : base.colors,
     galleryImages,
     images: galleryImages,
     img: galleryImages[0]?.src ?? base.img,

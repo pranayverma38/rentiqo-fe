@@ -184,13 +184,16 @@ export default function ProductSection({
   thumbnailPosition = "left",
   zoomType = "default",
   initialColor = "green",
+  initialDuration = "",
   initialSize = "S",
   initialQuantity = 1,
   extraImages = demoImages,
   colors = demoColors,
   sizes: sizesProp = demoSizes,
+  durationOptions: durationOptionsProp = [],
   medusaVariants,
   optionTitle,
+  hasDurationOption = false,
   layout = "default",
   mediaLayout = "slider",
   parentClass = "section-product-single tf-main-product section-image-zoom",
@@ -200,13 +203,16 @@ export default function ProductSection({
   thumbnailPosition?: "bottom" | "left" | "right";
   zoomType?: "default" | "inner" | "magnifying" | "none";
   initialColor?: string;
+  initialDuration?: string;
   initialSize?: string;
   initialQuantity?: number;
   extraImages?: ProductSingleImage[];
   colors?: ColorOption[];
   sizes?: (string | SizeOption)[];
+  durationOptions?: (string | SizeOption)[];
   medusaVariants?: ProductDetailVariant[];
   optionTitle?: string;
+  hasDurationOption?: boolean;
   layout?:
     | "default"
     | "grouped"
@@ -231,17 +237,23 @@ export default function ProductSection({
   const sizes: SizeOption[] = sizesProp.map((s) =>
     typeof s === "string" ? { value: s } : s,
   );
+  const durationOptions: SizeOption[] = durationOptionsProp.map((s) =>
+    typeof s === "string" ? { value: s } : s,
+  );
 
   return (
     <ProductProvider
       initialColor={initialColor}
+      initialDuration={initialDuration}
       initialSize={initialSize}
       initialQuantity={initialQuantity}
       extraImages={extraImages}
       colors={colors}
       sizes={sizes}
+      durationOptions={durationOptions}
       medusaVariants={medusaVariants}
       optionTitle={optionTitle}
+      hasDurationOption={hasDurationOption}
       thumbnailPosition={thumbnailPosition}
       zoomType={zoomType}
     >

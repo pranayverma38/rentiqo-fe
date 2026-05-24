@@ -17,7 +17,7 @@ export function VariantSizeLabel({ currentSize }: { currentSize: string }) {
   return (
     <div className="variant-picker-label">
       <div>
-        {label}:
+        <span className="fw-semibold">{label}:</span>
         <span className="variant-picker-label-value value-currentSize text-capitalize fw-medium">
           {" "}
           {currentSize}
