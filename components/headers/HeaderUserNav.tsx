@@ -10,7 +10,7 @@ const ACCOUNT_MENU_LINKS = [
   { href: "/account-orders", label: "Your Order" },
   { href: "/account-addresses", label: "My Address" },
   { href: "/track-order", label: "Traking" },
-  { href: "/account-setting", label: "Setting" },
+  { href: "/account-profile", label: "My Profile" },
 ] as const;
 
 export default function HeaderUserNav() {

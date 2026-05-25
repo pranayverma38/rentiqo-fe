@@ -34,5 +34,4 @@ export const ACCOUNT_NAV_ITEMS = [
     icon: "icon-ShieldCheck",
   },
   { href: "/account-addresses", label: "My Address", icon: "icon-Tag" },
-  { href: "/account-setting", label: "Setting", icon: "icon-GearSix" },
 ] as const;

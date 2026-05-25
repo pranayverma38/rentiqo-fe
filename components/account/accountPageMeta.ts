@@ -39,9 +39,6 @@ export const ACCOUNT_PAGE_META: Record<string, AccountPageMeta> = {
   "/account-addresses": {
     sectionTitle: "My Address",
   },
-  "/account-setting": {
-    sectionTitle: "Setting",
-  },
 };
 
 export function getAccountPageMeta(pathname: string): AccountPageMeta | undefined {

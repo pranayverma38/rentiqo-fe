@@ -1,6 +1,18 @@
 "use client";
 
+import AddressFormChipGroup from "@/components/account/account-addresses/AddressFormChipGroup";
 import { PreventDefaultForm } from "@/components/forms/PreventDefaultForm";
+
+const ACCOMMODATION_OPTIONS = [
+  { value: "apartment", label: "Apartment" },
+  { value: "independent-house", label: "Independent house" },
+  { value: "pg-hostel", label: "PG/Hostel" },
+] as const;
+
+const SERVICE_LIFT_OPTIONS = [
+  { value: "available", label: "Available" },
+  { value: "unavailable", label: "Unavailable" },
+] as const;
 
 type AccountAddressFormProps = {
   submitLabel?: string;
@@ -138,6 +150,30 @@ export default function AccountAddressForm({
             />
           </fieldset>
         </div>
+
+        <AddressFormChipGroup
+          name="accommodationType"
+          legend="Accommodation Type"
+          options={[...ACCOMMODATION_OPTIONS]}
+          defaultValue="apartment"
+        />
+
+        <AddressFormChipGroup
+          name="serviceLift"
+          legend="Service Lift"
+          options={[...SERVICE_LIFT_OPTIONS]}
+          defaultValue="available"
+        />
+
+        <fieldset className="tf-field account-address-default-field">
+          <label className="account-address-default-check" htmlFor="address-is-default">
+            <input type="checkbox" id="address-is-default" name="isDefault" />
+            <span className="account-address-default-check__box" aria-hidden="true" />
+            <span className="account-address-default-check__label fw-medium">
+              Mark as Default
+            </span>
+          </label>
+        </fieldset>
       </div>
       <div className="account-address-form__actions">
         <button type="button" className="tf-btn btn-stroke" onClick={onCancel}>
