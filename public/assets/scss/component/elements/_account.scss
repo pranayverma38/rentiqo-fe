@@ -1,5 +1,65 @@
 @use "../../abstracts/index"as *;
 
+.account-shell {
+    @include res(lg) {
+        &.account-shell--mobile-menu {
+            .account-shell__sidebar {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            .account-shell__main {
+                display: none;
+            }
+
+            .account-shell__menu-heading {
+                margin-bottom: 20px;
+            }
+
+            .sidebar-account-wrap {
+                position: static !important;
+            }
+        }
+
+        &.account-shell--mobile-content {
+            .account-shell__sidebar {
+                display: none;
+            }
+
+            .account-shell__main {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin-left: 0 !important;
+            }
+        }
+    }
+}
+
+.account-mobile-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    color: var(--text-2);
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+
+    .icon {
+        font-size: 20px;
+    }
+
+    &:hover {
+        color: var(--text);
+    }
+}
+
+.sidebar-account-wrap {
+    @include res(lg) {
+        position: static !important;
+    }
+}
+
 .my-account-nav {
     display: grid;
     border: 1px solid var(--line);
@@ -7,7 +67,7 @@
     overflow: hidden;
 
     .link-account {
-        padding: 20px;
+        padding: 16px;
         color: var(--text-2);
         width: 100%;
         display: flex;
@@ -15,7 +75,14 @@
         gap: 12px;
 
         .icon {
-            font-size: 24px;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .text {
+            font-size: 17px;
+            line-height: 1.3;
+            margin-bottom: 0;
         }
 
         &:hover,
@@ -39,6 +106,8 @@
 }
 
 .my-account-content {
+    min-width: 0;
+
     .account-title {
         margin-bottom: 20px;
     }
@@ -321,6 +390,300 @@
 .account-my_order {
     .tab-btn-wrap-v1 {
         margin-bottom: 24px;
+    }
+}
+
+.account-billing-payments {
+    $panel-radius: 12px;
+
+    .tf-btn {
+        border-radius: $panel-radius !important;
+    }
+
+    &__panel.account-my_address {
+        border-radius: $panel-radius;
+    }
+
+    &__toolbar {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    &__total-row {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    &__panel {
+        padding: 0;
+        overflow: hidden;
+    }
+
+    &__pay-btn {
+        background: #16a34a !important;
+        color: #fff !important;
+
+        &::after {
+            display: none;
+        }
+
+        &:hover:not(:disabled) {
+            background: #15803d !important;
+            color: #fff !important;
+        }
+
+        &:disabled {
+            background: var(--line) !important;
+            color: var(--text-3) !important;
+        }
+    }
+
+    &__icon-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--text-2);
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+        flex-shrink: 0;
+
+        &:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+    }
+
+    &__download-icon {
+        display: block;
+        flex-shrink: 0;
+    }
+
+    &__actions {
+        flex-wrap: nowrap !important;
+
+        .tf-btn {
+            flex-shrink: 0;
+        }
+    }
+
+    &__see-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        align-self: flex-start;
+        border: 0;
+        background: transparent;
+        padding: 0;
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        font-weight: 500;
+        color: var(--text);
+        cursor: pointer;
+        transition: color 0.2s ease;
+
+        .icon {
+            font-size: 16px;
+        }
+
+        &:hover {
+            color: var(--text-2);
+        }
+    }
+
+    &__table-wrap {
+        width: 100%;
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    &__table {
+        width: 100%;
+        table-layout: fixed;
+
+        th {
+            padding: 10px 12px 8px;
+            font-weight: 500;
+            color: var(--text);
+            vertical-align: bottom;
+        }
+
+        td {
+            padding: 10px 12px;
+            color: var(--text-2);
+            vertical-align: middle;
+            word-break: break-word;
+        }
+
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 11%;
+        }
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 15%;
+        }
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 12%;
+        }
+
+        th:nth-child(4),
+        td:nth-child(4),
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 9%;
+        }
+
+        th:nth-child(6),
+        td:nth-child(6) {
+            width: 6%;
+        }
+
+        th:nth-child(7),
+        td:nth-child(7) {
+            width: 14%;
+            white-space: nowrap;
+        }
+
+        thead tr {
+            border-bottom: 1px solid var(--line);
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--line);
+
+            &:last-child {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    &__cell-invoice {
+        word-break: break-all;
+        line-height: 1.4;
+    }
+
+    &__accordion {
+        border-top: 1px solid var(--line);
+    }
+
+    &__accordion-item {
+        border-bottom: 1px solid var(--line);
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+
+    &__accordion-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        padding: 16px;
+        border: 0;
+        background: var(--white);
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        color: var(--text);
+        text-align: left;
+        cursor: pointer;
+
+        .icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            color: var(--text-2);
+        }
+    }
+
+    &__accordion-panel {
+        padding: 0 16px 16px;
+        background: var(--bg);
+        border-top: 1px solid var(--line);
+    }
+
+    &__detail-list {
+        margin: 0 0 16px;
+        padding: 12px 0 0;
+    }
+
+    &__detail-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 4px 12px;
+        margin-bottom: 12px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        dt {
+            margin: 0;
+            min-width: 7.5rem;
+            color: var(--text);
+        }
+
+        dd {
+            margin: 0;
+            color: var(--text);
+        }
+    }
+
+    @include res(sm, min) {
+        &__total-row {
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+        }
+    }
+
+    @include res(lg, min) {
+        &__toolbar {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        &__total-row {
+            flex-shrink: 0;
+        }
+    }
+
+    @include res(md, max) {
+        &__panel.account-my_address {
+            padding: 0;
+        }
+
+        &__accordion-trigger {
+            padding: 14px 15px;
+        }
+
+        &__accordion-panel {
+            padding: 0 15px 16px;
+        }
+
+        &__actions {
+            .account-billing-payments__pay-btn {
+                flex: 1;
+                min-width: 0;
+            }
+        }
     }
 }
 

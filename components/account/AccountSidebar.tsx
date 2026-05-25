@@ -18,7 +18,7 @@ export default function AccountSidebar() {
   };
 
   return (
-    <div className="sidebar-account-wrap sidebar-content-wrap sticky-top d-lg-block d-none">
+    <div className="sidebar-account-wrap sidebar-content-wrap sticky-top">
       <nav className="my-account-nav" aria-label="Account">
         {ACCOUNT_NAV_ITEMS.map((item) => {
           const active = pathname === item.href;

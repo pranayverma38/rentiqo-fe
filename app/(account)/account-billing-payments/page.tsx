@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 
-import AccountPlaceholder from "@/components/account/AccountPlaceholder";
+import AccountBillingPayments from "@/components/account/account-billing-payments/AccountBillingPayments";
 
 export const metadata: Metadata = {
   title: "Billing & Payments | Rentiqo",
-  description: "Billing and payment history",
+  description: "View invoices and manage payments",
 };
 
 export default function AccountBillingPaymentsPage() {
-  return <AccountPlaceholder />;
+  return <AccountBillingPayments />;
 }
