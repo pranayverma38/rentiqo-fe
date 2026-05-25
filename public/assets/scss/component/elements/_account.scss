@@ -687,6 +687,231 @@
     }
 }
 
+.account-service-requests {
+    $panel-radius: 12px;
+
+    .tf-btn {
+        border-radius: $panel-radius !important;
+    }
+
+    &__section-title {
+        color: var(--text);
+    }
+
+    &__type-grid {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    &__type-tile {
+        width: 100%;
+        min-height: 108px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 14px 10px;
+        border: 1px solid var(--line);
+        border-radius: $panel-radius;
+        background: var(--white);
+        color: var(--text);
+        cursor: pointer;
+        transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+
+        &:hover {
+            border-color: #8684d4;
+            background: var(--bg);
+        }
+
+        &:focus-visible {
+            outline: 2px solid #8684d4;
+            outline-offset: 2px;
+        }
+    }
+
+    &__type-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        background: var(--bg);
+        color: var(--text);
+
+        .icon {
+            font-size: 22px;
+        }
+    }
+
+    &__type-label {
+        font-size: 13px;
+        line-height: 1.35;
+        text-align: center;
+        color: var(--text-2);
+    }
+
+    &__type-tile:hover &__type-label {
+        color: var(--text);
+    }
+
+    &__card-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    &__card {
+        border: 1px solid var(--line);
+        border-radius: $panel-radius;
+        background: var(--white);
+        overflow: hidden;
+    }
+
+    &__card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px;
+        border-bottom: 1px solid var(--line);
+    }
+
+    &__card-heading {
+        min-width: 0;
+        flex: 1;
+    }
+
+    &__card-title {
+        margin-bottom: 6px;
+        word-break: break-word;
+    }
+
+    &__ticket {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    &__status {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        line-height: 1.2;
+        white-space: nowrap;
+
+        &--in-progress {
+            color: #b45309;
+            background: #fef3c7;
+        }
+
+        &--scheduled {
+            color: #1d4ed8;
+            background: #eff6ff;
+        }
+
+        &--pending {
+            color: #6b7280;
+            background: #f3f4f6;
+        }
+
+        &--completed {
+            color: #15803d;
+            background: #f0fdf4;
+        }
+    }
+
+    &__card-body {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    &__section-label {
+        font-size: 14px;
+        color: var(--text);
+    }
+
+    &__update {
+        line-height: 1.55;
+        word-break: break-word;
+    }
+
+    &__date {
+        font-size: 14px;
+    }
+
+    &__card-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        padding: 16px;
+        border-top: 1px solid var(--line);
+        background: var(--bg);
+    }
+
+    &__cancel-btn {
+        &:hover:not(:disabled) {
+            border-color: #dc4646 !important;
+            color: #dc4646 !important;
+            background: #db44441a !important;
+        }
+    }
+
+    @include res(sm, min) {
+        &__type-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        &__type-tile {
+            min-height: 116px;
+        }
+
+        &__type-label {
+            font-size: 14px;
+        }
+    }
+
+    @include res(lg, min) {
+        &__type-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+    }
+
+    @include res(md, max) {
+        &__card-header {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        &__status {
+            align-self: flex-start;
+        }
+
+        &__card-actions {
+            flex-direction: column;
+            align-items: stretch;
+
+            .tf-btn {
+                width: 100%;
+            }
+        }
+    }
+}
+
 .account-refer-earn {
     &__code-row {
         align-items: stretch;

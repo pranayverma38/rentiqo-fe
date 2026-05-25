@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 
-import AccountPlaceholder from "@/components/account/AccountPlaceholder";
+import AccountServiceRequests from "@/components/account/account-service-requests/AccountServiceRequests";
 
 export const metadata: Metadata = {
   title: "Service Requests | Rentiqo",
-  description: "View and manage service requests",
+  description: "Raise and track service requests",
 };
 
 export default function AccountServiceRequestsPage() {
-  return <AccountPlaceholder />;
+  return <AccountServiceRequests />;
 }
