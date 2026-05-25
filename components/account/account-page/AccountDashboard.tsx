@@ -4,23 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 
-import { AccountSection } from "@/components/account/AccountSection";
-import { useAuth } from "@/context/AuthProvider";
 import { useCustomerOrders } from "@/lib/hooks/useCustomerOrders";
 import { mapMedusaOrderToUi } from "@/lib/orders/mapMedusaOrder";
 import TfSwiper from "@/components/ui/TfSwiper";
 import { accountStats } from "@/data/account_stats";
 
 export default function AccountDashboard() {
-  const { customer } = useAuth();
   const { orders, loading } = useCustomerOrders(5);
 
   const recentOrders = useMemo(() => orders.slice(0, 3).map(mapMedusaOrderToUi), [orders]);
-
-  const greetingName =
-    customer?.first_name?.trim() ||
-    customer?.email?.split("@")[0] ||
-    "there";
 
   const stats = useMemo(() => {
     const base = [...accountStats];
@@ -31,7 +23,7 @@ export default function AccountDashboard() {
   }, [orders.length]);
 
   return (
-    <AccountSection title={`Hello, ${greetingName}`}>
+    <>
       <div className="acount-order_stats">
         <TfSwiper
           preview={3}
@@ -125,6 +117,6 @@ export default function AccountDashboard() {
           View all orders
         </Link>
       </div>
-    </AccountSection>
+    </>
   );
 }

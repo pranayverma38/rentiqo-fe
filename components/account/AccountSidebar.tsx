@@ -40,7 +40,7 @@ export default function AccountSidebar() {
           onClick={handleLogout}
         >
           <i className="icon icon-SignOut" />
-          <span className="text h6 fw-medium">Logout</span>
+          <span className="text h6 fw-medium">Log Out</span>
         </button>
       </nav>
     </div>

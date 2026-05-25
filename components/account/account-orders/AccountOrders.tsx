@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 
-import { AccountSection } from "@/components/account/AccountSection";
 import { useCustomerOrders } from "@/lib/hooks/useCustomerOrders";
 import { mapMedusaOrderToUi } from "@/lib/orders/mapMedusaOrder";
 
@@ -29,11 +28,7 @@ export default function AccountOrders() {
   }, [activeTabId, uiOrders]);
 
   return (
-    <AccountSection
-      title="Your Orders"
-      sectionClassName="flat-spacing flat-animate-tab"
-    >
-      <div className="account-my_order">
+    <div className="account-my_order">
         <ul className="tab-btn-wrap-v1 style-2" role="tablist">
           {ORDER_TABS.map((tab) => (
             <li key={tab.id} className="nav-tab-item" role="presentation">
@@ -133,7 +128,6 @@ export default function AccountOrders() {
             </div>
           </div>
         </div>
-      </div>
-    </AccountSection>
+    </div>
   );
 }

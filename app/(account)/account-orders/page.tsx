@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 
-import AccountPageTitle from "@/components/account/AccountPageTitle";
 import AccountOrders from "@/components/account/account-orders/AccountOrders";
 
 export const metadata: Metadata = {
@@ -9,12 +8,7 @@ export const metadata: Metadata = {
 };
 
 const AccountOrdersPage = () => {
-  return (
-    <>
-      <AccountPageTitle />
-      <AccountOrders />
-    </>
-  );
+  return <AccountOrders />;
 };
 
 export default AccountOrdersPage;

@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 
-import AccountPageTitle from "@/components/account/AccountPageTitle";
 import AccountDashboard from "@/components/account/account-page/AccountDashboard";
 
 export const metadata: Metadata = {
@@ -9,12 +8,7 @@ export const metadata: Metadata = {
 };
 
 const AccountPage = () => {
-  return (
-    <>
-      <AccountPageTitle />
-      <AccountDashboard />
-    </>
-  );
+  return <AccountDashboard />;
 };
 
 export default AccountPage;

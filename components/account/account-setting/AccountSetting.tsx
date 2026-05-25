@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
 
-import { AccountSection } from "@/components/account/AccountSection";
 import { PreventDefaultForm } from "@/components/forms/PreventDefaultForm";
 import { useAuth } from "@/context/AuthProvider";
 import { getApiErrorMessage } from "@/utils/getApiErrorMessage";
@@ -43,8 +42,7 @@ export default function AccountSetting() {
   };
 
   return (
-    <AccountSection title="Setting">
-      <div className="account-my_address setting">
+    <div className="account-my_address setting">
         <p className="mb-12 h6 fw-medium">Information</p>
         {error ? <p className="text-primary mb-12" role="alert">{error}</p> : null}
         {successMessage ? <p className="mb-12 cl-text-2" role="status">{successMessage}</p> : null}
@@ -75,7 +73,6 @@ export default function AccountSetting() {
             </button>
           </div>
         </PreventDefaultForm>
-      </div>
-    </AccountSection>
+    </div>
   );
 }

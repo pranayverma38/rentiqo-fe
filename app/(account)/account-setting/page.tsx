@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 
-import AccountPageTitle from "@/components/account/AccountPageTitle";
 import AccountSetting from "@/components/account/account-setting/AccountSetting";
 
 export const metadata: Metadata = {
@@ -9,12 +8,7 @@ export const metadata: Metadata = {
 };
 
 const AccountSettingPage = () => {
-  return (
-    <>
-      <AccountPageTitle />
-      <AccountSetting />
-    </>
-  );
+  return <AccountSetting />;
 };
 
 export default AccountSettingPage;
