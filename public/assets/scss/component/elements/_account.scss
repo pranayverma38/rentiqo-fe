@@ -324,6 +324,52 @@
     }
 }
 
+.account-refer-earn {
+    &__code-row {
+        align-items: stretch;
+    }
+
+    &__refer-btn {
+        display: inline-flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: center !important;
+        align-self: stretch;
+        gap: 8px;
+        height: 44px;
+        min-height: 44px;
+        max-height: 44px;
+        box-sizing: border-box;
+        flex-shrink: 0;
+        padding: 0 16px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1;
+        white-space: nowrap;
+        color: #fff !important;
+        text-decoration: none !important;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+            opacity: 0.95;
+            color: #fff !important;
+        }
+
+        svg {
+            display: block;
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        span {
+            display: inline;
+        }
+    }
+}
+
 .account-addresses {
     display: flex;
     flex-direction: column;
