@@ -3,7 +3,7 @@ export const ACCOUNT_MENU_HREF = "/account-page";
 
 /** Routes under the account area; `href` must match `usePathname()` for active nav */
 export const ACCOUNT_NAV_ITEMS = [  { href: "/account-page", label: "Dashboard", icon: "icon-HouseLine" },
-  { href: "/account-orders", label: "Your Orders", icon: "icon-Package" },
+  { href: "/account-orders", label: "My Orders", icon: "icon-Package" },
   {
     href: "/account-manage-subscription",
     label: "Manage Subscription",

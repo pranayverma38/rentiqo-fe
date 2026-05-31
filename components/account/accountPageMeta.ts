@@ -3,6 +3,8 @@ export type AccountPageMeta = {
   /** Dashboard-style greeting: "Hello, {name}" */
   useGreeting?: boolean;
   sectionClassName?: string;
+  /** Mobile back link; defaults to account menu */
+  backHref?: string;
 };
 
 /** Section title + layout per account route; extend when adding pages */
@@ -12,7 +14,7 @@ export const ACCOUNT_PAGE_META: Record<string, AccountPageMeta> = {
     useGreeting: true,
   },
   "/account-orders": {
-    sectionTitle: "Your Orders",
+    sectionTitle: "My Orders",
     sectionClassName: "flat-spacing flat-animate-tab",
   },
   "/account-manage-subscription": {
@@ -42,5 +44,16 @@ export const ACCOUNT_PAGE_META: Record<string, AccountPageMeta> = {
 };
 
 export function getAccountPageMeta(pathname: string): AccountPageMeta | undefined {
+  if (
+    pathname.startsWith("/account-orders/") &&
+    pathname !== "/account-orders"
+  ) {
+    return {
+      sectionTitle: "Order Details",
+      sectionClassName: "flat-spacing flat-animate-tab",
+      backHref: "/account-orders",
+    };
+  }
+
   return ACCOUNT_PAGE_META[pathname];
 }
