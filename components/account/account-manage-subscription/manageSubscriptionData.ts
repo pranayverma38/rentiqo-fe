@@ -13,6 +13,7 @@ export type Subscription = {
   renewalLabel: string;
   renewalDate: string;
   billingDate: string;
+  amountDeposited: number;
   endedOn?: string;
 };
 
@@ -53,6 +54,7 @@ export const MOCK_SUBSCRIPTIONS: Subscription[] = [
     renewalLabel: "Renews on",
     renewalDate: "6 Jun '26",
     billingDate: "6th of every month",
+    amountDeposited: 4500,
   },
   {
     id: "sub-2",
@@ -66,6 +68,7 @@ export const MOCK_SUBSCRIPTIONS: Subscription[] = [
     renewalLabel: "Renews on",
     renewalDate: "18 Jul '26",
     billingDate: "18th of every month",
+    amountDeposited: 3500,
   },
   {
     id: "sub-3",
@@ -79,6 +82,7 @@ export const MOCK_SUBSCRIPTIONS: Subscription[] = [
     renewalLabel: "Ended on",
     renewalDate: "15 Nov '25",
     billingDate: "12th of every month",
+    amountDeposited: 2500,
     endedOn: "15 Nov, 2025",
   },
 ];
@@ -86,10 +90,16 @@ export const MOCK_SUBSCRIPTIONS: Subscription[] = [
 export const MOCK_SUBSCRIPTION_ACTIONS: SubscriptionAction[] = [
   {
     id: "extend",
-    title: "Extend Subscription",
+    title: "Extend Tenure",
     description: "Add more months to your current plan",
     icon: "icon-CalendarBlank",
     offer: "Up to 5% additional discount",
+  },
+  {
+    id: "relocation",
+    title: "Relocation",
+    description: "Move your rental to a new address",
+    icon: "icon-Truck",
   },
   {
     id: "change-plan",

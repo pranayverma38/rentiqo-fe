@@ -14,6 +14,8 @@ export type AccountOrderItem = {
   name: string;
   subscriptionTenure: string;
   rentPerMonth: number;
+  /** Security deposit for this line (all units in quantity) */
+  amountDeposited: number;
 };
 
 export type AccountOrderDelivery = {
@@ -72,6 +74,7 @@ export const MOCK_ACCOUNT_ORDERS: AccountOrder[] = [
         name: "Ergonomic Office Chair — Black",
         subscriptionTenure: "12 Months",
         rentPerMonth: 899,
+        amountDeposited: 2000,
       },
       {
         id: "li-2",
@@ -80,6 +83,7 @@ export const MOCK_ACCOUNT_ORDERS: AccountOrder[] = [
         name: "Height Adjustable Study Desk",
         subscriptionTenure: "12 Months",
         rentPerMonth: 681.96,
+        amountDeposited: 1500,
       },
     ],
     delivery: {
@@ -117,6 +121,7 @@ export const MOCK_ACCOUNT_ORDERS: AccountOrder[] = [
         name: "Single Door Refrigerator 190L",
         subscriptionTenure: "24 Months",
         rentPerMonth: 899.5,
+        amountDeposited: 3000,
       },
     ],
     delivery: {
@@ -154,6 +159,7 @@ export const MOCK_ACCOUNT_ORDERS: AccountOrder[] = [
         name: "Queen Size Bed with Storage",
         subscriptionTenure: "18 Months",
         rentPerMonth: 1499,
+        amountDeposited: 5000,
       },
       {
         id: "li-5",
@@ -162,6 +168,7 @@ export const MOCK_ACCOUNT_ORDERS: AccountOrder[] = [
         name: "6 Inch Memory Foam Mattress",
         subscriptionTenure: "18 Months",
         rentPerMonth: 999,
+        amountDeposited: 4000,
       },
       {
         id: "li-6",
@@ -170,6 +177,7 @@ export const MOCK_ACCOUNT_ORDERS: AccountOrder[] = [
         name: "Bedside Table — Walnut Finish",
         subscriptionTenure: "12 Months",
         rentPerMonth: 751.25,
+        amountDeposited: 1500,
       },
     ],
     delivery: {
@@ -207,6 +215,7 @@ export const MOCK_ACCOUNT_ORDERS: AccountOrder[] = [
         name: "Fabric 2-Seater Sofa",
         subscriptionTenure: "12 Months",
         rentPerMonth: 1400,
+        amountDeposited: 6000,
       },
       {
         id: "li-8",
@@ -215,6 +224,7 @@ export const MOCK_ACCOUNT_ORDERS: AccountOrder[] = [
         name: "Center Table — Glass Top",
         subscriptionTenure: "12 Months",
         rentPerMonth: 700,
+        amountDeposited: 2500,
       },
     ],
     delivery: {
@@ -252,6 +262,7 @@ export const MOCK_ACCOUNT_ORDERS: AccountOrder[] = [
         name: "Fully Automatic Washing Machine 7kg",
         subscriptionTenure: "24 Months",
         rentPerMonth: 1299.99,
+        amountDeposited: 4500,
       },
     ],
     delivery: {
@@ -289,11 +300,24 @@ export function formatOrderMetaLine(
   return `${formatItemCountLabel(itemCount)} | ${billingCycle} |`;
 }
 
+/** Single-line card summary: items, billing cycle, and monthly rent */
+export function formatOrderCardSummaryLine(
+  itemCount: number,
+  billingCycle: BillingCycle,
+  rentPerMonthRounded: number,
+): string {
+  return `${formatItemCountLabel(itemCount)} | ${billingCycle} | Rent per month: ${formatInr(rentPerMonthRounded)}/mo`;
+}
+
 export function formatOrderItemsDetailLine(
   itemCount: number,
   billingCycle: BillingCycle,
 ): string {
   return `${formatItemCountLabel(itemCount)} | ${billingCycle}`;
+}
+
+export function getOrderTotalAmountDeposited(order: AccountOrder): number {
+  return order.items.reduce((sum, item) => sum + item.amountDeposited, 0);
 }
 
 export function formatInr(
@@ -309,11 +333,12 @@ export function formatInr(
   }).format(amount);
 }
 
+/** Monthly rent — single value, aligned with order list cards */
 export function formatRentPerMonthDisplay(
-  amount: number,
+  _amount: number,
   roundedMonthly: number,
 ): string {
-  return `${formatInr(amount, { decimals: 2 })} ( ${formatInr(roundedMonthly)}/m)`;
+  return `${formatInr(roundedMonthly)}/mo`;
 }
 
 export function formatDeliveryHeadline(order: AccountOrder): string {

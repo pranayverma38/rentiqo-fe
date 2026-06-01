@@ -320,6 +320,7 @@ function SubscriptionCard({
                 <th scope="col">Rented from</th>
                 <th scope="col">{subscription.renewalLabel}</th>
                 <th scope="col">Billing date</th>
+                <th scope="col">Deposit</th>
               </tr>
             </thead>
             <tbody>
@@ -327,6 +328,7 @@ function SubscriptionCard({
                 <td>{subscription.rentedFrom}</td>
                 <td>{subscription.renewalDate}</td>
                 <td>{subscription.billingDate}</td>
+                <td>{formatInr(subscription.amountDeposited)}</td>
               </tr>
             </tbody>
           </table>

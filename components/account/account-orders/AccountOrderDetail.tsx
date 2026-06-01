@@ -11,6 +11,19 @@ import {
   getDeliveryFooterLabel,
   type AccountOrder,
 } from "@/components/account/account-orders/accountOrdersData";
+import {
+  ORDER_ITEM_CELL_DEPOSIT,
+  ORDER_ITEM_CELL_IMAGE,
+  ORDER_ITEM_CELL_NAME,
+  ORDER_ITEM_CELL_RENT,
+  ORDER_ITEM_CELL_TENURE,
+  ORDER_ITEM_FIELD,
+  ORDER_ITEM_FIELD_LABEL,
+  ORDER_ITEM_FIELD_VALUE,
+  ORDER_ITEM_GRID,
+  ORDER_ITEM_NAME,
+  ORDER_ITEM_THUMB,
+} from "@/components/account/account-orders/orderItemGridClasses";
 
 type AccountOrderDetailProps = {
   order: AccountOrder;
@@ -46,34 +59,43 @@ export default function AccountOrderDetail({ order }: AccountOrderDetailProps) {
         <ul className="account-order-detail__item-list">
           {order.items.map((item) => (
             <li key={item.id}>
-              <article className="account-order-detail__item">
-                <div className="account-order-detail__item-thumb">
-                  <Image
-                    src={item.image}
-                    alt=""
-                    width={80}
-                    height={80}
-                    className="account-order-detail__item-image"
-                  />
-                  <span className="account-order-detail__item-qty fw-medium">
-                    {item.quantity}x
-                  </span>
-                </div>
-                <div className="account-order-detail__item-body">
-                  <p className="account-order-detail__item-name fw-medium mb-0">
-                    {item.name}
-                  </p>
-                  <p className="account-order-detail__item-meta cl-text-2 mb-0">
-                    Subscription tenure:{" "}
-                    <span className="fw-medium">{item.subscriptionTenure}</span>
-                  </p>
-                  <p className="account-order-detail__item-meta cl-text-2 mb-0">
-                    Per month rent:{" "}
-                    <span className="fw-semibold">
-                      {formatInr(item.rentPerMonth, { decimals: 2 })}
+              <article
+                className={`account-order-detail__item ${ORDER_ITEM_GRID}`}
+              >
+                <div className={ORDER_ITEM_CELL_IMAGE}>
+                  <div className={ORDER_ITEM_THUMB}>
+                    <Image
+                      src={item.image}
+                      alt=""
+                      width={80}
+                      height={80}
+                      className="size-full object-cover"
+                    />
+                    <span className="account-order-detail__item-qty fw-medium">
+                      {item.quantity}x
                     </span>
-                  </p>
+                  </div>
                 </div>
+                <div className={ORDER_ITEM_CELL_NAME}>
+                  <p className={ORDER_ITEM_NAME}>{item.name}</p>
+                </div>
+                <OrderItemField
+                  label="Tenure"
+                  value={item.subscriptionTenure}
+                  gridClassName={ORDER_ITEM_CELL_TENURE}
+                />
+                <OrderItemField
+                  label="Monthly rent"
+                  value={formatInr(item.rentPerMonth, { decimals: 2 })}
+                  valueClassName="fw-semibold"
+                  gridClassName={ORDER_ITEM_CELL_RENT}
+                />
+                <OrderItemField
+                  label="Deposit"
+                  value={formatInr(item.amountDeposited)}
+                  valueClassName="fw-semibold"
+                  gridClassName={ORDER_ITEM_CELL_DEPOSIT}
+                />
               </article>
             </li>
           ))}
@@ -166,6 +188,27 @@ export default function AccountOrderDetail({ order }: AccountOrderDetailProps) {
           Back to orders
         </Link>
       </div>
+    </div>
+  );
+}
+
+function OrderItemField({
+  label,
+  value,
+  valueClassName = "fw-medium",
+  gridClassName,
+}: {
+  label: string;
+  value: string;
+  valueClassName?: string;
+  gridClassName: string;
+}) {
+  return (
+    <div className={`${ORDER_ITEM_FIELD} ${gridClassName}`}>
+      <span className={ORDER_ITEM_FIELD_LABEL}>{label}</span>
+      <span className={`${ORDER_ITEM_FIELD_VALUE} ${valueClassName}`}>
+        {value}
+      </span>
     </div>
   );
 }

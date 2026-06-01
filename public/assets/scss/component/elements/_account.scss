@@ -1,11 +1,40 @@
 @use "../../abstracts/index"as *;
 
+/* overflow-x:hidden on html breaks position:sticky; clip avoids horizontal bleed on account pages */
+html.account-route {
+    overflow-x: clip;
+}
+
 .account-shell {
+    /* Bootstrap .row is flex; stretch prevents sticky — pin columns to content height */
+    @include res(lg, min) {
+        align-items: flex-start !important;
+
+        .account-shell__sidebar {
+            position: sticky !important;
+            top: 100px;
+            align-self: flex-start !important;
+            height: fit-content;
+            max-height: calc(100vh - 120px);
+            z-index: 10;
+        }
+
+        .sidebar-account-wrap {
+            position: static;
+            top: auto;
+            max-height: 100%;
+            overflow-y: auto;
+        }
+    }
+
     @include res(lg) {
         &.account-shell--mobile-menu {
             .account-shell__sidebar {
                 flex: 0 0 100%;
                 max-width: 100%;
+                position: static !important;
+                top: auto;
+                max-height: none;
             }
 
             .account-shell__main {
@@ -18,6 +47,8 @@
 
             .sidebar-account-wrap {
                 position: static !important;
+                max-height: none;
+                overflow: visible;
             }
         }
 
@@ -33,6 +64,12 @@
             }
         }
     }
+}
+
+/* overflow on ancestors breaks position:sticky */
+.account-section,
+.account-section > .container {
+    overflow: visible !important;
 }
 
 .account-mobile-back {
@@ -51,12 +88,6 @@
 
     &:hover {
         color: var(--text);
-    }
-}
-
-.sidebar-account-wrap {
-    @include res(lg) {
-        position: static !important;
     }
 }
 
@@ -439,6 +470,7 @@
     }
 
     &__card {
+        position: relative;
         border: 1px solid var(--line);
         border-radius: $panel-radius;
         background: var(--white);
@@ -463,15 +495,26 @@
     }
 
     &__card-header {
-        padding: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
+        padding: 12px 16px;
         border-bottom: 1px solid var(--line);
     }
 
+    &__manage-placeholder {
+        flex-shrink: 0;
+        width: 168px;
+        height: 36px;
+        pointer-events: none;
+    }
+
+    &__card-header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
     &__status {
-        align-self: flex-start;
+        min-width: 0;
         display: inline-flex;
         align-items: center;
         padding: 6px 12px;
@@ -505,19 +548,29 @@
         }
     }
 
-    &__meta {
-        font-size: 14px;
-        line-height: 1.4;
-    }
-
-    &__rent {
+    &__summary {
+        margin: 0 16px;
+        padding-top: 12px;
         font-size: 14px;
         line-height: 1.45;
-        word-break: break-word;
+        white-space: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+
+        span {
+            font-weight: 500;
+            color: var(--text);
+        }
     }
 
-    &__rent-value {
-        color: var(--text);
+    &__deposit {
+        margin: 6px 16px 0;
+        font-size: 14px;
+        line-height: 1.45;
+
+        span {
+            color: var(--text);
+        }
     }
 
     &__items-box {
@@ -525,7 +578,7 @@
         flex-wrap: wrap;
         align-items: center;
         gap: 12px;
-        margin: 16px;
+        margin: 12px 16px 16px;
         padding: 14px;
         border: 1px solid var(--line);
         border-radius: 10px;
@@ -564,22 +617,31 @@
         text-align: center;
     }
 
-    &__card-footer {
-        padding: 0 16px 16px;
-    }
-
     &__manage-btn {
-        width: 100%;
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        z-index: 2;
+        flex-shrink: 0;
+        white-space: nowrap;
 
         &::after {
             display: none;
         }
     }
 
-    @include res(md, min) {
+    @include res(md, max) {
+        &__manage-placeholder {
+            width: 132px;
+            height: 32px;
+        }
+
         &__manage-btn {
-            width: auto;
-            min-width: 200px;
+            top: 12px;
+            right: 12px;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+            font-size: 12px;
         }
     }
 }
@@ -634,33 +696,6 @@
         gap: 12px;
     }
 
-    &__item {
-        display: flex;
-        align-items: flex-start;
-        gap: 14px;
-        padding: 14px;
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        background: var(--white);
-    }
-
-    &__item-thumb {
-        position: relative;
-        flex-shrink: 0;
-        width: 80px;
-        height: 80px;
-        border-radius: 8px;
-        overflow: hidden;
-        border: 1px solid var(--line);
-        background: var(--bg);
-    }
-
-    &__item-image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
     &__item-qty {
         position: absolute;
         right: 4px;
@@ -673,24 +708,6 @@
         font-size: 11px;
         line-height: 1.2;
         text-align: center;
-    }
-
-    &__item-body {
-        min-width: 0;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    &__item-name {
-        line-height: 1.4;
-        word-break: break-word;
-    }
-
-    &__item-meta {
-        font-size: 14px;
-        line-height: 1.45;
     }
 
     &__items-total {
@@ -1871,6 +1888,7 @@
     }
 
     &__quick-panel {
+        order: 2;
         border: 1px solid var(--line);
         border-radius: $panel-radius;
         background: var(--bg);
@@ -1953,6 +1971,7 @@
     &__main {
         min-width: 0;
         flex: 1;
+        order: 1;
     }
 
     &__subscriptions {
@@ -2227,7 +2246,7 @@
 
         th,
         td {
-            width: 33.333%;
+            width: 25%;
             padding: 10px 8px 12px;
             text-align: left;
             vertical-align: top;
@@ -2257,6 +2276,11 @@
             flex-direction: row;
             align-items: flex-start;
             gap: 20px;
+        }
+
+        &__main,
+        &__quick-panel {
+            order: unset;
         }
 
         &__quick-panel {

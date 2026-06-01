@@ -15,7 +15,7 @@ export const ACCOUNT_PAGE_META: Record<string, AccountPageMeta> = {
   },
   "/account-orders": {
     sectionTitle: "My Orders",
-    sectionClassName: "flat-spacing flat-animate-tab",
+    sectionClassName: "flat-spacing",
   },
   "/account-manage-subscription": {
     sectionTitle: "Manage Subscription",
@@ -50,7 +50,7 @@ export function getAccountPageMeta(pathname: string): AccountPageMeta | undefine
   ) {
     return {
       sectionTitle: "Order Details",
-      sectionClassName: "flat-spacing flat-animate-tab",
+      sectionClassName: "flat-spacing",
       backHref: "/account-orders",
     };
   }

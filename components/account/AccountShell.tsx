@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 import AccountMobileBack from "@/components/account/AccountMobileBack";
@@ -18,8 +19,17 @@ export default function AccountShell({ children }: AccountShellProps) {
   const sectionClassName = meta?.sectionClassName ?? "flat-spacing";
   const isMobileMenuView = pathname === ACCOUNT_MENU_HREF;
 
+  useEffect(() => {
+    document.documentElement.classList.add("account-route");
+    return () => {
+      document.documentElement.classList.remove("account-route");
+    };
+  }, []);
+
   return (
-    <section className={sectionClassName}>
+    <section
+      className={`account-section ${sectionClassName} max-lg:!pt-[30px]`.trim()}
+    >
       <div className="container">
         <div
           className={`row account-shell${isMobileMenuView ? " account-shell--mobile-menu" : " account-shell--mobile-content"}`}

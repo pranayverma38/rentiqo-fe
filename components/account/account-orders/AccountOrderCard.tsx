@@ -2,9 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 import {
-  formatOrderMetaLine,
-  formatRentPerMonthDisplay,
+  formatInr,
+  formatOrderCardSummaryLine,
   getAccountOrderStatusClass,
+  getOrderTotalAmountDeposited,
   type AccountOrder,
 } from "@/components/account/account-orders/accountOrdersData";
 
@@ -14,34 +15,45 @@ type AccountOrderCardProps = {
 
 export default function AccountOrderCard({ order }: AccountOrderCardProps) {
   const statusClass = getAccountOrderStatusClass(order.status);
+  const orderDetailHref = `/account-orders/${order.id}`;
 
   return (
     <article className="account-orders__card">
       <Link
-        href={`/account-orders/${order.id}`}
+        href={orderDetailHref}
         className="account-orders__card-link"
+        aria-label={`View order ${order.orderNumber}`}
       >
         <header className="account-orders__card-header">
-          <span
-            className={`account-orders__status fw-medium ${statusClass}`}
-          >
-            {order.statusLabel}
-          </span>
-          <p className="account-orders__meta cl-text-2 mb-0">
-            {formatOrderMetaLine(order.itemCount, order.billingCycle)}
-          </p>
-          <p className="account-orders__rent mb-0">
-            <span className="account-orders__rent-label cl-text-2">
-              Rent per month:{" "}
+          <div className="account-orders__card-header-top">
+            <span
+              className={`account-orders__status fw-medium ${statusClass}`}
+            >
+              {order.statusLabel}
             </span>
-            <span className="account-orders__rent-value fw-semibold">
-              {formatRentPerMonthDisplay(
-                order.rentPerMonth,
-                order.rentPerMonthRounded,
-              )}
-            </span>
-          </p>
+            <span
+              className="account-orders__manage-placeholder"
+              aria-hidden
+            />
+          </div>
         </header>
+
+        <p className="account-orders__summary cl-text-2 mb-0">
+          <span>
+            {formatOrderCardSummaryLine(
+              order.itemCount,
+              order.billingCycle,
+              order.rentPerMonthRounded,
+            )}
+          </span>
+        </p>
+
+        <p className="account-orders__deposit cl-text-2 mb-0">
+          Amount deposited (total):{" "}
+          <span className="fw-semibold">
+            {formatInr(getOrderTotalAmountDeposited(order))}
+          </span>
+        </p>
 
         <div className="account-orders__items-box" aria-label="Order items">
           {order.items.map((item) => (
@@ -61,14 +73,13 @@ export default function AccountOrderCard({ order }: AccountOrderCardProps) {
         </div>
       </Link>
 
-      <footer className="account-orders__card-footer">
-        <Link
-          href="/account-manage-subscription"
-          className="tf-btn animate-btn small account-orders__manage-btn"
-        >
-          Manage subscription
-        </Link>
-      </footer>
+      <Link
+        href="/account-manage-subscription"
+        className="tf-btn animate-btn small account-orders__manage-btn"
+        onClick={(e) => e.stopPropagation()}
+      >
+        Manage subscription
+      </Link>
     </article>
   );
 }
