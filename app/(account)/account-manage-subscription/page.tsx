@@ -1,12 +1,12 @@
 import { Metadata } from "next";
 
-import AccountPlaceholder from "@/components/account/AccountPlaceholder";
+import AccountManageSubscription from "@/components/account/account-manage-subscription/AccountManageSubscription";
 
 export const metadata: Metadata = {
   title: "Manage Subscription | Rentiqo",
-  description: "Manage your subscription",
+  description: "Manage active subscriptions, dues, and plan preferences",
 };
 
 export default function AccountManageSubscriptionPage() {
-  return <AccountPlaceholder />;
+  return <AccountManageSubscription />;
 }

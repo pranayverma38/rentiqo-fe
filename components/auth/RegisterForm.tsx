@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 
 import { PasswordField } from "@/components/forms/PasswordField";
 import { PreventDefaultForm } from "@/components/forms/PreventDefaultForm";
+import { getAccountEntryHref } from "@/components/account/accountEntry";
 import { useAuth } from "@/context/AuthProvider";
 import { hasMedusaApiBaseUrl } from "@/lib/api/config";
 
@@ -60,7 +61,7 @@ export default function RegisterForm({
         lastName: lastName || undefined,
       });
       onSuccess?.();
-      router.push("/account-page");
+      router.push(getAccountEntryHref());
     } catch {
       // Error surfaced via auth context.
     } finally {

@@ -6,6 +6,7 @@ import { FormEvent, useState } from "react";
 
 import { PasswordField } from "@/components/forms/PasswordField";
 import { PreventDefaultForm } from "@/components/forms/PreventDefaultForm";
+import { getAccountEntryHref } from "@/components/account/accountEntry";
 import { useAuth } from "@/context/AuthProvider";
 import { hasMedusaApiBaseUrl } from "@/lib/api/config";
 
@@ -28,7 +29,7 @@ export default function LoginForm({
   const [submitting, setSubmitting] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
 
-  const redirectTo = searchParams.get("redirect")?.trim() || "/account-page";
+  const redirectParam = searchParams.get("redirect")?.trim();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,7 +49,11 @@ export default function LoginForm({
     try {
       await login(email, password);
       onSuccess?.();
-      router.push(redirectTo);
+      const destination =
+        redirectParam && redirectParam !== "/account-page"
+          ? redirectParam
+          : getAccountEntryHref();
+      router.push(destination);
     } catch {
       // Error surfaced via auth context.
     } finally {

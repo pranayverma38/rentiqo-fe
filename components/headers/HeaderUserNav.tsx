@@ -3,10 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import {
+  ACCOUNT_DESKTOP_ENTRY_HREF,
+  ACCOUNT_MOBILE_MENU_HREF,
+} from "@/components/account/accountEntry";
 import { useAuth } from "@/context/AuthProvider";
 
 const ACCOUNT_MENU_LINKS = [
-  { href: "/account-page", label: "My Account" },
+  { href: ACCOUNT_DESKTOP_ENTRY_HREF, label: "My Account" },
   { href: "/account-orders", label: "Your Order" },
   { href: "/account-addresses", label: "My Address" },
   { href: "/track-order", label: "Traking" },
@@ -62,7 +66,7 @@ export default function HeaderUserNav() {
           </div>
         </li>
         <li className="d-sm-none">
-          <Link href="/account-page" className="nav-icon-item link">
+          <Link href={ACCOUNT_MOBILE_MENU_HREF} className="nav-icon-item link">
             <i className="icon icon-User" />
           </Link>
         </li>

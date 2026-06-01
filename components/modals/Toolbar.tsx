@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { ACCOUNT_MOBILE_MENU_HREF } from "@/components/account/accountEntry";
 import WishlistButton from "../common/WishlistButton";
 import CartIconCount from "../headers/CartIconCount";
 
@@ -23,7 +24,7 @@ export default function Toolbar() {
         </a>
       </div>
       <div className="toolbar-item">
-        <Link href={`/account-page`}>
+        <Link href={ACCOUNT_MOBILE_MENU_HREF}>
           <span className="toolbar-icon">
             <i className="icon icon-User" />
           </span>

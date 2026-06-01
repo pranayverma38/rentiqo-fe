@@ -1,14 +1,12 @@
 import { Metadata } from "next";
 
-import AccountDashboard from "@/components/account/account-page/AccountDashboard";
+import AccountMobileMenuPage from "@/components/account/account-page/AccountMobileMenuPage";
 
 export const metadata: Metadata = {
-  title: "My Account | Amerce - Multipurpose eCommerce React Nextjs Template",
-  description: "Amerce - Multipurpose eCommerce React Nextjs Template",
+  title: "My Account | Rentiqo",
+  description: "Account menu",
 };
 
-const AccountPage = () => {
-  return <AccountDashboard />;
-};
-
-export default AccountPage;
+export default function AccountPage() {
+  return <AccountMobileMenuPage />;
+}
