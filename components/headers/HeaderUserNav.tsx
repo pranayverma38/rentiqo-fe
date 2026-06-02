@@ -13,7 +13,6 @@ const ACCOUNT_MENU_LINKS = [
   { href: ACCOUNT_DESKTOP_ENTRY_HREF, label: "My Account" },
   { href: "/account-orders", label: "Your Order" },
   { href: "/account-addresses", label: "My Address" },
-  { href: "/track-order", label: "Traking" },
   { href: "/account-profile", label: "My Profile" },
 ] as const;
 

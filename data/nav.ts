@@ -153,10 +153,6 @@ export const navShop = [
         "text": "Forget Password"
       },
       {
-        "href": "/track-order",
-        "text": "Order Tracking"
-      },
-      {
         "href": "/account-page",
         "text": "My Account"
       }
