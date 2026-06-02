@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 
-import AccountPlaceholder from "@/components/account/AccountPlaceholder";
+import AccountChatSupport from "@/components/account/account-help-support/AccountChatSupport";
+import ServiceRequestTypeGrid from "@/components/account/account-service-requests/ServiceRequestTypeGrid";
 
 export const metadata: Metadata = {
   title: "Help & Support | Rentiqo",
@@ -8,5 +9,15 @@ export const metadata: Metadata = {
 };
 
 export default function AccountHelpSupportPage() {
-  return <AccountPlaceholder />;
+  return (
+    <div className="account-service-requests w-full min-w-0">
+      <section className="account-service-requests__section mb-24">
+        <h6 className="account-service-requests__section-title fw-medium mb-16">
+          Raise a service request
+        </h6>
+        <ServiceRequestTypeGrid />
+      </section>
+      <AccountChatSupport />
+    </div>
+  );
 }
