@@ -31,24 +31,17 @@ export default function Footer1({ hideTopRule = false }: Footer1Props) {
                     alt="Image"
                   />
                 </Link>
-                <p className="lh-26 cl-text-2">
-                  600 N Michigan Ave, Chicago, IL 60611, USA
+                <p className="lh-26 cl-text-2 mb-16">
+                  3014 - SKA Metroville , ETA 2 , Greater Noida - 203207
                 </p>
                 <a
-                  href="https://www.google.com/maps?q=600+N+Michigan+Ave+Chicago,+IL+60611+USA"
-                  target="_blank"
-                  className="text-decoration-underline text-primary lh-26 mb-16"
-                >
-                  Open in Maps
-                </a>
-                <a
-                  href="mailto:hi.amere@gmail.com"
+                  href="mailto:altiusfuturesystems@gmail.com"
                   className="cl-text-2 link mb-8"
                 >
-                  hi.amere@gmail.com
+                  altiusfuturesystems@gmail.com
                 </a>
-                <a href="tel:3156666688" className="cl-text-2 link mb-16">
-                  315-666-6688
+                <a href="tel:8859228751" className="cl-text-2 link mb-16">
+                  +91 8859228751
                 </a>
                 <ul className="tf-social-icon-2">
                   <li>

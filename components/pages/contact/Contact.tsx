@@ -20,8 +20,8 @@ function Contact() {
                   <div className="d-grid gap-8">
                     <h6>Phone:</h6>
                     <p>
-                      <a href="tel:16662348888" className="cl-text-2 link">
-                        +1 666 234 8888
+                      <a href="tel:8859228751" className="cl-text-2 link">
+                        +91 8859228751
                       </a>
                     </p>
                   </div>
@@ -29,24 +29,17 @@ function Contact() {
                     <h6>Email:</h6>
                     <p>
                       <a
-                        href="mailto:hi.amere@gmail.com"
+                        href="mailto:altiusfuturesystems@gmail.com"
                         className="cl-text-2 link"
                       >
-                        hi.amere@gmail.com
+                        altiusfuturesystems@gmail.com
                       </a>
                     </p>
                   </div>
                   <div className="wd-full d-grid gap-8">
                     <h6>Address:</h6>
-                    <p>
-                      <a
-                        href="https://www.google.com/maps?q=600+N+Michigan+Ave+Chicago,+IL+60611+USA"
-                        target="_blank"
-                        className="cl-text-2 link"
-                      >
-                        2163 Phillips Gap Rd, West Jefferson, North Carolina,
-                        United States
-                      </a>
+                    <p className="cl-text-2">
+                      3014 - SKA Metroville , ETA 2 , Greater Noida - 203207
                     </p>
                   </div>
                   <div className="wd-full d-grid gap-8">
