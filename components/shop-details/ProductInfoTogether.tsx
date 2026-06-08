@@ -165,9 +165,7 @@ export default function ProductInfoTogether({
               </span>
             </h6>
             <button
-              data-bs-target="#shoppingCart"
               type="button"
-              data-bs-toggle="offcanvas"
               className="btn-submit-total tf-btn btn-primary w-100 animate-btn"
             >
               Add Selected To Cart

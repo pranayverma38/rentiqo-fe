@@ -4,7 +4,7 @@ import Image from "next/image";
 
 import Nav from "./Nav";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
-import CartIconCount from "./CartIconCount";
+import CartNavIcon from "./CartNavIcon";
 
 export default function Header9() {
   const headerSticky = useHeaderSticky();
@@ -84,14 +84,7 @@ export default function Header9() {
                 </Link>
               </li>
               <li>
-                <a
-                  href="#shoppingCart"
-                  data-bs-toggle="offcanvas"
-                  className="nav-icon-item text-white link-dark shop-cart"
-                >
-                  <i className="icon icon-Handbag" />
-                  <CartIconCount />
-                </a>
+                <CartNavIcon className="nav-icon-item text-white link-dark shop-cart" />
               </li>
             </ul>
           </div>

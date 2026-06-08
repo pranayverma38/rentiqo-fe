@@ -80,7 +80,7 @@ function ProductCard({ product }: { product: CollectionProduct }) {
         <div className="product-action_bot">
           <AddToCartButton
             product={product}
-            href="#shoppingCart"
+            href="/view-cart"
             dataToggle="offcanvas"
             label="Add to Cart"
           />

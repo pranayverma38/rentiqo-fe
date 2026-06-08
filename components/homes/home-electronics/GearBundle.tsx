@@ -308,7 +308,6 @@ function GearBundle() {
                     <button
                       onClick={handleAddToCartAll}
                       data-bs-toggle="offcanvas"
-                      data-bs-target="#shoppingCart"
                       className="tf-btn animate-btn w-100"
                       disabled={bundleItems.length === 0}
                     >

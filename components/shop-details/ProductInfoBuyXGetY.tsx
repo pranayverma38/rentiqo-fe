@@ -119,8 +119,7 @@ export default function ProductInfoBuyXGetY({
               </div>
             </div>
             <a
-              href="#shoppingCart"
-              data-bs-toggle="offcanvas"
+              href="/view-cart"
               className="tf-btn effect-flash"
             >
               Grab this deal

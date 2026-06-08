@@ -6,7 +6,7 @@ import Nav from "./Nav";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
 import CurrencySelect from "../common/CurrencySelect";
 import LanguageSelect from "../common/LanguageSelect";
-import CartIconCount from "./CartIconCount";
+import CartNavIcon from "./CartNavIcon";
 
 export default function Header4({parentClass = "tf-header header-s5 scr-box-shadow"}) {
   const headerSticky = useHeaderSticky();
@@ -97,14 +97,7 @@ export default function Header4({parentClass = "tf-header header-s5 scr-box-shad
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#shoppingCart"
-                    data-bs-toggle="offcanvas"
-                    className="nav-icon-item text-white link shop-cart"
-                  >
-                    <i className="icon icon-Handbag" />
-                    <CartIconCount />
-                  </a>
+                  <CartNavIcon className="nav-icon-item text-white link shop-cart" />
                 </li>
               </ul>
             </div>

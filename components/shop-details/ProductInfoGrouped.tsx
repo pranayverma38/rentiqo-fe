@@ -105,9 +105,8 @@ export default function ProductInfoGrouped({
             </div>
           </div>
           <a
-            href="#shoppingCart"
-            data-bs-toggle="offcanvas"
-            className="tf-btn type-xl animate-btn w-100"
+            href="/view-cart"
+              className="tf-btn type-xl animate-btn w-100"
           >
             Add To Cart
           </a>

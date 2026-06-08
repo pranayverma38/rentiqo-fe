@@ -102,9 +102,8 @@ function ProductTab() {
                             </div>
                           </div>
                           <a
-                            href="#shoppingCart"
-                            data-bs-toggle="offcanvas"
-                            className="tf-btn small animate-btn text-nowrap"
+                            href="/view-cart"
+              className="tf-btn small animate-btn text-nowrap"
                           >
                             Add to cart
                           </a>

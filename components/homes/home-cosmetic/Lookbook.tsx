@@ -90,9 +90,8 @@ function Lookbook() {
               </div>
               <div className="wow fadeInUp">
                 <a
-                  href="#shoppingCart"
-                  data-bs-toggle="offcanvas"
-                  className="tf-btn animate-btn gap-8"
+                  href="/view-cart"
+              className="tf-btn animate-btn gap-8"
                 >
                   Buy At A Discount - $69.99
                   <i className="icon icon-ArrowUpRight fs-24" aria-hidden />

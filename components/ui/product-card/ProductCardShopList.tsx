@@ -94,7 +94,7 @@ export function ProductCardShopList() {
           <li>
             <AddToCartButton
               product={product}
-              href="#shoppingCart"
+              href="/view-cart"
               dataToggle="offcanvas"
               className="hover-tooltip tooltip-top box-icon"
               label="Add to Cart"

@@ -7,7 +7,7 @@ import { useStickyCategoryHeader } from "@/hooks/useStickyCategoryHeader";
 import CurrencySelect from "../common/CurrencySelect";
 import LanguageSelect from "../common/LanguageSelect";
 import BrowseByCategoryNav from "./BrowseByCategoryNav";
-import CartIconCount from "./CartIconCount";
+import CartNavIcon from "./CartNavIcon";
 import CategorySearch from "./CategorySearch";
 
 export default function Header5() {
@@ -97,14 +97,7 @@ export default function Header5() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#shoppingCart"
-                    data-bs-toggle="offcanvas"
-                    className="nav-icon-item link shop-cart"
-                  >
-                    <i className="icon icon-Handbag" />
-                    <CartIconCount />
-                  </a>
+                  <CartNavIcon />
                 </li>
               </ul>
             </div>
@@ -145,14 +138,7 @@ export default function Header5() {
                     </Link>
                   </li>
                   <li>
-                    <a
-                      href="#shoppingCart"
-                      data-bs-toggle="offcanvas"
-                      className="nav-icon-item link shop-cart"
-                    >
-                      <i className="icon icon-Handbag" />
-                      <CartIconCount />
-                    </a>
+                    <CartNavIcon />
                   </li>
                 </ul>
               </div>

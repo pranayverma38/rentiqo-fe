@@ -226,10 +226,7 @@ function BannerLookbook() {
                 })}
               </ul>
               <a
-                href="#shoppingCart"
-                data-bs-toggle="offcanvas"
-                suppressHydrationWarning
-                data-bs-target="#shoppingCart"
+                href="/view-cart"                suppressHydrationWarning
                 className={`tf-btn animate-btn w-100 ${selectedIds.size === 0 ? "disabled" : ""}`}
                 onClick={handleAddToCartAll}
                 style={

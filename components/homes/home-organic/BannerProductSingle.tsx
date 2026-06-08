@@ -213,9 +213,7 @@ function BannerProductSingleInner() {
                       </div>
                       <div className="group-action w-100">
                         <a
-                          href="#shoppingCart"
-                          data-bs-toggle="offcanvas"
-                          suppressHydrationWarning
+                          href="/view-cart"                          suppressHydrationWarning
                           className={`btn-action-price type-xl tf-btn animate-btn w-100 ${isAdded ? "disabled" : ""}`}
                           onClick={() =>
                             !isAdded && addProductToCart(product, quantity)

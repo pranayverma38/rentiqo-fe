@@ -227,9 +227,7 @@ function BannerProductSingleInner() {
                         </button>
                       </div>
                       <a
-                        href="#shoppingCart"
-                        data-bs-toggle="offcanvas"
-                        suppressHydrationWarning
+                        href="/view-cart"                        suppressHydrationWarning
                         className={`tf-btn type-xl animate-btn w-100 ${isAdded ? "disabled" : ""}`}
                         onClick={() =>
                           !isAdded && addProductToCart(product, quantity)

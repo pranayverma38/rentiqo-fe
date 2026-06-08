@@ -190,10 +190,9 @@ export default function QuickAdd({
                     <i className="icon icon-plus" />
                   </button>
                 </div>
-                <a
-                  href="#shoppingCart"
+                <button
+                  type="button"
                   onClick={handleAddToCart}
-                  data-bs-toggle="offcanvas"
                   className="btn-action-price tf-btn type-xl animate-btn w-100"
                 >
                   {isAddedToCartProducts(product.id) ? "Added" : "Add to Cart"}
@@ -203,7 +202,7 @@ export default function QuickAdd({
                   <span className="price-add d-none d-sm-block d-md-none d-lg-block">
                     {formatPrice(product.price * quantity)}
                   </span>
-                </a>
+                </button>
               </div>
               <Link
                 href={`/checkout`}

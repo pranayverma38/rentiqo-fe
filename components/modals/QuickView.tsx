@@ -225,10 +225,9 @@ export default function QuickView({
                     <i className="icon icon-plus" />
                   </button>
                 </div>
-                <a
-                  href="#shoppingCart"
+                <button
+                  type="button"
                   onClick={handleAddToCart}
-                  data-bs-toggle="offcanvas"
                   className="btn-action-price tf-btn type-xl animate-btn w-100"
                 >
                   {isAdded ? "Added" : "Add to Cart"}
@@ -238,7 +237,7 @@ export default function QuickView({
                   <span className="price-add d-none d-sm-block d-md-none d-lg-block">
                     {formatPrice(product.price * quantity)}
                   </span>
-                </a>
+                </button>
               </div>
               <Link
                 href="/checkout"

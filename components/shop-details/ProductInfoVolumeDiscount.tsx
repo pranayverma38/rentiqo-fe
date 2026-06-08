@@ -128,9 +128,7 @@ export default function ProductInfoVolumeDiscount({
               ))}
             </div>
             <button
-              data-bs-target="#shoppingCart"
               type="button"
-              data-bs-toggle="offcanvas"
               className="tf-btn animate-btn w-100"
             >
               Choose this deal

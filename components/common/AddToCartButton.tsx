@@ -116,15 +116,23 @@ export default function AddToCartButton({
     );
   }
 
+  const opensCartDrawer = href === "#shoppingCart";
   const bsTarget =
-    !directAdd && href.startsWith("#") && href.length > 1 ? href : undefined;
+    !directAdd &&
+    !opensCartDrawer &&
+    href.startsWith("#") &&
+    href.length > 1
+      ? href
+      : undefined;
+  const bsToggle =
+    !directAdd && !opensCartDrawer && href.startsWith("#") ? dataToggle : undefined;
 
   if (variant === "tooltip") {
     return (
       <button
         type="button"
         onClick={handleClick}
-        data-bs-toggle={directAdd ? undefined : dataToggle}
+        data-bs-toggle={bsToggle}
         data-bs-target={bsTarget}
         suppressHydrationWarning
         className={buttonClass}
@@ -142,7 +150,7 @@ export default function AddToCartButton({
       <button
         type="button"
         onClick={handleClick}
-        data-bs-toggle={directAdd ? undefined : dataToggle}
+        data-bs-toggle={bsToggle}
         data-bs-target={bsTarget}
         suppressHydrationWarning
         className={buttonClass}
@@ -159,7 +167,7 @@ export default function AddToCartButton({
     <button
       type="button"
       onClick={handleClick}
-      data-bs-toggle={directAdd ? undefined : dataToggle}
+      data-bs-toggle={bsToggle}
       data-bs-target={bsTarget}
       suppressHydrationWarning
       className={buttonClass}

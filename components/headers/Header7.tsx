@@ -6,7 +6,7 @@ import Nav from "./Nav";
 import TfSwiper from "@/components/ui/TfSwiper";
 import { useHeaderSticky } from "@/hooks/useHeaderSticky";
 import BrowseByCategoryNav from "./BrowseByCategoryNav";
-import CartIconCount from "./CartIconCount";
+import CartNavIcon from "./CartNavIcon";
 
 export default function Header7() {
   const headerSticky = useHeaderSticky();
@@ -87,14 +87,7 @@ export default function Header7() {
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#shoppingCart"
-                    data-bs-toggle="offcanvas"
-                    className="nav-icon-item link shop-cart"
-                  >
-                    <i className="icon icon-Handbag" />
-                    <CartIconCount />
-                  </a>
+                  <CartNavIcon />
                 </li>
               </ul>
             </div>

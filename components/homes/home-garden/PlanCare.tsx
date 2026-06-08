@@ -61,9 +61,8 @@ function PlanCare() {
                     </p>
                   </div>
                   <a
-                    href="#shoppingCart"
-                    data-bs-toggle="offcanvas"
-                    className="tf-btn animate-btn small-2"
+                    href="/view-cart"
+              className="tf-btn animate-btn small-2"
                   >
                     <span className="text-caption-01">
                       Buy now - ${item.price}

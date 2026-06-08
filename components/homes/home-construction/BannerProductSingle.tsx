@@ -273,9 +273,7 @@ function BannerProductSingleInner() {
                         </button>
                       </div>
                       <a
-                        href="#shoppingCart"
-                        data-bs-toggle="offcanvas"
-                        suppressHydrationWarning
+                        href="/view-cart"                        suppressHydrationWarning
                         className={`btn-action-price tf-btn type-xl animate-btn w-100 ${isAdded ? "disabled" : ""}`}
                         onClick={() =>
                           !isAdded && addProductToCart(product, quantity)
@@ -302,9 +300,8 @@ function BannerProductSingleInner() {
                       </a>
                     </div>
                     <a
-                      href="#shoppingCart"
-                      data-bs-toggle="offcanvas"
-                      className="tf-btn type-xl w-100 btn-third"
+                      href="/view-cart"
+              className="tf-btn type-xl w-100 btn-third"
                       onClick={() =>
                         !isAdded && addProductToCart(product, quantity)
                       }

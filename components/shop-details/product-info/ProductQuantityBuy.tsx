@@ -63,10 +63,8 @@ export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
             <i className="icon icon-plus" />
           </button>
         </div>
-        <a
-          href="#shoppingCart"
-          data-bs-toggle="offcanvas"
-          suppressHydrationWarning
+        <button
+          type="button"
           className="btn-action-price tf-btn type-xl animate-btn w-100"
           onClick={handleAddToCart}
         >
@@ -77,7 +75,7 @@ export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
           <span className="price-add d-none d-sm-block d-md-none d-lg-block">
             {formatPrice(unitPrice * quantity)}
           </span>
-        </a>
+        </button>
       </div>
     </div>
   );

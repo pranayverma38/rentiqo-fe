@@ -104,16 +104,14 @@ export default function StickyProduct() {
                   </button>
                 </div>
               </div>
-              <a
-                href="#shoppingCart"
-                data-bs-toggle="offcanvas"
+              <button
+                type="button"
                 className="tf-btn animate-btn btn-add-to-cart"
-                suppressHydrationWarning
                 onClick={handleAddToCart}
               >
                 {isInCart ? "Update Cart" : "Add To Cart"} - $
                 {(stickyBarProduct.price * quantity).toFixed(2)}
-              </a>
+              </button>
             </form>
           </div>
         </div>

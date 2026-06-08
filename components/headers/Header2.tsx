@@ -5,7 +5,7 @@ import Image from "next/image";
 import BrowseByCategoryNav from "./BrowseByCategoryNav";
 import Nav from "./Nav";
 import { useStickyCategoryHeader } from "@/hooks/useStickyCategoryHeader";
-import CartIconCount from "./CartIconCount";
+import CartNavIcon from "./CartNavIcon";
 import CategorySearch from "./CategorySearch";
 
 export default function Header2({
@@ -89,14 +89,7 @@ export default function Header2({
                   </Link>
                 </li>
                 <li>
-                  <a
-                    href="#shoppingCart"
-                    data-bs-toggle="offcanvas"
-                    className="nav-icon-item link shop-cart"
-                  >
-                    <i className="icon icon-Handbag" />
-                    <CartIconCount />
-                  </a>
+                  <CartNavIcon />
                 </li>
               </ul>
             </div>

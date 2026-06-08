@@ -54,7 +54,7 @@ export default function ProductCardMiniList({
         </div>
         <AddToCartButton
           product={product}
-          href="#shoppingCart"
+          href="/view-cart"
           dataToggle="offcanvas"
           className="btn-action"
           label="Add to cart"
