@@ -94,9 +94,9 @@ export default function ProductBenefits() {
     `tf-sw-nav-2 rounded-[8px]${enabled ? "" : " swiper-button-disabled pointer-events-none opacity-40"}`;
 
   return (
-    <section className="section-product-benefits pb-[48px] md:pb-[60px] lg:pb-[80px]">
+    <section className="section-product-benefits flat-spacing">
       <div className="container">
-        <div className="sect-heading type-4 align-items-end mb-[28px] md:mb-[36px]">
+        <div className="sect-heading type-4 align-items-end mb-[24px] md:mb-[40px]">
           <div>
             <h3 className="s-title mb-0">Benefits</h3>
           </div>

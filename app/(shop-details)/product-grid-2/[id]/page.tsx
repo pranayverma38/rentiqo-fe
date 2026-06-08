@@ -1,5 +1,4 @@
 import Breadcrumb from "@/components/shop-details/Breadcrumb";
-import ProductDescription from "@/components/shop-details/ProductDescription";
 import ProductSection from "@/components/shop-details/ProductSection";
 import { products } from "@/data/products/products";
 import type { Metadata } from "next";
@@ -81,7 +80,6 @@ export default async function page({
         initialColor="green"
         initialSize="L"
       />
-<ProductDescription />
     </>
   );
 }
