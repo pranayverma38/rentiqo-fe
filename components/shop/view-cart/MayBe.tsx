@@ -1,13 +1,25 @@
+"use client";
+
 import { products } from "@/data/products/products";
 import ProductCard from "@/components/ui/ProductCard";
 import TfSwiper from "@/components/ui/TfSwiper";
+import { useContextElement } from "@/context/Context";
 
 function MayBe() {
+  const { cartProducts } = useContextElement();
+
+  if (cartProducts.length === 0) {
+    return null;
+  }
+
   return (
-    <section className="flat-spacing">
+    <section className="flat-spacing view-cart-recommendations">
       <div className="container">
         <div className="sect-heading">
-          <h4>You may be interested in…</h4>
+          <h4>You may also like</h4>
+          <p className="cl-text-2 mb-0">
+            Complete your look with these popular picks
+          </p>
         </div>
         <TfSwiper
           preview={4}

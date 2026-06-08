@@ -15,10 +15,8 @@ function PageTitle() {
             </div>
             <h3>Shopping Cart</h3>
             <p className="text-body-1 cl-text-2">
-              Review your selected items, update quantities, and get ready for a
-              smooth and
-              <br className="d-none d-lg-block" />
-              easy checkout experience.
+              Review your items, adjust quantities, and proceed to checkout when
+              you&apos;re ready.
             </p>
           </div>
         </div>
