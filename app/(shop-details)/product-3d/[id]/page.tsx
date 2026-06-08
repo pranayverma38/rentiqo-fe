@@ -2,7 +2,6 @@
 import Breadcrumb from "@/components/shop-details/Breadcrumb";
 import { ProductSingleImage } from "@/types/productCard";
 import ProductDescription from "@/components/shop-details/ProductDescription";
-import RelatedProducts from "@/components/shop-details/RelatedProducts";
 import ProductSection from "@/components/shop-details/ProductSection";
 import { products } from "@/data/products/products";
 import type { Metadata } from "next";
@@ -74,7 +73,6 @@ export default async function page({
       <Breadcrumb product={product} />
       <ProductSection product={product} extraImages={threeDImages} />
 <ProductDescription />
-      <RelatedProducts />
     </>
   );
 }

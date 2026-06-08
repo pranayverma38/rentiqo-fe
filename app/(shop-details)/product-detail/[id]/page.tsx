@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 
 import ProductDetailView from "@/components/catalog/ProductDetailView";
 import ProductDescription from "@/components/shop-details/ProductDescription";
-import RelatedProducts from "@/components/shop-details/RelatedProducts";
 import {
   loadProductDetailPageProduct,
   resolveProductDetailLocation,
@@ -70,7 +69,6 @@ export default async function Page({
         initialLocation={location}
       />
       <ProductDescription />
-      <RelatedProducts />
     </>
   );
 }

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Breadcrumb from "@/components/shop-details/Breadcrumb";
-import RelatedProducts from "@/components/shop-details/RelatedProducts";
 import ProductSection from "@/components/shop-details/ProductSection";
 import { buildShopProductMetadata } from "@/lib/metadata/shop-product";
 import { products } from "@/data/products/products";
@@ -28,7 +27,6 @@ export default async function page({
       <Breadcrumb product={product} />
       <ProductSection product={product} />
 <ProductDescription2 />
-      <RelatedProducts />
     </>
   );
 }
