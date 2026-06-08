@@ -2,7 +2,6 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
 
 import { useStore } from "@/context/store";
 import {
@@ -14,30 +13,9 @@ import {
   type LocationSlug,
 } from "@/lib/catalog/catalogRoutes";
 import type { ProductCategoryNav } from "@/lib/catalog/rentiqoStoreCatalog";
-import { products } from "@/data/products/products";
 import type { ProductCardItem } from "@/types/productCard";
 
 type Crumb = { label: string; href?: string };
-
-function useAdjacentProductIds(currentId: string | number) {
-  return useMemo(() => {
-    const key = String(currentId);
-    const sorted = [...products].sort((a, b) =>
-      String(a.id).localeCompare(String(b.id), undefined, { numeric: true }),
-    );
-    const idx = sorted.findIndex((p) => String(p.id) === key);
-    if (idx === -1) {
-      return {
-        prevId: null as string | number | null,
-        nextId: null as string | number | null,
-      };
-    }
-    return {
-      prevId: idx > 0 ? sorted[idx - 1].id : null,
-      nextId: idx < sorted.length - 1 ? sorted[idx + 1].id : null,
-    };
-  }, [currentId]);
-}
 
 function buildCatalogBreadcrumbs(
   categoryNav: ProductCategoryNav,
@@ -71,58 +49,8 @@ function buildCatalogBreadcrumbs(
   return crumbs;
 }
 
-function NavArrow({
-  direction,
-  href,
-  iconClass,
-}: {
-  direction: "prev" | "next";
-  href: string | undefined;
-  iconClass: string;
-}) {
-  const className = `link nav-post-item nav-post-${direction}`;
-
-  if (!href) {
-    return (
-      <span
-        className={`${className} opacity-50`}
-        style={{ pointerEvents: "none" }}
-        aria-disabled="true"
-        tabIndex={-1}
-      >
-        <i className={`icon ${iconClass}`} />
-      </span>
-    );
-  }
-
-  return (
-    <Link href={href} className={className} prefetch={false}>
-      <i className={`icon ${iconClass}`} />
-    </Link>
-  );
-}
-
 export default function Breadcrumb({ product }: { product: ProductCardItem }) {
-  const params = useParams();
-  const pathname = usePathname() ?? "";
   const selectedLocation = useStore((state) => state.selectedLocation);
-
-  const idParam = params?.id;
-  const rawId = Array.isArray(idParam) ? idParam[0] : idParam;
-  const currentId: string | number =
-    rawId != null && rawId !== "" ? rawId : product.id;
-
-  const basePath =
-    pathname.includes("/") && pathname.length > 0
-      ? pathname.slice(0, pathname.lastIndexOf("/"))
-      : "";
-
-  const { prevId, nextId } = useAdjacentProductIds(currentId);
-
-  const prevHref =
-    basePath && prevId != null ? `${basePath}/${prevId}` : undefined;
-  const nextHref =
-    basePath && nextId != null ? `${basePath}/${nextId}` : undefined;
 
   const categoryNav = (
     product as ProductCardItem & { categoryNav?: ProductCategoryNav }
@@ -161,24 +89,6 @@ export default function Breadcrumb({ product }: { product: ProductCardItem }) {
                 )}
               </span>
             ))}
-          </div>
-          <div className="nav-post-list">
-            <NavArrow
-              direction="prev"
-              href={prevHref}
-              iconClass="icon-CaretLeft"
-            />
-            <Link
-              href="/shop-default"
-              className="link nav-all-post nav-post-link"
-            >
-              <i className="icon icon-SquaresFour" />
-            </Link>
-            <NavArrow
-              direction="next"
-              href={nextHref}
-              iconClass="icon-CaretRightThin"
-            />
           </div>
         </div>
       </div>

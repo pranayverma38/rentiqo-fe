@@ -1,0 +1,39 @@
+---
+description: Colocate new styles as Tailwind arbitrary classes in the component file — never SCSS
+alwaysApply: true
+---
+
+# Styling: arbitrary CSS in the same file only
+
+When adding or changing UI styles in this project, put styles in the **same file** you are editing (usually the `.tsx` component). Do not spread one-off styles into global SCSS or new style files.
+
+## Do
+
+- Use Tailwind arbitrary values inline on `className` in the component being changed
+- Reuse existing utility / theme classes when they already match (`var(--primary)`, `text-[var(--black)]`, etc.)
+- Keep layout and spacing tweaks colocated with the markup they affect
+
+```tsx
+// ✅ GOOD — styles live in the component file
+<section className="w-full py-[40px]">
+  <div className="mx-auto w-full max-w-[1320px] px-[15px]">
+    <h2 className="mb-0 text-[24px] font-bold leading-[1.2] text-[#1a1a1a]">
+```
+
+## Don't
+
+- Do **not** add or edit files under `public/assets/scss/` for component-specific tweaks
+- Do **not** create new `.scss`, `.css`, or CSS module files for one-off layout/spacing/color changes
+- Do **not** add inline `style={{ ... }}` when a Tailwind arbitrary class can express the same thing
+- Do **not** refactor unrelated legacy SCSS unless the task explicitly asks for it
+
+```tsx
+// ❌ BAD — don't fix spacing by editing _pop-up.scss or _cart.scss
+// ❌ BAD — don't add a new ShopDetails.module.scss for a single margin tweak
+```
+
+## Scope
+
+- **New work**: arbitrary Tailwind in the component file, every time
+- **Existing SCSS classes**: leave them alone unless the task is specifically to migrate or fix that stylesheet
+- **Shared design tokens**: prefer `var(--*)` and existing project classes over hard-coded hex when a token already exists

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import ProductDetailView from "@/components/catalog/ProductDetailView";
+import ProductBenefits from "@/components/shop-details/ProductBenefits";
 import ProductDescription from "@/components/shop-details/ProductDescription";
 import {
   loadProductDetailPageProduct,
@@ -69,6 +70,7 @@ export default async function Page({
         initialLocation={location}
       />
       <ProductDescription />
+      <ProductBenefits />
     </>
   );
 }
