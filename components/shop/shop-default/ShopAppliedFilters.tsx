@@ -12,6 +12,7 @@ import {
   toggleSize,
 } from "./filterActions";
 import { hasActiveShopFilters } from "./hasActiveShopFilters";
+import { formatPrice } from "@/utils/formatPrice";
 
 type Props = {
   state: FilterState;
@@ -172,7 +173,8 @@ export function ShopAppliedFilters({ state, dispatch }: Props) {
             }}
           >
             <span className="icon icon-X2" aria-hidden />
-            ${Math.round(state.price[0])} – ${Math.round(state.price[1])}
+            {formatPrice(Math.round(state.price[0]))} –{" "}
+            {formatPrice(Math.round(state.price[1]))}
           </span>
         )}
       </div>

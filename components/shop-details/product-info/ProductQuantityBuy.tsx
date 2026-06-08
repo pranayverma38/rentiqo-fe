@@ -3,14 +3,7 @@
 import { useProduct } from "@/context/ProductContext";
 import { useContextElement } from "@/context/Context";
 import { ProductCardItem } from "@/types/productCard";
-
-function formatInr(amount: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
+import { formatPrice } from "@/utils/formatPrice";
 
 export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
   const { quantity, setQuantity, currentColor, currentSize, selectedVariant } =
@@ -82,7 +75,7 @@ export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
             &nbsp;-&nbsp;
           </span>
           <span className="price-add d-none d-sm-block d-md-none d-lg-block">
-            {formatInr(unitPrice * quantity)}
+            {formatPrice(unitPrice * quantity)}
           </span>
         </a>
       </div>

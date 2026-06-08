@@ -7,7 +7,10 @@ import type { ProductCardItem } from "@/types/productCard";
 import { formatPrice } from "@/utils/formatPrice";
 import CountdownTimer from "@/components/common/Countdown";
 import { ProductRatingStars } from "@/components/common/ProductRatingStars";
-import { badgeClassFromBadge } from "./productCardUtils";
+import {
+  badgeClassFromBadge,
+  resolveProductCardBadges,
+} from "./productCardUtils";
 import React from "react";
 
 export function ProductCardDualImageLink({
@@ -50,22 +53,35 @@ export function ProductCardDualImageLink({
 export function ProductCardBadgeList({
   product,
 }: {
-  product: Pick<ProductCardItem, "badge" | "badgeTrend">;
+  product: Pick<
+    ProductCardItem,
+    "badge" | "badgeTrend" | "price" | "priceOld"
+  >;
 }) {
-  if (product.badge == null && product.badgeTrend == null) return null;
+  const { metaBadge, discountBadge, trendBadge } =
+    resolveProductCardBadges(product);
 
-  const badgeClass = badgeClassFromBadge(product.badge);
+  if (metaBadge == null && discountBadge == null && trendBadge == null) {
+    return null;
+  }
 
   return (
     <ul className="product-badge_list">
-      {product.badge != null && (
-        <li className={`product-badge_item text-caption-01 ${badgeClass}`}>
-          {product.badge}
+      {metaBadge != null && (
+        <li
+          className={`product-badge_item text-caption-01 ${badgeClassFromBadge(metaBadge)}`}
+        >
+          {metaBadge}
         </li>
       )}
-      {product.badgeTrend != null && (
+      {discountBadge != null && (
+        <li className="product-badge_item text-caption-01 sale">
+          {discountBadge}
+        </li>
+      )}
+      {trendBadge != null && (
         <li className="product-badge_item text-caption-01 trend">
-          {product.badgeTrend}
+          {trendBadge}
         </li>
       )}
     </ul>

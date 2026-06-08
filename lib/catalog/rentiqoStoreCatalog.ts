@@ -975,13 +975,9 @@ export function mapMedusaStoreProductToShopProduct(
       ? product.handle
       : product.id;
 
-  const metaBadge = typeof meta.badge === "string" ? meta.badge : undefined;
-  const saleBadge =
-    metaBadge == null &&
-    priceOld != null &&
-    priceOld > price &&
-    priceOld > 0
-      ? `-${Math.round(((priceOld - price) / priceOld) * 100)}%`
+  const metaBadge =
+    typeof meta.badge === "string" && meta.badge.trim().length > 0
+      ? meta.badge.trim()
       : undefined;
 
   const medusaVariantId = resolveDefaultMedusaVariantId(product);
@@ -995,7 +991,7 @@ export function mapMedusaStoreProductToShopProduct(
     priceOld,
     img,
     imgHover,
-    badge: metaBadge ?? saleBadge,
+    badge: metaBadge,
     badgeTrend: typeof meta.badgeTrend === "string" ? meta.badgeTrend : undefined,
     marquee: typeof meta.marquee === "string" ? meta.marquee : undefined,
     countdown: readOptionalNumber(meta.countdown),

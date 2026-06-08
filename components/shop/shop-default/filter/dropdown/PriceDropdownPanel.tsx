@@ -5,6 +5,7 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import type { FilterAction, FilterState } from "@/types/shopFilter";
 import { setPriceRange } from "../../filterActions";
+import { formatPrice } from "@/utils/formatPrice";
 
 type Props = {
   state: FilterState;
@@ -56,17 +57,15 @@ export function PriceDropdownPanel({ state, dispatch, priceMax }: Props) {
           <div className="price-box tf-grid-layout tf-col-2">
             <div className="box-wrap">
               <div className="price-val_wrap">
-                <span className="cl-text-2 text-body-1">$</span>
                 <div className="price-val" id="price-min-value">
-                  {Math.round(state.price[0])}
+                  {formatPrice(Math.round(state.price[0]))}
                 </div>
               </div>
             </div>
             <div className="box-wrap">
               <div className="price-val_wrap">
-                <span className="cl-text-2 text-body-1">$</span>
                 <div className="price-val" id="price-max-value">
-                  {Math.round(state.price[1])}
+                  {formatPrice(Math.round(state.price[1]))}
                 </div>
               </div>
             </div>
