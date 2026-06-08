@@ -1095,6 +1095,64 @@
   }
 }
 
+/* -- Responsive app offcanvas (right on desktop, bottom sheet on mobile) -- */
+.canvas-responsive {
+  .wrap-canvas {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+  }
+
+  &:not(.canvas-quickview) {
+    @include res(md, min) {
+      width: 480px !important;
+    }
+  }
+
+  @include res(md) {
+    &.offcanvas-end {
+      top: auto !important;
+      right: 0 !important;
+      left: 0 !important;
+      bottom: 0 !important;
+      width: 100% !important;
+      height: auto !important;
+      max-height: 92vh;
+      border-left: none !important;
+      border-top: 1px solid var(--line);
+      border-radius: 16px 16px 0 0;
+      transform: translateY(100%) !important;
+
+      &.show:not(.hiding),
+      &.showing {
+        transform: none !important;
+      }
+
+      &.hiding {
+        transform: translateY(100%) !important;
+      }
+    }
+
+    .wrap-canvas {
+      overflow: auto;
+      max-height: 92vh;
+    }
+
+    &::before {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 4px;
+      border-radius: 100px;
+      background: var(--line);
+      margin: 10px auto 0;
+      flex-shrink: 0;
+    }
+  }
+}
+
 /* -- Quick View -- */
 .canvas-quickview {
   flex-direction: row;

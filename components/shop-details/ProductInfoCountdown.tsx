@@ -9,9 +9,7 @@ import {
   ProductViews,
   ProductVariantPicker,
   ProductQuantityBuy,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
 } from "./product-info";
 import CountdownTimer from "../common/Countdown";
 
@@ -70,12 +68,10 @@ export default function ProductInfoCountdown({
             <ProductQuantityBuy product={product} />
           </div>
 
-          <ProductExtraActions />
 
           <div className="br-line" />
 
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
       </div>
     </div>

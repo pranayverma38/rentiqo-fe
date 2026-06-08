@@ -79,12 +79,6 @@ export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
           </span>
         </a>
       </div>
-      <a
-        href="/checkout"
-        className="tf-btn type-xl btn-primary animate-btn w-100"
-      >
-        Buy It Now
-      </a>
     </div>
   );
 }

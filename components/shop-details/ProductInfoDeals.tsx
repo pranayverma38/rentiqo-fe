@@ -9,9 +9,7 @@ import {
   ProductViews,
   ProductVariantPicker,
   ProductQuantityBuy,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
 } from "./product-info";
 
 interface SimpleDeal {
@@ -69,7 +67,6 @@ export default function ProductInfoDeals({
             <ProductQuantityBuy product={product} />
           </div>
 
-          <ProductExtraActions />
 
           <div className="br-line" />
 
@@ -124,7 +121,6 @@ export default function ProductInfoDeals({
           <div className="br-line" />
 
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
       </div>
     </div>

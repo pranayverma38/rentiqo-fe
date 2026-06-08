@@ -8,9 +8,7 @@ import {
   ProductTitle,
   ProductShortDescription,
   ProductViews,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
 } from "./product-info";
 
 export default function ProductInfoGrouped({
@@ -114,12 +112,10 @@ export default function ProductInfoGrouped({
             Add To Cart
           </a>
 
-          <ProductExtraActions />
 
           <div className="br-line" />
 
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
 
         <ProductAccordions />

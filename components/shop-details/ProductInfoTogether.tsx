@@ -10,9 +10,7 @@ import {
   ProductViews,
   ProductVariantPicker,
   ProductQuantityBuy,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
 } from "./product-info";
 
 interface BundleItem {
@@ -100,7 +98,6 @@ export default function ProductInfoTogether({
             <ProductQuantityBuy product={product} />
           </div>
 
-          <ProductExtraActions />
 
           <div className="br-line" />
 
@@ -181,7 +178,6 @@ export default function ProductInfoTogether({
           <div className="br-line" />
 
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
       </div>
     </div>

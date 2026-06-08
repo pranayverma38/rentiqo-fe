@@ -8,9 +8,7 @@ import {
   ProductPrice,
   ProductShortDescription,
   ProductViews,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
 } from "./product-info";
 
 export default function ProductInfoAffiliate({
@@ -51,12 +49,10 @@ export default function ProductInfoAffiliate({
             </div>
           </div>
 
-          <ProductExtraActions />
 
           <div className="br-line" />
 
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
       </div>
     </div>

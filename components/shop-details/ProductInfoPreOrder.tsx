@@ -9,9 +9,7 @@ import {
   ProductViews,
   ProductVariantPicker,
   ProductQuantityBuy,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
 } from "./product-info";
 
 export default function ProductInfoPreOrder({
@@ -46,12 +44,10 @@ export default function ProductInfoPreOrder({
             <ProductQuantityBuy product={product} />
           </div>
 
-          <ProductExtraActions />
 
           <div className="br-line" />
 
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
       </div>
     </div>

@@ -8,9 +8,7 @@ import {
   ProductShortDescription,
   ProductViews,
   ProductQuantityBuy,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
 } from "./product-info";
 
 export default function ProductInfoAvailable({
@@ -57,7 +55,6 @@ export default function ProductInfoAvailable({
           </div>
 
           <ProductQuantityBuy product={product} />
-          <ProductExtraActions />
 
           <div className="br-line" />
 
@@ -81,7 +78,6 @@ export default function ProductInfoAvailable({
           </div>
 
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
       </div>
     </div>

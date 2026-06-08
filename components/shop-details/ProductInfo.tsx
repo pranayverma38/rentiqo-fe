@@ -5,13 +5,13 @@ import { ProductCardItem } from "@/types/productCard";
 import {
   ProductTitle,
   ProductPrice,
+  ProductDeposit,
   ProductShortDescription,
   ProductViews,
   ProductVariantPicker,
   ProductQuantityBuy,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
+  ProductRentalInfo,
 } from "./product-info";
 
 export default function ProductInfo({ product }: { product: ProductCardItem }) {
@@ -25,6 +25,7 @@ export default function ProductInfo({ product }: { product: ProductCardItem }) {
           <div className="tf-product-info-heading">
             <ProductTitle product={product} />
             <ProductPrice product={product} />
+            <ProductDeposit product={product} />
             <ProductShortDescription product={product} />
             <ProductViews />
           </div>
@@ -35,12 +36,11 @@ export default function ProductInfo({ product }: { product: ProductCardItem }) {
             <ProductQuantityBuy product={product} />
           </div>
 
-          <ProductExtraActions />
 
           <div className="br-line" />
 
+          <ProductRentalInfo />
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
       </div>
     </div>

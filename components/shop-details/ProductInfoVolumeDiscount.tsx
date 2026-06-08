@@ -11,9 +11,7 @@ import {
   ProductViews,
   ProductVariantPicker,
   ProductQuantityBuy,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
 } from "./product-info";
 
 interface DiscountDeal {
@@ -79,7 +77,6 @@ export default function ProductInfoVolumeDiscount({
             <ProductQuantityBuy product={product} />
           </div>
 
-          <ProductExtraActions />
 
           <div className="br-line" />
 
@@ -143,7 +140,6 @@ export default function ProductInfoVolumeDiscount({
           <div className="br-line" />
 
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
       </div>
     </div>

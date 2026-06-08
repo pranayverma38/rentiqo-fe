@@ -5,11 +5,11 @@ import { ProductCardItem } from "@/types/productCard";
 import {
   ProductTitle,
   ProductPrice,
+  ProductDeposit,
   ProductShortDescription,
   ProductViews,
-  ProductExtraActions,
   ProductDelivery,
-  ProductSafeCheckout,
+  ProductRentalInfo,
 } from "./product-info";
 
 export default function ProductInfoOutOfStock({
@@ -27,6 +27,7 @@ export default function ProductInfoOutOfStock({
           <div className="tf-product-info-heading">
             <ProductTitle product={product} />
             <ProductPrice product={product} />
+            <ProductDeposit product={product} />
 
             <div className="product-stock mb-12">
               <span className="stock out-stock fw-medium">Out of Stock</span>
@@ -57,12 +58,11 @@ export default function ProductInfoOutOfStock({
             </div>
           </form>
 
-          <ProductExtraActions />
 
           <div className="br-line" />
 
+          <ProductRentalInfo />
           <ProductDelivery />
-          <ProductSafeCheckout />
         </div>
       </div>
     </div>
