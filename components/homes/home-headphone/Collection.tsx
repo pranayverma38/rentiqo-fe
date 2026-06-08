@@ -1,4 +1,3 @@
-import CompareButton from "@/components/common/CompareButton";
 import QuickViewButton from "@/components/common/QuickViewButton";
 import AddToCartButton from "@/components/common/AddToCartButton";
 
@@ -45,9 +44,6 @@ function ProductCard({ product }: { product: CollectionProduct }) {
         <ul className="product-action_list">
           <li className="wishlist">
             <WishlistButton product={product} />
-          </li>
-          <li className="compare">
-            <CompareButton product={product} />
           </li>
           <li>
             <QuickViewButton product={product} />

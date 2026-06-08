@@ -1,20 +1,15 @@
 "use client";
 
 import { ProductCardItem } from "@/types/productCard";
-import CompareButton from "../../common/CompareButton";
 
 export function ProductExtraActions({
-  product,
+  product: _product,
 }: {
   product?: ProductCardItem;
 }) {
+  void _product;
   return (
     <div className="tf-product-extra-link">
-      <CompareButton
-        className="product-extra-icon link"
-        product={product}
-        variant="extra"
-      />
       <a href="#ask" data-bs-toggle="modal" className="product-extra-icon link">
         <i className="icon icon-Question" />
         Ask A Question

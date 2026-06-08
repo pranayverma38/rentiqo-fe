@@ -54,16 +54,6 @@ function WishlistItem({
           />
         </Link>
         <ul className="product-action_list">
-          <li className="compare">
-            <a
-              href="#compare"
-              data-bs-toggle="offcanvas"
-              className="hover-tooltip tooltip-left box-icon"
-            >
-              <span className="icon icon-ArrowsLeftRight" />
-              <span className="tooltip">Compare</span>
-            </a>
-          </li>
           <li>
             <a
               href="#quickView"

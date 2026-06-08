@@ -14,7 +14,6 @@ const Share = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void;
 const SignIn = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/SignIn").then((m) => m.default), { ssr: false });
 const SizeGuide = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/SizeGuide").then((m) => m.default), { ssr: false });
 const Cart = dynamic<{ registerOffcanvasElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/Cart").then((m) => m.default), { ssr: false });
-const Compare = dynamic<{ registerOffcanvasElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/Compare").then((m) => m.default), { ssr: false });
 const MobileMenu = dynamic<{ registerOffcanvasElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/MobileMenu").then((m) => m.default), { ssr: false });
 const QuickView = dynamic<{ registerOffcanvasElement?: (el: HTMLElement | null) => void; }>(() => import("@/components/modals/QuickView").then((m) => m.default), { ssr: false });
 const OrderDetails = dynamic<{ registerModalElement?: (el: HTMLElement | null) => void }>(
@@ -121,7 +120,6 @@ export default function LayoutModals() {
       <SignIn registerModalElement={registerModalElement} />
       <SizeGuide registerModalElement={registerModalElement} />
       <Cart registerOffcanvasElement={registerOffcanvasElement} />
-      <Compare registerOffcanvasElement={registerOffcanvasElement} />
       <MobileMenu registerOffcanvasElement={registerOffcanvasElement} />
       <QuickView registerOffcanvasElement={registerOffcanvasElement} />
     

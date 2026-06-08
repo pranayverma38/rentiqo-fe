@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import AddToCartButton from "@/components/common/AddToCartButton";
-import CompareButton from "@/components/common/CompareButton";
 import QuickViewButton from "@/components/common/QuickViewButton";
 import WishlistButton from "@/components/common/WishlistButton";
 import {
@@ -104,12 +103,6 @@ export function ProductCardShopList() {
           </li>
           <li className="wishlist">
             <WishlistButton
-              product={product}
-              className="hover-tooltip tooltip-top box-icon"
-            />
-          </li>
-          <li className="compare">
-            <CompareButton
               product={product}
               className="hover-tooltip tooltip-top box-icon"
             />

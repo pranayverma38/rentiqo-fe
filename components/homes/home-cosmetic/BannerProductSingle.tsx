@@ -12,7 +12,6 @@ import {
 import DriftZoom from "@/components/ui/DriftZoom";
 import { Swiper as SwiperType } from "swiper";
 import WishlistButton from "@/components/common/WishlistButton";
-import CompareButton from "@/components/common/CompareButton";
 import { useContextElement } from "@/context/store";
 
 function formatPrice(value: number): string {
@@ -263,11 +262,6 @@ function BannerProductSingleInner() {
                           product={product}
                           variant="button"
                           className="hover-tooltip box-icon btn-add-wishlist"
-                        />
-                        <CompareButton
-                          product={product}
-                          icon="icon-GitDiff"
-                          className="hover-tooltip tooltip-top box-icon btn-add-compare"
                         />
                       </div>
                       <Link

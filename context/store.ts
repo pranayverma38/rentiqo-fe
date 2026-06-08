@@ -26,7 +26,6 @@ export type ProductId = number | string;
 interface StoreState {
   cartProducts: CartProduct[];
   wishList: Product[];
-  compareItem: Product[];
   quickViewItem: Product;
   quickAddItem: ProductId;
   totalPrice: number;
@@ -38,7 +37,6 @@ interface StoreState {
   setWishList: (value: Product[] | ((prev: Product[]) => Product[])) => void;
   setQuickViewItem: (item: Product) => void;
   setQuickAddItem: (id: ProductId) => void;
-  setCompareItem: (value: Product[] | ((prev: Product[]) => Product[])) => void;
   setActiveCartProduct: (item: CartProduct | null) => void;
   setSelectedLocation: (location: LocationSlug) => void;
   isAddedToCartProducts: (id: ProductId) => boolean;
@@ -48,10 +46,7 @@ interface StoreState {
   quantityInCart: (id: ProductId) => number;
   addToWishlist: (item: Product) => void;
   removeFromWishlist: (id: ProductId) => void;
-  addToCompareItem: (item: Product) => void;
-  removeFromCompareItem: (id: ProductId) => void;
   isAddedtoWishlist: (id: ProductId) => boolean;
-  isAddedToCompareItem: (id: ProductId) => boolean;
 }
 
 const getTotalPrice = (cart: CartProduct[]) =>
@@ -62,7 +57,6 @@ export const useStore = create<StoreState>()(
     (set, get) => ({
       cartProducts: [],
       wishList: [],
-      compareItem: [],
       quickViewItem: products[0],
       quickAddItem: 1,
       totalPrice: 0,
@@ -83,11 +77,6 @@ export const useStore = create<StoreState>()(
 
       setQuickViewItem: (item) => set({ quickViewItem: item }),
       setQuickAddItem: (id) => set({ quickAddItem: id }),
-      setCompareItem: (value) =>
-        set((state) => ({
-          compareItem:
-            typeof value === "function" ? value(state.compareItem) : value,
-        })),
       setActiveCartProduct: (item) => set({ activeCartProduct: item }),
       setSelectedLocation: (selectedLocation) => set({ selectedLocation }),
 
@@ -216,21 +205,7 @@ export const useStore = create<StoreState>()(
         );
       },
 
-      addToCompareItem: (item) => {
-        const { compareItem } = get();
-        if (compareItem.some((elm) => elm.id === item.id)) return;
-        set({ compareItem: [...compareItem, item] });
-      },
-
-      removeFromCompareItem: (id) => {
-        set((state) => ({
-          compareItem: state.compareItem.filter((elm) => elm.id !== id),
-        }));
-      },
-
       isAddedtoWishlist: (id) => get().wishList.some((elm) => elm.id === id),
-      isAddedToCompareItem: (id) =>
-        get().compareItem.some((elm) => elm.id === id),
     }),
     {
       name: "amerce-store",
@@ -355,11 +330,6 @@ function getContextSnapshot(state: StoreState) {
     setQuickViewItem: state.setQuickViewItem,
     quickAddItem: state.quickAddItem,
     setQuickAddItem: state.setQuickAddItem,
-    addToCompareItem: state.addToCompareItem,
-    isAddedToCompareItem: state.isAddedToCompareItem,
-    removeFromCompareItem: state.removeFromCompareItem,
-    compareItem: state.compareItem,
-    setCompareItem: state.setCompareItem,
     updateQuantity: state.updateQuantity,
     removeProductFromCart: state.removeProductFromCart,
     quantityInCart: state.quantityInCart,

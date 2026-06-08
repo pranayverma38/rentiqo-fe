@@ -315,14 +315,6 @@ function BannerProductSingleInner() {
                 </div>
                 <div className="tf-product-extra-link justify-content-between mb-4">
                   <a
-                    href="#compare"
-                    data-bs-toggle="offcanvas"
-                    className="product-extra-icon link fw-medium"
-                  >
-                    <i className="icon icon-ArrowsLeftRight" />
-                    Compare
-                  </a>
-                  <a
                     href="#ask"
                     data-bs-toggle="modal"
                     className="product-extra-icon link fw-medium"

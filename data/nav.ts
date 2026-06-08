@@ -341,10 +341,6 @@ export const navPages = [
     "text": "404"
   },
   {
-    "href": "/compare",
-    "text": "Compare"
-  },
-  {
     "href": "/account-page",
     "text": "My Account"
   }

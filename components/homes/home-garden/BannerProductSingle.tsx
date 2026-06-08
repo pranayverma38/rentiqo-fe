@@ -11,7 +11,6 @@ import {
 } from "@/context/ProductContext";
 import DriftZoom from "@/components/ui/DriftZoom";
 import { Swiper as SwiperType } from "swiper";
-import CompareButton from "@/components/common/CompareButton";
 import { useContextElement } from "@/context/store";
 
 function formatPrice(value: number): string {
@@ -309,7 +308,6 @@ function BannerProductSingleInner() {
                     </div>
                   </div>
                   <div className="tf-product-extra-link mb-8">
-                    <CompareButton product={product} variant="extra" />
                     <a
                       href="#ask"
                       data-bs-toggle="modal"

@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import TfSwiper from "@/components/ui/TfSwiper";
 import { gearBundleProducts } from "@/data/products/products";
-import CompareButton from "@/components/common/CompareButton";
 import QuickViewButton from "@/components/common/QuickViewButton";
 import WishlistButton from "@/components/common/WishlistButton";
 import { ProductCardItem } from "@/types/productCard";
@@ -54,9 +53,6 @@ function ProductCard({
         <ul className="product-action_list">
           <li className="wishlist">
             <WishlistButton product={product} />
-          </li>
-          <li className="compare">
-            <CompareButton product={product} />
           </li>
           <li>
             <QuickViewButton product={product} />
