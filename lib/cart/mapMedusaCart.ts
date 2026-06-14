@@ -30,6 +30,7 @@ function lineItemPrice(item: MedusaCartLineItem): number {
 
 function mapLineItem(item: MedusaCartLineItem): CartProduct {
   const variantId = item.variant_id ?? item.id;
+  const price = lineItemPrice(item);
   return {
     id: variantId,
     medusaLineItemId: item.id,
@@ -37,7 +38,8 @@ function mapLineItem(item: MedusaCartLineItem): CartProduct {
     medusaProductId: item.product_id ?? undefined,
     name: item.title ?? item.product_title ?? "Product",
     img: item.thumbnail ?? PLACEHOLDER_IMG,
-    price: lineItemPrice(item),
+    price,
+    depositAmount: price,
     quantity: item.quantity ?? 1,
   };
 }
@@ -49,8 +51,9 @@ export function mapMedusaCartToCartProducts(cart: MedusaCart): CartProduct[] {
 export function resolveCartTotal(
   cart: MedusaCart,
   cartProducts: CartProduct[],
+  options?: { preferLineItems?: boolean },
 ): number {
-  if (typeof cart.total === "number" && Number.isFinite(cart.total)) {
+  if (!options?.preferLineItems && typeof cart.total === "number" && Number.isFinite(cart.total)) {
     return cart.total;
   }
   return cartProducts.reduce(

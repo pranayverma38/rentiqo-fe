@@ -46,6 +46,8 @@ export interface ProductCardItem extends Partial<ShopProductFacetFields> {
   /** Short line under the title (Medusa `subtitle`). */
   subtitle?: string;
   price: number;
+  /** One-time security deposit (defaults to one month rent when omitted). */
+  depositAmount?: number;
   priceOld?: number;
   /** Badge text (e.g. "NEW", "-25%"). Rendered with class "new" or "sale" based on value. */
   badge?: string;

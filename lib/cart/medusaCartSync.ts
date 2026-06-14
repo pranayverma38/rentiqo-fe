@@ -18,8 +18,11 @@ import { getMedusaListingStoreContext } from "@/lib/catalog/medusaListingByLocat
 import type { LocationSlug } from "@/lib/catalog/catalogRoutes";
 import {
   mapMedusaCartToCartProducts,
-  resolveCartTotal,
 } from "@/lib/cart/mapMedusaCart";
+import {
+  computeCartTotalFromLines,
+  hydrateCartProductPrices,
+} from "@/lib/cart/hydrateCartProducts";
 import type { MedusaCart } from "@/lib/api/types/medusa";
 
 let cartSyncInFlight: Promise<void> | null = null;
@@ -30,12 +33,44 @@ function cartLinesEqual(a: CartProduct[], b: CartProduct[]): boolean {
     (line, index) =>
       line.id === b[index]?.id &&
       line.quantity === b[index]?.quantity &&
-      line.medusaLineItemId === b[index]?.medusaLineItemId,
+      line.medusaLineItemId === b[index]?.medusaLineItemId &&
+      line.price === b[index]?.price &&
+      line.depositAmount === b[index]?.depositAmount,
   );
 }
 
 function applyCartToStore(cartProducts: CartProduct[], totalPrice: number): void {
   useStore.setState({ cartProducts, totalPrice });
+}
+
+async function ensureCartRegionMatchesLocation(
+  cartId: string,
+  location: LocationSlug,
+): Promise<MedusaCart> {
+  const { regionId, salesChannelId } = getMedusaListingStoreContext(location);
+  const { cart } = await medusaApi.carts.retrieve(cartId);
+
+  if (cart.region_id === regionId) {
+    return cart;
+  }
+
+  const { cart: updated } = await medusaApi.carts.update(cartId, {
+    region_id: regionId,
+    sales_channel_id: salesChannelId,
+  });
+  return updated;
+}
+
+async function mapAndHydrateCart(
+  cart: MedusaCart,
+  location: LocationSlug,
+): Promise<{ cartProducts: CartProduct[]; totalPrice: number }> {
+  const cartProducts = await hydrateCartProductPrices(
+    mapMedusaCartToCartProducts(cart),
+    location,
+  );
+  const totalPrice = computeCartTotalFromLines(cartProducts);
+  return { cartProducts, totalPrice };
 }
 
 export function clearLocalCart(): void {
@@ -68,8 +103,16 @@ async function persistCartIdToCustomer(cartId: string): Promise<void> {
 
 async function applyCartResponse(cart: MedusaCart): Promise<void> {
   setStoredCartId(cart.id);
-  const cartProducts = mapMedusaCartToCartProducts(cart);
-  const totalPrice = resolveCartTotal(cart, cartProducts);
+  const location = useStore.getState().selectedLocation;
+
+  let activeCart = cart;
+  try {
+    activeCart = await ensureCartRegionMatchesLocation(cart.id, location);
+  } catch (error) {
+    console.error("Failed to sync cart region:", error);
+  }
+
+  const { cartProducts, totalPrice } = await mapAndHydrateCart(activeCart, location);
   const { cartProducts: currentProducts, totalPrice: currentTotal } =
     useStore.getState();
 
@@ -80,7 +123,7 @@ async function applyCartResponse(cart: MedusaCart): Promise<void> {
     applyCartToStore(cartProducts, totalPrice);
   }
 
-  await persistCartIdToCustomer(cart.id);
+  await persistCartIdToCustomer(activeCart.id);
 }
 
 /** Line-item mutations often omit expanded `items`; always re-fetch before updating UI. */
@@ -102,8 +145,8 @@ async function createCustomerCart(location: LocationSlug): Promise<string> {
     sales_channel_id: salesChannelId,
   });
   setStoredCartId(cart.id);
-  const cartProducts = mapMedusaCartToCartProducts(cart);
-  applyCartToStore(cartProducts, resolveCartTotal(cart, cartProducts));
+  const { cartProducts, totalPrice } = await mapAndHydrateCart(cart, location);
+  applyCartToStore(cartProducts, totalPrice);
   await persistCartIdToCustomer(cart.id);
   await linkCartToCustomerIfNeeded(cart.id);
   return cart.id;
@@ -295,16 +338,38 @@ export async function refreshCartFromMedusa(): Promise<void> {
   const cartId = getStoredCartId();
   if (!cartId) return;
 
+  const location = useStore.getState().selectedLocation;
+
   try {
-    const { cart } = await medusaApi.carts.retrieve(cartId);
-    const cartProducts = mapMedusaCartToCartProducts(cart);
-    applyCartToStore(cartProducts, resolveCartTotal(cart, cartProducts));
+    const cart = await ensureCartRegionMatchesLocation(cartId, location);
+    const { cartProducts, totalPrice } = await mapAndHydrateCart(cart, location);
+    applyCartToStore(cartProducts, totalPrice);
   } catch (error) {
     if (error instanceof ApiError && error.statusCode === 404) {
       clearStoredCartId();
       applyCartToStore([], 0);
     }
   }
+}
+
+/** Re-sync Medusa cart pricing when the storefront location changes. */
+export async function syncCartRegionForSelectedLocation(): Promise<void> {
+  if (!hasMedusaApiBaseUrl) return;
+
+  await waitForStoreHydration();
+
+  const token = getStoredAuthToken();
+  if (token) {
+    try {
+      const { customer } = await medusaApi.customers.retrieve();
+      await loadCartForCustomer(customer);
+    } catch (error) {
+      console.error("Failed to sync cart for location change:", error);
+    }
+    return;
+  }
+
+  await refreshCartFromMedusa();
 }
 
 async function ensureMedusaCart(location: LocationSlug): Promise<string> {
@@ -326,7 +391,7 @@ async function ensureMedusaCart(location: LocationSlug): Promise<string> {
   const existingId = getStoredCartId();
   if (existingId) {
     try {
-      await medusaApi.carts.retrieve(existingId);
+      await ensureCartRegionMatchesLocation(existingId, location);
       return existingId;
     } catch (error) {
       if (!(error instanceof ApiError) || error.statusCode !== 404) {
@@ -430,4 +495,48 @@ export async function removeMedusaCartLine(
 
 export async function clearMedusaCart(): Promise<void> {
   clearLocalCart();
+}
+
+/** Swap each cart line to the variant matching `months` tenure (same region pricing as PDP). */
+export async function changeMedusaCartTenureForMonths(
+  months: number,
+  location: LocationSlug,
+): Promise<void> {
+  if (!hasMedusaApiBaseUrl) {
+    return;
+  }
+
+  const { cartProducts } = useStore.getState();
+  if (cartProducts.length === 0) {
+    return;
+  }
+
+  const { resolveCartLineForTenure } = await import("@/lib/cart/cartTenure");
+  const cartId = getStoredCartId() ?? (await ensureMedusaCart(location));
+  const customer = getStoredAuthToken()
+    ? (await medusaApi.customers.retrieve()).customer
+    : null;
+
+  for (const item of cartProducts) {
+    if (!item.medusaLineItemId) {
+      continue;
+    }
+
+    const next = await resolveCartLineForTenure(
+      item,
+      months as 3 | 6 | 12,
+      location,
+    );
+    if (next == null || next.medusaVariantId === item.medusaVariantId) {
+      continue;
+    }
+
+    await medusaApi.carts.removeLineItem(cartId, item.medusaLineItemId);
+    await medusaApi.carts.addLineItem(cartId, {
+      variant_id: String(next.medusaVariantId),
+      quantity: item.quantity,
+    });
+  }
+
+  await reloadCartFromServer(cartId, customer);
 }

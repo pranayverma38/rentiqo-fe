@@ -13,12 +13,12 @@ function MayBe() {
   }
 
   return (
-    <section className="flat-spacing view-cart-recommendations">
+    <section className="flat-spacing-3 border-t border-[var(--line)]">
       <div className="container">
-        <div className="sect-heading">
-          <h4>You may also like</h4>
-          <p className="cl-text-2 mb-0">
-            Complete your look with these popular picks
+        <div className="mb-[24px]">
+          <h4 className="account-title mb-[8px]">You may also like</h4>
+          <p className="mb-0 text-[15px] cl-text-2">
+            Complete your home with these popular picks
           </p>
         </div>
         <TfSwiper

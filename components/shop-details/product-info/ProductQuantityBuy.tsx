@@ -3,7 +3,7 @@
 import { useProduct } from "@/context/ProductContext";
 import { useContextElement } from "@/context/Context";
 import { ProductCardItem } from "@/types/productCard";
-import { formatPrice } from "@/utils/formatPrice";
+import { formatPrice, getDepositAmount } from "@/utils/formatPrice";
 
 export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
   const { quantity, setQuantity, currentColor, currentSize, selectedVariant } =
@@ -22,6 +22,7 @@ export function ProductQuantityBuy({ product }: { product: ProductCardItem }) {
     const productWithSelection = {
       ...product,
       price: unitPrice,
+      depositAmount: getDepositAmount(unitPrice),
       selectedColor: currentColor || undefined,
       selectedSize: currentSize || undefined,
       medusaVariantId: selectedVariant?.id,

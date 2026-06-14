@@ -15,3 +15,8 @@ export function formatPrice(value: number): string {
 export function formatDepositAmount(value: number): string {
   return formatInrAmount(value);
 }
+
+/** Security deposit equals one month of rent (same rule as product detail). */
+export function getDepositAmount(monthlyRent: number): number {
+  return monthlyRent;
+}

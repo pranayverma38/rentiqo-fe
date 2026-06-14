@@ -13,6 +13,7 @@ import {
   updateMedusaCartLineQuantity,
 } from "@/lib/cart/medusaCartSync";
 import { syncWishlistIfAuthenticated } from "@/lib/wishlist/wishlistSync";
+import { getDepositAmount } from "@/utils/formatPrice";
 
 export type Product = ProductCardItem;
 export type CartProduct = Product & {
@@ -130,7 +131,11 @@ export const useStore = create<StoreState>()(
         }
 
         if (isAddedToCartProducts(item.id)) return;
-        const cartItem: CartProduct = { ...item, quantity: qty };
+        const cartItem: CartProduct = {
+          ...item,
+          depositAmount: item.depositAmount ?? getDepositAmount(item.price),
+          quantity: qty,
+        };
         const next = [...cartProducts, cartItem];
         set({ cartProducts: next, totalPrice: getTotalPrice(next) });
       },

@@ -559,6 +559,19 @@ function variantPricesFromCalculated(
   return { price, priceOld };
 }
 
+/** Regional monthly rent from a Medusa variant row (same as PDP). */
+export function resolveVariantRegionalPrice(variant: MedusaVariant): number | null {
+  const cp = variant.calculated_price;
+  if (cp == null) {
+    return null;
+  }
+  const amount = cp.calculated_amount;
+  if (typeof amount !== "number" || !Number.isFinite(amount)) {
+    return null;
+  }
+  return variantPricesFromCalculated(cp).price;
+}
+
 /**
  * Catalog card price: lowest variant `calculated_amount` with its `original_amount`
  * for strike-through when on sale (price list / compare-at).
